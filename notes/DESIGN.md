@@ -1,0 +1,46 @@
+# DESIGN.md -- ResponseCategories-Normality-Study
+
+Registro de decisiones metodológicas, en orden cronológico.
+
+## 1. Origen del proyecto (22 sep 2026)
+
+Este proyecto nace de un hallazgo secundario de SSTN-Normality-Study (Bloque 5 ampliado: 12 escenarios simulados x k=3..8, ver ese repo, `notes/DESIGN.md`): la potencia de las 11 pruebas de normalidad evaluadas frente a la cantidad de categorías de respuesta k del instrumento simulado (a) depende en su mayoría de la CANTIDAD de categorías dentro de una misma paridad (no de la paridad par/impar en sí, salvo para SSTN, Jarque-Bera, D'Agostino-Pearson y curtosis, que son robustas a ambos), y (b) esa dependencia está fuertemente modulada por n: negligible en n=10, pico en n≈100-250, casi desaparece en n≥1000.
+
+Decisión: separar esto en un artículo independiente en vez de agregarlo como una sexta sección al manuscrito de SSTN-Normality-Study (que ya está en revisión mayor en Psicothema y convergiendo) -- la pregunta de fondo ("¿cómo interactúan diseño del instrumento y tamaño de muestra en la potencia de CUALQUIER prueba de normalidad?") es distinta a la de ese paper ("¿cómo se compara SSTN contra las clásicas?") y generalizable más allá de SSTN.
+
+Título de trabajo: "Efecto de la cantidad de categorías de respuesta y el tamaño de muestra en la potencia de 11 pruebas de normalidad: evidencia de un efecto no monotónico que se disipa en muestras grandes".
+
+## 2. Por qué un bloque de datos reales, y por qué estos 4 (22 sep 2026)
+
+El Bloque 5 original (simulado) usa un factor común + m=10 ítems + umbrales calibrados a asimetría/curtosis reales -- pero el instrumento en sí es 100% sintético. Para verificar que el patrón hallado no es un artefacto puro de la simulación, se busca un ancla a datos reales genuinos: instrumentos reales publicados, con su cantidad NATIVA de categorías de respuesta (no colapsada post-hoc), cubriendo el rango más amplio posible de k.
+
+Los 4 datasets ya usados en SSTN-Normality-Study (DASS, RIASEC, MACH-IV, RSE) solo cubren k=4 (DASS, RSE) y k=5 (RIASEC, MACH-IV) -- insuficiente para replicar el rango k=3..8 del diseño simulado. Se buscó explícitamente en openpsychometrics.org (mismo repositorio ya usado, mismo criterio de calidad de datos) instrumentos con k en los extremos:
+
+- **k=6 y k=8**: búsqueda exhaustiva (openpsychometrics.org completo, ~20 datasets candidatos revisados vía codebook.txt real, más OSF/Kaggle/candidatos específicos de la literatura como Need for Cognition) -- NO se encontró ningún dataset real abierto con exactamente k=6 ni k=8. Parecen ser valores genuinamente raros en la práctica psicométrica publicada (las escalas reales se agrupan en 4, 5, 7, 9 o formatos de 100 puntos). Se documenta como limitación del diseño, no como omisión.
+- **k=7**: encontrado -- HEXACO (IPIP HEXACO equivalent scales), escala de 7 puntos confirmada en su codebook.txt real ("1 = strongly disagree" ... "7 = strongly agree"). Se usa un solo facet (X:Expr -- Expresividad, 10 ítems) en vez del instrumento completo (240 ítems, 6 dominios), para mantener un tamaño de subescala comparable a los otros 3 datasets.
+- **k=9**: encontrado -- RWAS (Right-Wing Authoritarianism Scale), escala de 9 puntos confirmada en el HTML real del test interactivo (value 1-9, "very strongly disagree" ... "feel neutral" ... "very strongly agree"). Excede el rango simulado (k=3..8) -- decisión explícita del usuario (22 sep 2026): se usa igual como extremo real genuino, documentando en el paper que esa comparación específica es extrapolación del patrón simulado, no interpolación dentro del rango ya cubierto.
+
+No se consideró viable colapsar categorías post-hoc sobre los datasets ya usados en SSTN-Normality-Study (ej. RIASEC k=5 -> k=3) como sustituto: fusionar categorías después de la recolección no es equivalente a que el respondiente haya elegido con menos opciones desde el inicio (limitación ya identificada y descartada en la conversación de diseño de este proyecto, antes de decidir buscar datasets con k nativo distinto en su lugar).
+
+## 3. Claves de puntuación verificadas (22 sep 2026)
+
+Ver comentario completo en `R/01_extract_real_subscales.R`. Resumen:
+
+| Dataset | k | Ítems | Invertidos | Fuente de verificación |
+|---|---|---|---|---|
+| RSE | 4 | 10 | {3,5,8,9,10} | Rosenberg 1965 (misma clave que SSTN-Normality-Study) |
+| MACH-IV | 5 | 20 | {3,4,6,7,9,10,11,14,16,17} | checkpsych.com/tests/mach-iv/ (misma clave que SSTN-Normality-Study) |
+| HEXACO X:Expr | 7 | 10 | {6,7,8,9,10} | ipip.ori.org/newHEXACO_PI_key.htm -- match exacto palabra por palabra contra XExpr1..XExpr10 del codebook.txt real |
+| RWAS | 9 | 22 | {4,6,8,9,11,13,15,18,20,21} | db.arabpsychology.com/scales/right-wing-authoritarianism-scale/ -- misma lista de items invertidos que la lectura semántica independiente del contenido de cada item |
+
+## 4. Formato de archivo no uniforme entre los 4 zips (22 sep 2026)
+
+A diferencia de SSTN-Normality-Study (los 4 zips de ese proyecto son TSV pese a la extensión .csv), en este proyecto **RWAS viene delimitado por COMA**, no por TAB -- único caso distinto encontrado hasta ahora en el catálogo de openpsychometrics.org. Confirmado con `head -1 data.csv | awk -F',' '{print NF}'` antes de escribir `R/01_extract_real_subscales.R`. RSE, MACH-IV y HEXACO sí son TSV, igual que en el proyecto hermano.
+
+## 5. Grilla de n y método de submuestreo (22 sep 2026)
+
+Se usa la MISMA grilla de n que el Bloque 5 simulado de SSTN-Normality-Study -- {10,25,50,100,250,500,1000,1500} -- para que la comparación entre el hallazgo simulado y su contraparte real sea directa, celda por celda de n, no solo cualitativa. El N mínimo de los 4 datasets (RWAS, 9.680) es muy superior al n máximo del grid (1.500), así que el remuestreo sin reemplazo (mismo método "m-out-of-N" del Bloque 4 de SSTN-Normality-Study) es válido para los 4 sin ajuste.
+
+## 6. Restricción de integridad de investigación (22 sep 2026)
+
+Mismo criterio no negociable que SSTN-Normality-Study: ningún resultado se fabrica ni se estima. Toda corrida real (extracción, submuestreo, batería de 11 pruebas) pasa por GitHub Actions -- nada se corre localmente. La extracción de los 4 datasets sí se corrió una vez localmente como chequeo de sintaxis (confirmar que el script no truena y que los N/momentos resultantes son plausibles), pero ese resultado NO se usa como dato del estudio -- el dato real sale de la corrida de `correr_extraccion` en Actions.

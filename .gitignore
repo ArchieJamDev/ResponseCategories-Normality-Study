@@ -1,0 +1,16 @@
+# R
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+renv/library/
+renv/staging/
+
+# Datos procesados intermedios (regenerar desde data/raw/)
+data/processed/*.csv
+data/processed/*.rds
+!data/processed/.gitkeep
+
+# Sistema
+.DS_Store
+Thumbs.db

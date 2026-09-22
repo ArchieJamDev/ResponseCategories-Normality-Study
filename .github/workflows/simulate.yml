@@ -1,0 +1,112 @@
+# Workflow de simulacion/submuestreo de este proyecto (ver notes/DESIGN.md).
+# Mismo criterio que SSTN-Normality-Study: nada se corre localmente, toda
+# corrida real (extraccion de datos reales, submuestreo, bateria de 11
+# pruebas) pasa por GitHub Actions -- ver restriccion de integridad de
+# investigacion en notes/DESIGN.md.
+
+name: Bloque real de categorias
+
+run-name: >-
+  Bloque real:
+  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (4 datasets, k=4,5,7,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      correr_extraccion:
+        description: "Extrae los 4 datasets reales (RSE k=4, MACH-IV k=5, HEXACO k=7, RWAS k=9) desde data/raw/ -- correr esto primero"
+        type: boolean
+        default: false
+      correr_bloque_real:
+        description: "Submuestreo m-out-of-N sobre los 4 datasets reales (R=10000, grid n identico al Bloque 5 simulado de SSTN-Normality-Study) -- requiere que correr_extraccion ya se haya corrido y su artifact este disponible"
+        type: boolean
+        default: false
+      correr_agregacion:
+        description: "Agrega los 4 CSV finales en un consolidado"
+        type: boolean
+        default: false
+
+jobs:
+  extract-real-data:
+    if: ${{ inputs.correr_extraccion }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - name: Extraer los 4 datasets reales
+        run: Rscript R/01_extract_real_subscales.R
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-data-processed
+          path: data/processed/*.csv
+
+  bloque-real-categorias:
+    if: ${{ inputs.correr_bloque_real }}
+    permissions:
+      actions: read
+      contents: read
+    strategy:
+      matrix:
+        dataset:
+          - rse_k4.csv
+          - mach_k5.csv
+          - hexaco_k7.csv
+          - rwas_k9.csv
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - uses: actions/download-artifact@v4
+        with:
+          name: real-data-processed
+          path: data/processed
+      - name: Bloque real -- submuestreo m-out-of-N (R=10000)
+        run: Rscript R/02_bloque_real_categorias.R ${{ matrix.dataset }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bloque-real-${{ matrix.dataset }}
+          path: data/results/bloque_real_*.csv
+
+  aggregate-results:
+    if: ${{ inputs.correr_agregacion }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::readr
+      - name: Agregar los 4 datasets
+        run: Rscript R/99_aggregate_results.R
+      - uses: actions/upload-artifact@v4
+        with:
+          name: consolidado
+          path: data/results/consolidado.csv
