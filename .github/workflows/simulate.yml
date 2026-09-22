@@ -8,7 +8,7 @@ name: Bloque real de categorias
 
 run-name: >-
   Bloque real:
-  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (4 datasets, k=4,5,7,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}${{ inputs.correr_calibracion_niveles && 'Calibracion de niveles (5 niveles x k=3..9) ' || '' }}${{ inputs.correr_simulacion_niveles && 'Simulacion de niveles (35 shards) ' || '' }}
+  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (4 datasets, k=4,5,7,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}${{ inputs.correr_calibracion_niveles && 'Calibracion de niveles (5 niveles x k=3..9) ' || '' }}${{ inputs.correr_consolidar_calibracion_niveles && 'Consolidar calibracion de niveles ' || '' }}${{ inputs.correr_simulacion_niveles && 'Simulacion de niveles (35 shards) ' || '' }}
 
 on:
   workflow_dispatch:
