@@ -8,7 +8,7 @@ name: Bloque real de categorias
 
 run-name: >-
   Bloque real:
-  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (4 datasets, k=4,5,7,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}
+  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (4 datasets, k=4,5,7,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}${{ inputs.correr_calibracion_niveles && 'Calibracion de niveles (5 niveles x k=3..9) ' || '' }}${{ inputs.correr_simulacion_niveles && 'Simulacion de niveles (35 shards) ' || '' }}
 
 on:
   workflow_dispatch:
@@ -22,7 +22,19 @@ on:
         type: boolean
         default: false
       correr_agregacion:
-        description: "Agrega los 4 CSV finales en un consolidado"
+        description: "Agrega los 4 CSV finales del bloque real en un consolidado"
+        type: boolean
+        default: false
+      correr_calibracion_niveles:
+        description: "Calibra lambda + umbrales (libre, no fijo) para 5 niveles de asimetria/curtosis x k=3..9 (ver R/03_calibrar_niveles.R y notes/DESIGN.md) -- correr esto antes de correr_consolidar_calibracion_niveles"
+        type: boolean
+        default: false
+      correr_consolidar_calibracion_niveles:
+        description: "Concatena los 5 CSV de calibracion de niveles en uno solo (data/results/calibracion_niveles.csv) -- requiere que correr_calibracion_niveles ya se haya corrido"
+        type: boolean
+        default: false
+      correr_simulacion_niveles:
+        description: "Simulacion completa (R=10000) de los 5 niveles x k=3..9 = 35 shards -- requiere que calibracion_niveles.csv ya este commiteado en el repo"
         type: boolean
         default: false
 
@@ -118,3 +130,90 @@ jobs:
         with:
           name: consolidado
           path: data/results/consolidado.csv
+
+  calibrate-niveles:
+    if: ${{ inputs.correr_calibracion_niveles }}
+    strategy:
+      matrix:
+        nivel:
+          - bajo
+          - bajo_moderado
+          - moderado
+          - alto
+          - muy_alto
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::readr
+            any::dplyr
+      - name: Calibrar nivel (lambda + umbrales, Nelder-Mead)
+        run: Rscript R/03_calibrar_niveles.R ${{ matrix.nivel }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: calibracion-nivel-${{ matrix.nivel }}
+          path: data/results/calibracion_nivel_${{ matrix.nivel }}.csv
+
+  consolidate-calibracion-niveles:
+    if: ${{ inputs.correr_consolidar_calibracion_niveles }}
+    needs: calibrate-niveles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::readr
+            any::dplyr
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: calibracion-nivel-*
+          path: data/results
+          merge-multiple: true
+      - name: Consolidar los 5 niveles
+        run: Rscript R/03b_consolidar_calibracion_niveles.R
+      - uses: actions/upload-artifact@v4
+        with:
+          name: calibracion-niveles-consolidada
+          path: data/results/calibracion_niveles.csv
+
+  simulate-niveles:
+    if: ${{ inputs.correr_simulacion_niveles }}
+    strategy:
+      matrix:
+        nivel:
+          - bajo
+          - bajo_moderado
+          - moderado
+          - alto
+          - muy_alto
+        k: [3, 4, 5, 6, 7, 8, 9]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - name: Simulacion de niveles (R=10000)
+        run: Rscript R/04_simulacion_niveles.R ${{ matrix.nivel }} ${{ matrix.k }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nivel-final-${{ matrix.nivel }}-k${{ matrix.k }}
+          path: data/results/nivel_${{ matrix.nivel }}_k${{ matrix.k }}.csv

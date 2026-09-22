@@ -41,6 +41,32 @@ A diferencia de SSTN-Normality-Study (los 4 zips de ese proyecto son TSV pese a 
 
 Se usa la MISMA grilla de n que el Bloque 5 simulado de SSTN-Normality-Study -- {10,25,50,100,250,500,1000,1500} -- para que la comparación entre el hallazgo simulado y su contraparte real sea directa, celda por celda de n, no solo cualitativa. El N mínimo de los 4 datasets (RWAS, 9.680) es muy superior al n máximo del grid (1.500), así que el remuestreo sin reemplazo (mismo método "m-out-of-N" del Bloque 4 de SSTN-Normality-Study) es válido para los 4 sin ajuste.
 
-## 6. Restricción de integridad de investigación (22 sep 2026)
+## 6. Bloque de niveles: separar el efecto de k/n/paridad de la forma real de la distribución (22 sep 2026)
+
+Al correr el bloque real (Sección 5), surgió un problema de interpretación: RWAS (k=9) domina la potencia sobre los otros 3 datasets no necesariamente por su k, sino porque su asimetría real (1.35) es mucho más fuerte que la de RSE/MACH-IV/HEXACO (entre -0.16 y 0.21) -- k y la forma real del constructo están confundidos en datos reales, y ni siquiera igualar la cantidad de ítems (par RSE k=4 vs HEXACO k=7, ambos m=10) aísla el efecto limpiamente (ver comparación en la conversación de diseño: Shapiro-Wilk y Pearson χ² se invierten respecto a la dirección esperada).
+
+**Decisión**: no forzar una narrativa de "la simulación dice X, el dato real lo confirma/contradice" -- en vez de eso, agregar un bloque de simulación nuevo que aísle explícitamente el efecto de la FORMA de la distribución (asimetría, curtosis), separado de k/n/paridad, para poder decir con evidencia cuánta de la variación observada en el bloque real viene de cada factor.
+
+**Diseño**: 5 niveles ordenados en un solo eje (no una grilla 2D completa asimetría×curtosis, que generaría demasiadas celdas no interpretables), de "casi normal" a "muy asimétrica y leptocúrtica", anclados cerca de la variación real ya observada entre los 12 escenarios de SSTN-Normality-Study y los 4 datasets de este proyecto:
+
+| Nivel | Asimetría objetivo | Curtosis exceso objetivo | Ancla aproximada |
+|---|---|---|---|
+| bajo | 0.0 | -0.70 | RSE / C9_rse_total |
+| bajo_moderado | 0.2 | -0.55 | HEXACO / C6_riasec_enterprising |
+| moderado | 0.7 | -0.15 | B1_riasec_realistic |
+| alto | 1.0 | 0.40 | punto nuevo, intermedio |
+| muy_alto | 1.35 | 1.17 | RWAS |
+
+Cada nivel se calibra y simula en k=3..9 (7 valores, extendido un paso más allá del Bloque 5 de SSTN-Normality-Study para cubrir el k nativo de RWAS) x el mismo grid de n del resto del proyecto -- 5 x 7 = 35 celdas.
+
+## 7. Por qué lambda libre, no fija en 0.8 (22 sep 2026)
+
+El diseño original de Bloque 5 (SSTN-Normality-Study) fija la carga factorial lambda=0.8 y solo calibra los umbrales -- por eso los 12 escenarios ya calibrados son TODOS platicúrticos (curtosis exceso entre -0.15 y -1.15): con lambda fija, el mecanismo factor-común + umbrales discretizados tiende estructuralmente hacia formas platicúrticas o casi-normales.
+
+Un chequeo de factibilidad (grilla de lambda de 0.1 a 0.95 x umbrales centrados/corridos, N=80.000 réplicas por combinación, sin calibrar -- solo explorar el espacio alcanzable) confirmó que dejando lambda como parámetro LIBRE de la optimización (no fijo), el mecanismo sí alcanza curtosis positiva: con lambda chico (0.10-0.20) y umbrales corridos hacia un extremo, se alcanzan combinaciones como asimetría=1.18, curtosis exceso=1.58 -- en el vecindario del objetivo de RWAS (asimetría=1.35, curtosis exceso=1.17). Rango alcanzado en la grilla completa: asimetría de -9.8 a 9.7, curtosis exceso de -1.5 a 120 (con `lambda` chico y umbrales muy corridos se puede llegar a curtosis extrema, no solo positiva moderada).
+
+Por eso `R/03_calibrar_niveles.R` optimiza sobre (lambda, umbrales) conjuntamente -- vía `plogis()`/`qlogis()` para mantener lambda en (0,1) sin restringir el optimizador -- en vez de reusar el mecanismo de lambda fija de SSTN-Normality-Study. Mismo método de resto (números aleatorios comunes, Nelder-Mead multi-arranque, N=150.000, semilla 20260922).
+
+## 8. Restricción de integridad de investigación (22 sep 2026)
 
 Mismo criterio no negociable que SSTN-Normality-Study: ningún resultado se fabrica ni se estima. Toda corrida real (extracción, submuestreo, batería de 11 pruebas) pasa por GitHub Actions -- nada se corre localmente. La extracción de los 4 datasets sí se corrió una vez localmente como chequeo de sintaxis (confirmar que el script no truena y que los N/momentos resultantes son plausibles), pero ese resultado NO se usa como dato del estudio -- el dato real sale de la corrida de `correr_extraccion` en Actions.
