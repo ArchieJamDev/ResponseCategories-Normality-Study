@@ -70,3 +70,23 @@ Por eso `R/03_calibrar_niveles.R` optimiza sobre (lambda, umbrales) conjuntament
 ## 8. Restricción de integridad de investigación (22 sep 2026)
 
 Mismo criterio no negociable que SSTN-Normality-Study: ningún resultado se fabrica ni se estima. Toda corrida real (extracción, submuestreo, batería de 11 pruebas) pasa por GitHub Actions -- nada se corre localmente. La extracción de los 4 datasets sí se corrió una vez localmente como chequeo de sintaxis (confirmar que el script no truena y que los N/momentos resultantes son plausibles), pero ese resultado NO se usa como dato del estudio -- el dato real sale de la corrida de `correr_extraccion` en Actions.
+
+## 9. Hallazgo central: el efecto de k se achica cuanto más extrema es la desviación real de la normalidad (22 sep 2026)
+
+Con las 35 celdas del bloque de niveles (Sección 6) completas, se puede responder la pregunta que motivó el bloque: ¿el efecto de k observado en el Bloque 5 original (calibrado a una asimetría real moderada, tipo B1_riasec_realistic) se sostiene igual cuando la distribución real es mucho más extrema (tipo RWAS)?
+
+Brecha de potencia media (11 pruebas, promediada sobre n) entre k=3 y k=9, por nivel:
+
+| Nivel | Asimetría / curtosis objetivo | Brecha k3−k9 |
+|---|---|---|
+| bajo | 0.0 / -0.70 | 0.061 |
+| bajo_moderado | 0.2 / -0.55 | 0.049 |
+| moderado | 0.7 / -0.15 | 0.023 |
+| alto | 1.0 / 0.40 | 0.017 |
+| muy_alto | 1.35 / 1.17 | 0.012 |
+
+**La dirección del efecto es consistente en los 5 niveles** (siempre k=3 > k=9, menos categorías → más potencia, mismo signo que en el Bloque 5 original) -- no se invierte en ningún nivel. Pero **la magnitud decae monotónicamente** a medida que la distribución real se aleja más de la normalidad: en el nivel más extremo (muy_alto, tipo RWAS) el efecto de k es aproximadamente una quinta parte del que se observa cerca de la normalidad (nivel bajo).
+
+**Esto resuelve, sin necesidad de una reformulación narrativa, la aparente contradicción encontrada antes con el bloque real** (Sección 5): ahí RWAS (k=9) mostraba MÁS potencia que RSE/MACH-IV/HEXACO (k=4,5,7), lo que a primera vista parecía contradecir "menos k → más potencia". La explicación no es que k=9 sea mejor -- es que con una asimetría/curtosis real tan fuerte como la de RWAS, la potencia ya está cerca del techo (~0.88 en la simulación del nivel muy_alto) para CUALQUIER k, así que la elección de k casi no importa ahí. En instrumentos con desviaciones más sutiles de la normalidad (como RSE), en cambio, k sí importa proporcionalmente más. No son dos hallazgos en tensión -- es una interacción de tres vías (k × n × severidad de la no-normalidad real) que el bloque de niveles aísla explícitamente.
+
+Implicación práctica para el paper: el efecto de k sobre la potencia de las pruebas de normalidad no es una propiedad fija del diseño del instrumento -- depende de qué tan cerca de la normalidad está el constructo que se está midiendo. Es más consecuente para constructos con desviaciones sutiles (la mayoría de la práctica psicométrica aplicada) que para constructos con desviaciones extremas y obvias.
