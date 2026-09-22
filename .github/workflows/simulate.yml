@@ -160,7 +160,9 @@ jobs:
 
   consolidate-calibracion-niveles:
     if: ${{ inputs.correr_consolidar_calibracion_niveles }}
-    needs: calibrate-niveles
+    permissions:
+      actions: read
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -172,9 +174,17 @@ jobs:
             any::dplyr
       - uses: actions/download-artifact@v4
         with:
+          # run-id fijo, no needs: -- mismo motivo que bloque-real-categorias
+          # arriba (no depende de correr_calibracion_niveles en el mismo
+          # dispatch). Apunta a la corrida de calibrate-niveles ya validada
+          # (35749127861, las 5 celdas con dist2 <= 1e-11). Si ese artifact
+          # expira, correr una vez con correr_calibracion_niveles=true y
+          # actualizar el run-id de abajo.
           pattern: calibracion-nivel-*
           path: data/results
           merge-multiple: true
+          run-id: 35749127861
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Consolidar los 5 niveles
         run: Rscript R/03b_consolidar_calibracion_niveles.R
       - uses: actions/upload-artifact@v4
