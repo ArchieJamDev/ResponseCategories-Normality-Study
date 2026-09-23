@@ -45,7 +45,11 @@ Se definieron cinco niveles ordenados de severidad de no-normalidad, con objetiv
 | alto | 1.00 | 0.40 |
 | muy alto | 1.35 | 1.17 |
 
-Para cada combinación de nivel y *k* (7 valores, 3 a 9), λ y los *k*−1 umbrales se calibraron simultáneamente mediante optimización Nelder-Mead multi-arranque (8 puntos de partida por celda, barriendo λ y el corrimiento de los umbrales), minimizando la distancia cuadrática entre los momentos empíricos del compuesto simulado (*N*=150.000 réplicas, números aleatorios comunes reusados en las 35 celdas para evitar que el ruido Monte Carlo contamine las comparaciones entre celdas) y los objetivos de la Tabla 2. Las 35 celdas calibraron con una distancia residual máxima de 3.8 × 10⁻¹¹, prácticamente exacta.
+**Calibración.** Para cada combinación de nivel y *k* (7 valores, 3 a 9; 35 celdas en total), λ y los *k*−1 umbrales se calibraron simultáneamente vía optimización numérica, minimizando la distancia cuadrática entre los momentos empíricos del compuesto simulado y los objetivos de la Tabla 2:
+
+*d*² = (asimetría_lograda − asimetría_objetivo)² + (curtosis_lograda − curtosis_objetivo)²
+
+Los umbrales se parametrizaron como *u₁* = *p*, *uⱼ* = *p* + Σᵢ₌₂ʲ exp(*gᵢ*) para *j* > 1 (con *p* el primer umbral y *g* los log-incrementos), lo que garantiza umbrales crecientes sin restringir el optimizador; λ se parametrizó como λ = expit(*z*) = 1 / (1 + *e*⁻ᶻ), lo que mantiene λ en (0, 1) sin restricciones explícitas. El vector de parámetros libres (*z*, *p*, *g*₁, ..., *g*ₖ₋₂) se optimizó con el algoritmo Nelder-Mead, con ocho puntos de partida distintos por celda —barriendo λ inicial de 0.15 a 0.85 y el corrimiento de los umbrales iniciales hacia el signo del objetivo— y quedándose con el resultado de menor *d*² entre los ocho. Los momentos empíricos de cada combinación de parámetros se calcularon sobre *N*=150.000 réplicas de números aleatorios comunes (misma semilla y mismos valores de θ y ε generados una sola vez, reusados en las 35 celdas), para que el ruido Monte Carlo no contaminara las comparaciones de forma entre celdas. Las 35 celdas calibraron con una distancia residual máxima *d*² = 3.8 × 10⁻¹¹, prácticamente exacta.
 
 Con los parámetros calibrados, cada celda (nivel × *k*) se simuló de forma independiente sobre la grilla completa de *n*, con *R*=10.000 réplicas por celda (280 celdas: 5 niveles × 7 valores de *k* × 8 tamaños de muestra).
 
