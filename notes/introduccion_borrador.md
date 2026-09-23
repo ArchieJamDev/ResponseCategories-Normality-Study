@@ -1,6 +1,6 @@
-# Introducción (borrador v2) — segundo paper
+# Introducción (borrador v3) — segundo paper
 
-Nota: reescritura completa tras la v1 (descartada por parecerse demasiado al original de SSTN en apertura y estructura). Prosa continua, sin marcado LaTeX de plantilla todavía.
+Nota: v2 reescribió la apertura/estructura completa (descartada v1 por parecerse demasiado al original de SSTN). v3 quita la referencia al paper de SSTN como motivación (no está publicado, no hay cita formal posible) — el vacío se sostiene solo con literatura publicada. Prosa continua, sin marcado LaTeX de plantilla todavía.
 
 ---
 
@@ -11,8 +11,6 @@ Esa segunda pregunta —qué le hace la cantidad de categorías de respuesta *k*
 Existe, en paralelo, una tradición extensa de comparar la potencia de distintas pruebas de normalidad entre sí, con Shapiro-Wilk señalada consistentemente entre las más potentes frente a una amplia variedad de alternativas (Razali y Wah, 2011; Shapiro y Wilk, 1965; Yap y Sim, 2011), y trabajos recientes que replican ese tipo de comparación en dominios tan distintos como datos geoespaciales, con una batería de pruebas casi idéntica a la aquí empleada (Bantu, Kozyra y Wiora, 2025), o sobre datos simulados con la forma típicamente asimétrica y heterocedástica de un puntaje Likert (Matamoros-Mota, 2026). Esta tradición, no obstante, casi siempre varía la *forma* de la distribución alternativa —su asimetría, su curtosis, la familia paramétrica de la que proviene— sin tocar nunca la *cantidad de categorías de respuesta* como una dimensión de variación independiente. Kamath, Poojari y Varsha (2025) llevan esto más lejos que la mayoría: cruzan sistemáticamente asimetría y curtosis (generadas con el método de Fleishman) con el tamaño de muestra para evaluar trece pruebas de normalidad, cubriendo justo el rango de desviaciones leves a moderadas que la literatura previa solía saltarse. Pero ni ese estudio ni ningún otro de esta tradición pasa la forma de la distribución por un mecanismo de discretización tipo Likert —*k* simplemente no aparece como factor.
 
 El resultado es un vacío específico y, hasta donde se ha podido determinar, no cubierto: no existe evidencia sistemática de cómo interactúan la cantidad de categorías de respuesta de un instrumento, el tamaño de la muestra y la severidad real de la desviación de la normalidad del constructo medido, en su efecto conjunto sobre la potencia comparada de una batería amplia de pruebas de normalidad. Es una pregunta con consecuencias prácticas directas: la cantidad de categorías de respuesta es, de las tres, la única que quien construye el instrumento controla directamente antes de recolectar datos.
-
-Este vacío se hizo evidente a partir de un hallazgo incidental en un estudio de simulación más amplio sobre el desempeño comparado de once pruebas de normalidad [CITAR: manuscrito en preparación], donde un bloque dedicado exclusivamente a *k* —anclado, vía simulación plasmode, a la asimetría y curtosis reales de una única subescala psicométrica de asimetría moderada— mostró que el efecto de *k* sobre la potencia es sistemático y no monotónico según su paridad, concentrado en un rango intermedio de tamaño de muestra. Ese diseño, sin embargo, fijaba la forma de la distribución subyacente en un solo punto, dejando abierta la pregunta de si el efecto observado se sostendría igual, más fuerte o más débil, ante constructos con desviaciones de la normalidad más leves o más severas que la usada como ancla.
 
 El presente estudio responde esa pregunta con dos aproximaciones complementarias. La primera es puramente simulada: cinco niveles ordenados de severidad de no-normalidad —de una forma cercana a la normal hasta una marcadamente asimétrica y leptocúrtica— cruzados sistemáticamente con *k* = 3 a 9 y con el tamaño de muestra, lo que permite aislar por primera vez si el efecto de *k* es constante o depende de qué tan lejos está la distribución real de la normalidad. La segunda ancla ese resultado a la práctica psicométrica real, sin necesidad de recolectar datos primarios: cuatro instrumentos de acceso abierto que difieren en su cantidad NATIVA de categorías de respuesta —la Escala de Autoestima de Rosenberg (Rosenberg, 1965; *k*=4), el MACH-IV (Christie y Geis, 1970; *k*=5), la faceta de Expresividad de HEXACO (Ashton, Lee y Goldberg, 2007; *k*=7) y la Escala de Autoritarismo de Derecha (Altemeyer, 1981; *k*=9)— se someten al mismo remuestreo repetido que la parte simulada, permitiendo comparar directamente si el patrón hallado en simulación controlada se manifiesta también cuando *k* viene naturalmente confundido con la cantidad de ítems y la forma real del constructo, como ocurre siempre en la práctica.
 
@@ -28,7 +26,10 @@ El presente estudio responde esa pregunta con dos aproximaciones complementarias
 - Se recorta Chakrabartty y Doronila (2026, preprint SSRN) de esta versión — pertenecían más al debate ordinal-continuo que ya no es protagonista aquí. Quedan disponibles si hace falta un párrafo de matiz metodológico más adelante en Método/Discusión.
 - Más corto en general (6 párrafos + cierre vs. 7 antes) y con frases más cortas.
 
-## Pendientes (se mantienen de la v1)
+## Qué cambió en v3
+
+- Se eliminó el párrafo que citaba el hallazgo del paper de SSTN como motivación directa ([CITAR: manuscrito en preparación]) — no está publicado ni sometido, no hay cita formal posible. El vacío ahora se sostiene solo con literatura publicada (Kamath et al. 2025 + la literatura de *k* sin cruce con severidad), sin depender de trabajo propio inédito.
+
+## Pendientes
 
 - Referencias completas (formato APA) de: Dillman et al. 2009, Foddy 1994, Rosenberg 1965, Christie y Geis 1970, Ashton, Lee y Goldberg 2007, Altemeyer 1981.
-- El placeholder [CITAR: manuscrito en preparación] para el paper de SSTN sigue sin resolver — sigue siendo la decisión pendiente más importante.
