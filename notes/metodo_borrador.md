@@ -13,16 +13,18 @@ El estudio combina dos componentes complementarios, ambos evaluados con la misma
 Los cuatro instrumentos usados en el componente de datos reales, todos provenientes del catálogo de datos abiertos de openpsychometrics.org, se resumen en la Tabla 1. Se seleccionaron específicamente por su cantidad nativa de categorías de respuesta —no colapsada ni modificada post-hoc—, buscando cubrir el rango más amplio posible de *k* disponible en datos abiertos. Una búsqueda exhaustiva en ese catálogo, complementada con Open Science Framework, Kaggle y candidatos específicos de la literatura psicométrica, no encontró ningún instrumento con exactamente *k*=6 ni *k*=8; estos valores parecen ser genuinamente infrecuentes en la práctica psicométrica publicada (§4, Limitaciones).
 
 **Tabla 1**
-*Instrumentos reales usados y su cantidad nativa de categorías de respuesta*
+*Instrumentos reales usados, su cantidad nativa de categorías de respuesta y parámetros psicométricos publicados*
 
-| Instrumento | *k* | Ítems | *N* | Ítems invertidos |
-|---|---|---|---|---|
-| Escala de Autoestima de Rosenberg (Rosenberg, 1965) | 4 | 10 | 46.546 | {3,5,8,9,10} |
-| MACH-IV (Christie y Geis, 1970) | 5 | 20 | 73.486 | {3,4,6,7,9,10,11,14,16,17} |
-| HEXACO, faceta Expresividad (Ashton, Lee y Goldberg, 2007) | 7 | 10 | 22.783 | {6,7,8,9,10} |
-| Escala de Autoritarismo de Derecha — RWAS (Altemeyer, 1981) | 9 | 22 | 9.680 | {4,6,8,9,11,13,15,18,20,21} |
+| Instrumento | *k* | Ítems | *N* | α publicado | Ítems invertidos |
+|---|---|---|---|---|---|
+| Escala de Autoestima de Rosenberg (Rosenberg, 1965) | 4 | 10 | 46.546 | .77–.88 (Blascovich y Tomaka, 1993; Rosenberg, 1986) | {3,5,8,9,10} |
+| MACH-IV (Christie y Geis, 1970) | 5 | 20 | 73.486 | .68–.70 | {3,4,6,7,9,10,11,14,16,17} |
+| HEXACO, faceta Expresividad (Ashton, Lee y Goldberg, 2007) | 7 | 10 | 22.783 | .84 (Ashton et al., 2007, Tabla 2) | {6,7,8,9,10} |
+| Escala de Autoritarismo de Derecha — RWAS (Altemeyer, 1981) | 9 | 22 | 9.680 | ≈.90 | {4,6,8,9,11,13,15,18,20,21} |
 
-*Nota.* Las claves de reversión de MACH-IV y RSE se confirmaron contra checkpsych.com/tests/mach-iv/ y Rosenberg (1965), respectivamente; la de HEXACO, contra la clave oficial de puntuación del IPIP (ipip.ori.org/newHEXACO_PI_key.htm), verificada ítem por ítem; la de RWAS, contra la lista de ítems invertidos reportada independientemente en una base de datos de escalas psicológicas (db.arabpsychology.com/scales/right-wing-authoritarianism-scale/), coincidente con la lectura semántica directa del contenido de cada ítem. El puntaje compuesto de cada instrumento se calculó como la suma de sus ítems (con reversión donde correspondía), exigiendo caso completo: un caso solo entra al puntaje total si todos sus ítems tienen respuesta válida en rango.
+*Nota.* Los valores de α (alfa de Cronbach) corresponden a la confiabilidad publicada de cada instrumento en su desarrollo original o en estudios de validación citados, no a un cálculo propio sobre los datos de este estudio. Las claves de reversión de MACH-IV y RSE se confirmaron contra checkpsych.com/tests/mach-iv/ y Rosenberg (1965), respectivamente; la de HEXACO, contra la clave oficial de puntuación del IPIP (ipip.ori.org/newHEXACO_PI_key.htm), verificada ítem por ítem; la de RWAS, contra la lista de ítems invertidos reportada independientemente en una base de datos de escalas psicológicas (db.arabpsychology.com/scales/right-wing-authoritarianism-scale/), coincidente con la lectura semántica directa del contenido de cada ítem. El puntaje compuesto de cada instrumento se calculó como la suma de sus ítems (con reversión donde correspondía), exigiendo caso completo: un caso solo entra al puntaje total si todos sus ítems tienen respuesta válida en rango.
+
+Los cuatro instrumentos difieren no solo en *k* sino también en su confiabilidad reportada: MACH-IV es notablemente el más bajo (α≈.68–.70, un problema de consistencia interna ya documentado en la literatura sobre esta escala), mientras que RWAS es el más alto (α≈.90). Esta variación es una propiedad de los instrumentos tal como existen en la práctica real —no algo controlado por el diseño del estudio—, y se retoma en la Discusión al interpretar los resultados del componente de datos reales.
 
 Los cuatro instrumentos se eligieron conjuntamente para cubrir el rango de *k* más amplio posible disponible en datos abiertos: RSE y MACH-IV cubren el extremo bajo (*k*=4 y *k*=5), mientras que HEXACO y RWAS extienden el rango hacia valores más altos (*k*=7 y *k*=9, respectivamente).
 
