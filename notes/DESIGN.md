@@ -8,7 +8,7 @@ Este proyecto nace de un hallazgo secundario de SSTN-Normality-Study (Bloque 5 a
 
 Decisión: separar esto en un artículo independiente en vez de agregarlo como una sexta sección al manuscrito de SSTN-Normality-Study (que ya está en revisión mayor en Psicothema y convergiendo) -- la pregunta de fondo ("¿cómo interactúan diseño del instrumento y tamaño de muestra en la potencia de CUALQUIER prueba de normalidad?") es distinta a la de ese paper ("¿cómo se compara SSTN contra las clásicas?") y generalizable más allá de SSTN.
 
-Título de trabajo (actualizado 23 sep 2026, segunda revisión -- refleja que el estudio combina simulación Y datos reales, no solo Monte Carlo): "Cuándo importa la cantidad de categorías de respuesta: un estudio Monte Carlo y de datos reales de su interacción con el tamaño de muestra y la severidad de la no-normalidad en 11 pruebas".
+Título de trabajo (actualizado 23 sep 2026, tercera revisión): "Cuándo importa la cantidad de categorías de respuesta: un estudio Monte Carlo y de puntaje compuesto de su interacción con el tamaño de muestra y la severidad de la no-normalidad en 11 pruebas".
 
 ## 2. Por qué un bloque de datos reales, y por qué estos 4 (22 sep 2026)
 
