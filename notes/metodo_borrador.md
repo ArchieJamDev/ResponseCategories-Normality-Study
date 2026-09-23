@@ -6,7 +6,7 @@ Prosa continua, sin marcado LaTeX de plantilla todavía. Numeración de subsecci
 
 ## 2.1. Diseño general
 
-El estudio combina dos componentes complementarios, ambos evaluados con la misma batería de once pruebas de normalidad (§2.5) y, cuando aplica, la misma grilla de tamaño de muestra *n* ∈ {10, 25, 50, 100, 250, 500, 1000, 1500}. El primer componente es puramente simulado (§2.3): cinco niveles ordenados de severidad de no-normalidad, cruzados sistemáticamente con *k* ∈ {3, ..., 9} y con *n*, aíslan el efecto de la cantidad de categorías de respuesta de la forma específica de la distribución subyacente. El segundo componente ancla ese resultado a la práctica psicométrica real (§2.4): cuatro instrumentos de acceso abierto que difieren en su cantidad nativa de categorías de respuesta se someten a remuestreo repetido sobre la misma grilla de *n*.
+El estudio combina dos componentes complementarios, ambos evaluados con la misma batería de once pruebas de normalidad (§2.5) y, cuando aplica, la misma grilla de tamaño de muestra *n* ∈ {10, 25, 50, 100, 250, 500, 1000, 1500}. El primer componente es puramente simulado (§2.3): cinco niveles ordenados de severidad de no-normalidad, cruzados sistemáticamente con *k* ∈ {3, ..., 9} y con *n*, aíslan el efecto de la cantidad de categorías de respuesta de la forma específica de la distribución subyacente. El segundo componente ancla ese resultado a la práctica psicométrica real (§2.4): cuatro instrumentos de acceso abierto que difieren en su cantidad nativa de categorías de respuesta se someten a submuestreo aleatorio repetido sobre la misma grilla de *n*.
 
 ## 2.2. Instrumentos psicométricos reales
 
@@ -49,9 +49,9 @@ Para cada combinación de nivel y *k* (7 valores, 3 a 9), λ y los *k*−1 umbra
 
 Con los parámetros calibrados, cada celda (nivel × *k*) se simuló de forma independiente sobre la grilla completa de *n*, con *R*=10.000 réplicas por celda (280 celdas: 5 niveles × 7 valores de *k* × 8 tamaños de muestra).
 
-## 2.4. Bloque de datos reales: remuestreo *m-out-of-N*
+## 2.4. Bloque de datos reales: submuestreo aleatorio *m-out-of-N*
 
-Sobre cada uno de los cuatro instrumentos de la Tabla 1 se aplicó remuestreo aleatorio sin reemplazo tipo *m-out-of-N* (Politis, Romano y Wolf, 1999): para cada tamaño de muestra *n* de la grilla, se extrajeron *R*=10.000 submuestras aleatorias del puntaje compuesto completo del instrumento, y se calculó la tasa de rechazo empírica de cada prueba de normalidad frente al *N* completo del instrumento como población de referencia. El *N* mínimo entre los cuatro instrumentos (RWAS, 9.680) es muy superior al *n* máximo de la grilla (1.500), por lo que el remuestreo sin reemplazo es válido para los cuatro sin necesidad de ajuste.
+Sobre cada uno de los cuatro instrumentos de la Tabla 1 se aplicó submuestreo aleatorio sin reemplazo tipo *m-out-of-N* (Politis, Romano y Wolf, 1999): para cada tamaño de muestra *n* de la grilla, se extrajeron *R*=10.000 submuestras aleatorias del puntaje compuesto completo del instrumento, y se calculó la tasa de rechazo empírica de cada prueba de normalidad frente al *N* completo del instrumento como población de referencia. El *N* mínimo entre los cuatro instrumentos (RWAS, 9.680) es muy superior al *n* máximo de la grilla (1.500), por lo que el submuestreo sin reemplazo es válido para los cuatro sin necesidad de ajuste.
 
 A diferencia del componente de niveles (§2.3), en este componente la cantidad de categorías de respuesta *k* viene naturalmente confundida con la cantidad de ítems del instrumento y con la asimetría/curtosis real del constructo medido —tal como ocurre siempre en la práctica psicométrica aplicada—; el componente de niveles existe precisamente para poder separar esos factores de forma que el componente de datos reales no puede.
 
@@ -61,7 +61,7 @@ Se evaluó la siguiente batería de once pruebas de normalidad: Shapiro-Wilk (Sh
 
 ## 2.6. Implementación y reproducibilidad
 
-Todas las simulaciones y el remuestreo se ejecutaron en R (v4.6.1), sobre la infraestructura de GitHub Actions (*runners* ubuntu-latest, paralelización por celda mediante `strategy: matrix`), con `r-lib/actions/setup-r-dependencies` para el cacheo de dependencias. Ninguna corrida real (extracción de datos, calibración, simulación, remuestreo) se ejecutó en una máquina local: los resultados reportados provienen exclusivamente de corridas archivadas en el repositorio de desarrollo, con historial de commits verificable. El código completo, incluida la configuración exacta de la infraestructura de simulación, está disponible en el repositorio citado en la sección de disponibilidad de datos y código.
+Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1), sobre la infraestructura de GitHub Actions (*runners* ubuntu-latest, paralelización por celda mediante `strategy: matrix`), con `r-lib/actions/setup-r-dependencies` para el cacheo de dependencias. Ninguna corrida real (extracción de datos, calibración, simulación, submuestreo) se ejecutó en una máquina local: los resultados reportados provienen exclusivamente de corridas archivadas en el repositorio de desarrollo, con historial de commits verificable. El código completo, incluida la configuración exacta de la infraestructura de simulación, está disponible en el repositorio citado en la sección de disponibilidad de datos y código.
 
 ---
 
@@ -70,4 +70,5 @@ Todas las simulaciones y el remuestreo se ejecutaron en R (v4.6.1), sobre la inf
 - Falta decidir si el orden de exposición debe ser primero el bloque de niveles o primero el bloque de datos reales — aquí puse niveles primero (§2.3 antes de §2.4) porque es el componente que aísla el mecanismo; en Resultados podría convenir el orden inverso (mostrar primero el dato real "crudo" y su aparente confusión, y luego el bloque de niveles que la resuelve), replicando el arco narrativo real de cómo se llegó al hallazgo. Pendiente de decidir junto con la estructura de Resultados.
 - Falta una figura o tabla que muestre visualmente el mecanismo generativo del bloque de niveles (factor común + ítems + umbrales) — el original de SSTN no tenía figuras, solo tablas; revisar si conviene agregar una acá dado que el mecanismo con λ libre es una novedad metodológica del presente estudio.
 - Pendiente: decidir si se incluye el detalle completo de las fórmulas (momentos, parametrización de umbrales `primer_umbral + cumsum(exp(log_gaps))`, transformación `plogis`/`qlogis` de λ) en el cuerpo del Método o se relega a un apéndice/material suplementario.
-- Confirmado: se eliminaron todas las referencias a "estudio hermano"/trabajo comparado en el texto del Método (instrumentos reales, calibración de λ, remuestreo m-out-of-N, batería de pruebas) — el paper ahora se sostiene sin depender de mencionar trabajo propio no publicado.
+- Confirmado: se eliminaron todas las referencias a "estudio hermano"/trabajo comparado en el texto del Método (instrumentos reales, calibración de λ, submuestreo m-out-of-N, batería de pruebas) — el paper ahora se sostiene sin depender de mencionar trabajo propio no publicado.
+- Confirmado: "remuestreo" reemplazado por "submuestreo aleatorio" en todo el documento.
