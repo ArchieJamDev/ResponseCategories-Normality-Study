@@ -66,9 +66,61 @@ Este patrón —potencia sustancialmente mayor en el instrumento de *k* más alt
 
 ---
 
+## 3.4. Hipótesis puestas a prueba en datos reales (6 instrumentos, k=4..9)
+
+El bloque de niveles (§3.1) genera hipótesis; esta sección resume qué tanto se pudieron confirmar con los 6 instrumentos reales (RSE k=4, MACH-IV k=5, NFC k=6, HEXACO k=7, AHS k=8, RWAS k=9). Ver `notes/DESIGN.md` Secciones 9-13 para el detalle estadístico completo de cada punto.
+
+**H1 — Menos categorías de respuesta (k) → más potencia.** Confirmada, pero solo donde fue evaluable: únicamente en pares de instrumentos con severidad real equivalente (MACH-IV k=5 vs HEXACO k=7, ambos en nivel bajo-moderado por distancia euclidiana a los niveles calibrados) se pudo aislar el efecto de *k* de la severidad real. Ahí la dirección predicha se confirma, significativa en *n*=50 a *n*=500 (t pareado por prueba, p<.05 en 4 de 8 tamaños de muestra). El ANCOVA agregado con los 6 instrumentos confirma la misma dirección (coeficiente de *k* negativo en los 7 *n* evaluables) solo tras excluir NFC —cuyo desajuste de severidad (ver H5 más abajo) basta para invertir el signo del modelo agregado—, sin alcanzar significancia individual por baja potencia estadística (5 instrumentos, un dato por *k*).
+
+**H2 — El efecto de *k* se modula por *n* (negligible en extremos, pico en n≈50-250).** Confirmada de forma limpia. El par MACH-IV/HEXACO reproduce la misma forma de U invertida que predice la simulación: p=.117 (*n*=10) → .222 (*n*=25) → .026\* (*n*=50) → .011\* (*n*=100) → .011\* (*n*=250) → .012\* (*n*=500) → .211 (*n*=1000).
+
+**H3 — La brecha de potencia entre *k* extremos se achica con la severidad real (Tabla 3).** No evaluable como tendencia con los datos reales disponibles: solo hay 2 pares de instrumentos que comparten nivel de severidad (bajo-moderado, alto), insuficiente para trazar una curva de brecha vs. severidad. Ni confirmada ni refutada — sigue siendo evidencia exclusivamente simulada.
+
+**H4 — La paridad de *k* (par/impar) afecta la potencia, independiente de su magnitud, controlando severidad.** Estructuralmente no evaluable con los 6 instrumentos: cada nivel de severidad real cae enteramente dentro de un solo grupo de paridad (bajo=par, bajo-moderado=impar, alto=par, muy alto=impar), así que un modelo `potencia ~ nivel + paridad` no puede estimar el coeficiente de paridad (columna `NA` por singularidad exacta, verificado en los 7 tamaños de *n*). Con covariables continuas de asimetría/curtosis en vez de la categoría discreta, el modelo sí es estimable pero el resultado no es robusto (invierte signo o pierde significancia al excluir casi cualquier instrumento individual, análisis leave-one-out). Ni confirmada ni refutada — evidencia exclusivamente simulada, donde el diseño garantiza ortogonalidad entre paridad y severidad.
+
+**H5 — Un instrumento con severidad mal calibrada distorsiona cualquier análisis agregado que lo incluya.** Confirmada con evidencia cuantitativa doble: (a) NFC tiene la peor distancia de ajuste de severidad de los 6 (0.958, un orden de magnitud peor que el resto) porque combina asimetría baja (0.113) con curtosis alta (0.761) — una combinación fuera de la trayectoria que calibran los 5 niveles simulados (exceso de curtosis sobre la trayectoria esperada: +1.376, el mayor de los 6); (b) excluir NFC del ANCOVA agregado restaura la dirección de *k* esperada en los 7 tamaños de *n*, mientras que incluirlo la invierte y la vuelve significativa en 2 celdas — es decir, un solo instrumento mal calibrado puede revertir la conclusión de un análisis agregado.
+
+## 3.5. Comparación de las 11 pruebas: potencia bruta y estabilidad frente a *k*
+
+Pregunta práctica: ¿qué prueba conviene usar, y bajo qué condiciones? Se calcularon tres versiones comparables de la misma tabla (potencia media + coeficiente de variación de la potencia a través de *k*, como medida de estabilidad):
+
+1. **Simulada limpia** (280 celdas, severidad aislada de *k* por diseño — verificado: la asimetría/curtosis lograda por la calibración varía menos de 10⁻⁵ entre los 7 valores de *k* dentro de cada nivel).
+2. **Real** (6 instrumentos, *k* y severidad inevitablemente confundidos).
+3. **Simulada confundida** (mismas 6 combinaciones nivel-*k* que los instrumentos reales, impuestas artificialmente sobre datos simulados, para poder comparar 1 y 2 en igualdad de condiciones).
+
+**Tabla 7**
+*Ranking combinado (potencia + estabilidad a k) de las 11 pruebas, en los tres escenarios*
+
+| Prueba | Rank sim. limpia | Rank real | Rank sim. confundida | Desplazamiento confundida↔real |
+|---|---|---|---|---|
+| D'Agostino-Pearson | 3 | 2 | 5 | 3 |
+| Shapiro-Wilk | 7 | 5 | 3 | 2 |
+| Epps-Pulley | 8 | 18 | 6 | **12** |
+| Anderson-Darling | 10 | 7 | 7 | **0** |
+| Jarque-Bera | 11 | 18 | 21 | 3 |
+| Shapiro-Francia | 11 | 12 | 9 | 3 |
+| SSTN | 12 | 18 | 19 | **1** |
+| Cramér-von Mises | 15 | 12.5 | 15 | 2 |
+| Pearson χ² | 16 | 11.5 | 13 | 2 |
+| Lilliefors | 17 | 6 | 14 | 8 |
+| Curtosis (Anscombe-Glynn) | 22 | 22 | 20 | 2 |
+
+**Lectura para la Discusión:**
+
+- **D'Agostino-Pearson** es la recomendación por defecto: mejor balance potencia/estabilidad en los tres escenarios, de forma consistente.
+- **Shapiro-Wilk** mantiene la potencia bruta más alta ya documentada en la literatura, pero es más sensible a *k* que D'Agostino-Pearson.
+- **SSTN** no compite en potencia bruta (nunca la más potente), pero ofrece dos argumentos distintos: (a) 3ra más estable a *k* cuando la severidad está controlada (escenario simulado limpio) — su conclusión depende menos de la cantidad de categorías de la escala; (b) 2da prueba más *predecible* entre el escenario simulado-confundido y el real (desplazamiento=1, solo detrás de Anderson-Darling) — la simulación anticipa fielmente su comportamiento real, incluso cuando la ventaja de estabilidad pura se diluye por la confusión k-severidad inevitable en datos reales.
+- **Anderson-Darling** es la única prueba con desplazamiento cero — su ranking en el escenario simulado-confundido predice exactamente su ranking real.
+- **Lilliefors y Epps-Pulley** son las menos confiables entre escenarios (desplazamientos de 8 y 12 respectivamente, en direcciones opuestas) — Lilliefors resulta mejor de lo esperado en datos reales, Epps-Pulley resulta peor. Ninguna de las dos permite anticipar con confianza su comportamiento real desde un análisis simulado.
+- **Curtosis (Anscombe-Glynn)** es la peor en potencia bruta en casi todos los escenarios y errática entre niveles de severidad (solo detecta desviaciones de curtosis, no de asimetría) — recomendable solo cuando se sabe de antemano que la desviación es puramente de curtosis.
+
+---
+
 ## Notas para revisión
 
 - Falta la Figura 1 referenciada en el texto (gráfico de la Tabla 5, brecha k3-k9 vs. n, una línea por nivel, mostrando el desplazamiento del pico) — pendiente de diseñar.
 - Falta decidir si se agrega una tabla/figura adicional desglosando el patrón por prueba individual (no solo el promedio de las 11) — el estudio hermano [ya no debe mencionarse, pero como referencia de formato] usaba tablas de prueba x familia; aquí podría ser prueba x nivel o prueba x n. A confirmar si aporta o satura el Resultados.
 - Confirmado: el "1.000" de la Tabla 6 en n=1000/1500 es potencia esencialmente perfecta (no redondeo de un valor bajo), verificado contra el consolidado.
 - Pendiente: decidir si la Tabla 5 (la más densa) se queda como tabla o se reemplaza enteramente por la Figura 1 y se resume en texto, para no sobrecargar de números el cuerpo del Resultados.
+- **PENDIENTE IMPORTANTE**: §3.2 (Tabla 6) sigue con los 4 instrumentos originales (RSE, MACH-IV, HEXACO, RWAS) — falta reescribirla con los 6 (agregar NFC k=6 y AHS k=8), y reemplazar la narrativa "aparente discrepancia con el bloque de niveles" por la explicación ya desarrollada en DESIGN.md Secciones 9-13 (severidad real confundida con k, validada cuantitativamente vía distancia euclidiana y correlación real-vs-simulado). Las nuevas §3.4 y §3.5 ya incorporan el análisis de los 6 instrumentos, pero §3.2 todavía no está alineada con ellas — revisar consistencia antes de considerar el Resultados completo.
+- Falta también la sección de validación real-vs-simulado (correlación r=0.91 global, hasta 0.999 en instrumentos bien ajustados, ρ=1 entre distancia de severidad y error de predicción) — está en DESIGN.md Sección 11 pero no volcada aún a este archivo.
