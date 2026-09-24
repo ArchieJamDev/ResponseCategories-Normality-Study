@@ -37,9 +37,11 @@ Ver comentario completo en `R/01_extract_real_subscales.R`. Resumen:
 
 A diferencia de SSTN-Normality-Study (los 4 zips de ese proyecto son TSV pese a la extensión .csv), en este proyecto **RWAS viene delimitado por COMA**, no por TAB -- único caso distinto encontrado hasta ahora en el catálogo de openpsychometrics.org. Confirmado con `head -1 data.csv | awk -F',' '{print NF}'` antes de escribir `R/01_extract_real_subscales.R`. RSE, MACH-IV y HEXACO sí son TSV, igual que en el proyecto hermano.
 
-## 5. Grilla de n y método de submuestreo (22 sep 2026)
+## 5. Grilla de n y método de submuestreo (22 sep 2026; actualizado 24 sep 2026 tras agregar NFC y AHS -- ver Secciones 10 y 11)
 
-Se usa la MISMA grilla de n que el Bloque 5 simulado de SSTN-Normality-Study -- {10,25,50,100,250,500,1000,1500} -- para que la comparación entre el hallazgo simulado y su contraparte real sea directa, celda por celda de n, no solo cualitativa. El N mínimo de los 4 datasets (RWAS, 9.680) es muy superior al n máximo del grid (1.500), así que el remuestreo sin reemplazo (mismo método "m-out-of-N" del Bloque 4 de SSTN-Normality-Study) es válido para los 4 sin ajuste.
+Se usa la MISMA grilla de n que el Bloque 5 simulado de SSTN-Normality-Study -- {10,25,50,100,250,500,1000,1500} -- para que la comparación entre el hallazgo simulado y su contraparte real sea directa, celda por celda de n, no solo cualitativa. El N mínimo de los 4 datasets originales (RWAS, 9.680) es muy superior al n máximo del grid (1.500), así que el submuestreo sin reemplazo (mismo método "m-out-of-N" del Bloque 4 de SSTN-Normality-Study) es válido para los 4 sin ajuste.
+
+Con los 6 datasets finales (RSE k=4, MACH-IV k=5, NFC k=6, HEXACO k=7, AHS k=8, RWAS k=9), 5 de 6 siguen usando el grid completo (el N mínimo entre esos 5, NFC con 1.688, sigue siendo mayor que 1.500). La excepción es **AHS (k=8, N=1.036)**: no alcanza el n máximo de 1.500, así que corre con un grid reducido {10,25,50,100,250,500,1000} -- una asimetría explícita en el diseño, no un dato faltante (ver Sección 11).
 
 ## 6. Bloque de niveles: separar el efecto de k/n/paridad de la forma real de la distribución (22 sep 2026)
 
@@ -90,3 +92,25 @@ Brecha de potencia media (11 pruebas, promediada sobre n) entre k=3 y k=9, por n
 **Esto resuelve, sin necesidad de una reformulación narrativa, la aparente contradicción encontrada antes con el bloque real** (Sección 5): ahí RWAS (k=9) mostraba MÁS potencia que RSE/MACH-IV/HEXACO (k=4,5,7), lo que a primera vista parecía contradecir "menos k → más potencia". La explicación no es que k=9 sea mejor -- es que con una asimetría/curtosis real tan fuerte como la de RWAS, la potencia ya está cerca del techo (~0.88 en la simulación del nivel muy_alto) para CUALQUIER k, así que la elección de k casi no importa ahí. En instrumentos con desviaciones más sutiles de la normalidad (como RSE), en cambio, k sí importa proporcionalmente más. No son dos hallazgos en tensión -- es una interacción de tres vías (k × n × severidad de la no-normalidad real) que el bloque de niveles aísla explícitamente.
 
 Implicación práctica para el paper: el efecto de k sobre la potencia de las pruebas de normalidad no es una propiedad fija del diseño del instrumento -- depende de qué tan cerca de la normalidad está el constructo que se está midiendo. Es más consecuente para constructos con desviaciones sutiles (la mayoría de la práctica psicométrica aplicada) que para constructos con desviaciones extremas y obvias.
+
+## 10. Hallazgo posterior de un instrumento real con k=6: NFC / GESIS ZA5088 (23-24 sep 2026)
+
+La Sección 2 documentó la ausencia de datasets abiertos con k=6 o k=8 tras una búsqueda en openpsychometrics.org, OSF, Kaggle y candidatos específicos de la literatura (Need for Cognition, entre otros). Antes de dar la limitación por cerrada, se hizo una segunda búsqueda más intensiva, esta vez extendida a repositorios institucionales de ciencias sociales (GESIS, ZIS, ICPSR) y con la colaboración directa del usuario explorando Google Dataset Search.
+
+Se encontró el estudio GESIS ZA5088 ("Identity Development and Value Transmission among Veteran and Migrant Adolescents and Their Families in Germany and Israel"), que en su submuestra de Israel aplicó la escala de Necesidad de Cierre Cognitivo (Webster y Kruglanski, 1994) en formato de 6 puntos (la submuestra de Alemania usó una versión de 7 puntos del mismo instrumento, por eso no se mezclan). Se extrajeron 3 de las 5 subescalas originales (9 ítems), N=1.688 tras exigir caso completo. Ver `R/01_extract_real_subscales.R` para la clave de puntuación (inferida cruzando el contenido semántico de los ítems contra la estructura documentada en el informe metodológico del estudio, ya que este no publica una tabla de reversión ítem por ítem) y la Sección 5 para su lugar en la grilla de n (usa el grid completo, con margen ajustado: solo 188 casos de sobra sobre el n máximo de 1.500).
+
+## 11. Hallazgo posterior de un instrumento real con k=8: Adult Hope Scale / OSF (24 sep 2026)
+
+Siguiendo la misma búsqueda intensiva de la Sección 10, el usuario aportó 5 enlaces de OSF con instrumentos de esperanza/bienestar. De esos, 3 datasets independientes usaban la Adult Hope Scale (Snyder et al., 1991/1994) en su escala original de 8 puntos, confirmando los 8 niveles de respuesta en los datos crudos:
+
+| Dataset OSF | N | Población |
+|---|---|---|
+| xwcu8 (Torales, "Felicidad, Esperanza y Resiliencia") | 591 | Población general |
+| db3h7 ("Sexual Orientation Concealment...") | 409 | Solo hombres gay/bisexuales |
+| 2anvx ("Chronic Disease Longitudinal Study", T1-T5) | 1.036 (ola T1) | Pacientes con enfermedad crónica |
+
+Se evaluó combinar los 3 en un solo dataset (mismo instrumento exacto, mismos ítems, N combinado = 2.036, suficiente para el grid completo hasta n=1.500) -- pero un ANOVA de un factor sobre el puntaje total mostró diferencia significativa entre las 3 poblaciones (F(2,2033)=48.44, p<.001, η²=.045; medias 50.18/43.88/48.50 respectivamente). Combinar población general, hombres gay/bisexuales y pacientes crónicos bajo una sola etiqueta de "k=8" habría violado el supuesto del submuestreo m-out-of-N de que el N completo representa UNA sola población de referencia -- mismo criterio ya aplicado antes para descartar un candidato de k=6 restringido a un solo sexo (ver conversación de diseño, no registrada en este archivo por no haberse concretado como dataset).
+
+**Decisión**: usar solo 2anvx (N=1.036, el de mayor N y sin restricción demográfica explícita más allá del diagnóstico crónico), solo su ola T1 (línea base, para no introducir dependencia intra-sujeto con T2-T5 del mismo dataset). Como N=1.036 < 1.500, este dataset usa el grid de n reducido documentado en la Sección 5.
+
+Con esto, la Sección 2 queda parcialmente obsoleta: la ausencia de instrumentos reales con k=6 y k=8 NO era total, sino un límite de la búsqueda original -- se mantiene como registro histórico de esa etapa, pero el diseño final del estudio (6 instrumentos, k=4..9) no tiene esa laguna.
