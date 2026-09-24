@@ -114,3 +114,29 @@ Se evaluó combinar los 3 en un solo dataset (mismo instrumento exacto, mismos �
 **Decisión**: usar solo 2anvx (N=1.036, el de mayor N y sin restricción demográfica explícita más allá del diagnóstico crónico), solo su ola T1 (línea base, para no introducir dependencia intra-sujeto con T2-T5 del mismo dataset). Como N=1.036 < 1.500, este dataset usa el grid de n reducido documentado en la Sección 5.
 
 Con esto, la Sección 2 queda parcialmente obsoleta: la ausencia de instrumentos reales con k=6 y k=8 NO era total, sino un límite de la búsqueda original -- se mantiene como registro histórico de esa etapa, pero el diseño final del estudio (6 instrumentos, k=4..9) no tiene esa laguna.
+
+## 12. La cantidad de ítems real (8-22) no distorsiona sistemáticamente la validación real-vs-simulada, una vez controlada la severidad (24 sep 2026)
+
+La simulación de niveles (Sección 6) usa siempre m=10 ítems fijos (`R/04_simulacion_niveles.R`, `m_items <- 10L`), independientemente del nivel o k. Los 6 instrumentos reales varían bastante en cantidad de ítems: RSE=10, MACH-IV=20, NFC=9, HEXACO X:Expr=10, AHS=8, RWAS=22. Esto es una fuente de confusión candidata adicional a la severidad real (Sección 9): un compuesto de más ítems tiende a una forma más suave por el Teorema Central del Límite, independientemente de k.
+
+**Chequeo de robustez** (1000 subconjuntos aleatorios de 10 ítems, sin selección por calidad psicométrica para no introducir un sesgo de selección nuevo) sobre los 2 instrumentos con más de 10 ítems:
+
+| | MACH-IV (m=20) | RWAS (m=22) |
+|---|---|---|
+| α con todos los ítems | 0.888 | 0.964 |
+| α medio de subconjuntos de 10 | 0.797 | 0.924 |
+| skew con todos los ítems / medio de subconjuntos | -0.164 / -0.179 | 1.352 / 1.331 |
+| kurt_exc con todos los ítems / medio de subconjuntos | -0.686 / -0.649 | 1.170 / 1.137 |
+
+La FORMA del compuesto (asimetría, curtosis) se mantiene estable entre el compuesto completo y el promedio de subconjuntos de 10 ítems en ambos casos -- la confiabilidad sí cae con menos ítems (esperado por Spearman-Brown), más en MACH-IV (escala multifacética) que en RWAS (escala muy homogénea), pero eso es un hecho psicométrico esperado, no evidencia de que la forma del compuesto esté distorsionada por tener más ítems que la simulación.
+
+**Prueba cuantitativa directa** (¿los datasets con más ítems predicen sistemáticamente mejor la potencia real, más allá de lo que ya explica el ajuste de severidad?): usando los 6 instrumentos como unidad de análisis (`m_items`, `dist_severidad` de la Sección 11 y el error absoluto medio real-vs-simulado de la sección de validación), la correlación simple entre cantidad de ítems y error de predicción es engañosa (ρ=-0.75, más ítems parece asociarse a menos error) porque RWAS combina a la vez el mayor N de ítems (22) y el mejor ajuste de severidad (dist=0.002) -- pura coincidencia entre las dos variables, no un efecto de ítems.
+
+Controlando `dist_severidad` (regresión múltiple `error_abs ~ dist_severidad + m_items`, N=6, 3 gl residuales):
+
+```
+dist_severidad:  coef=0.272,  p=.038 *
+m_items:         coef=0.0009, p=.853  (no significativo; correlación parcial ~0.12)
+```
+
+**Conclusión**: la brecha entre lo que predice la simulación y la potencia real observada se explica casi enteramente por qué tan bien calibrada está la severidad de cada instrumento (Sección 9/11) -- la cantidad de ítems, aunque varía de 8 a 22 frente a los m=10 fijos de la simulación, no aporta una distorsión sistemática detectable una vez controlada la severidad. Esto respalda usar los 6 instrumentos reales tal como están (con su cantidad nativa de ítems), sin necesidad de reconstruir compuestos artificiales de 10 ítems para el análisis principal del paper. Limitación honesta: con solo 6 datasets (3 gl residuales) la potencia para detectar un efecto pequeño de ítems es muy baja -- esto es evidencia de ausencia de un efecto GRANDE, no prueba definitiva de que no exista ningún efecto.
