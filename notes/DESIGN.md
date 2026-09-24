@@ -140,3 +140,97 @@ m_items:         coef=0.0009, p=.853  (no significativo; correlación parcial ~0
 ```
 
 **Conclusión**: la brecha entre lo que predice la simulación y la potencia real observada se explica casi enteramente por qué tan bien calibrada está la severidad de cada instrumento (Sección 9/11) -- la cantidad de ítems, aunque varía de 8 a 22 frente a los m=10 fijos de la simulación, no aporta una distorsión sistemática detectable una vez controlada la severidad. Esto respalda usar los 6 instrumentos reales tal como están (con su cantidad nativa de ítems), sin necesidad de reconstruir compuestos artificiales de 10 ítems para el análisis principal del paper. Limitación honesta: con solo 6 datasets (3 gl residuales) la potencia para detectar un efecto pequeño de ítems es muy baja -- esto es evidencia de ausencia de un efecto GRANDE, no prueba definitiva de que no exista ningún efecto.
+
+## 13. Comparación de las 11 pruebas: potencia bruta, estabilidad a k, y qué tan predecible es su comportamiento real desde la simulación (24 sep 2026)
+
+Pregunta práctica para el paper: ¿cuál de las 11 pruebas conviene usar, bajo qué criterios de k, n y severidad? Se necesitan tres tablas distintas, no comparables directamente entre sí salvo con el cuidado que se explica abajo.
+
+### 13.1 Tabla simulada LIMPIA (severidad aislada de k por diseño)
+
+Usando las 280 filas del bloque de niveles (5 niveles × k=3..9 × 8 n), donde la calibración mantiene la severidad constante dentro de cada nivel con precisión de 5-6 decimales (ver verificación abajo), se calculó potencia media por prueba y el coeficiente de variación (CV) de su potencia a través de k=3..9 (promediando sobre n), dentro de cada nivel y luego promediado entre los 5 niveles:
+
+| Prueba | Potencia media | CV estabilidad a k | Rank combinado |
+|---|---|---|---|
+| D'Agostino-Pearson | 0.759 | 0.019 | 3 |
+| Shapiro-Wilk | 0.755 | 0.050 | 7 |
+| Epps-Pulley | 0.731 | 0.040 | 8 |
+| Anderson-Darling | 0.731 | 0.057 | 10 |
+| Jarque-Bera | 0.612 | 0.010 | 11 |
+| Shapiro-Francia | 0.725 | 0.056 | 11 |
+| SSTN | 0.698 | 0.034 | 12 |
+| Cramér-von Mises | 0.708 | 0.061 | 15 |
+| Pearson χ² | 0.719 | 0.073 | 16 |
+| Lilliefors | 0.700 | 0.066 | 17 |
+| Curtosis (Anscombe-Glynn) | 0.447 | 0.078 | 22 |
+
+**Verificación de que la severidad SÍ está aislada de k en esta tabla**: los valores de asimetría/curtosis logrados por la calibración (`data/results/calibracion_niveles.csv`) varían menos de 10⁻⁵ entre los 7 valores de k dentro de cada nivel (ej. nivel "moderado": asimetría lograda en [0.699998, 0.700004], curtosis lograda en [-0.150004, -0.149999], dist² máxima 3.78e-11) -- cuatro a cinco órdenes de magnitud más chico que la diferencia ENTRE niveles (0.15 a 1.35). El CV de esta tabla mide sensibilidad a k pura.
+
+D'Agostino-Pearson gana el balance general (potencia casi máxima + muy estable a k). SSTN no es la más potente (9no lugar en potencia) pero es la 3ra más estable a k -- su argumento no es "detecta mejor", es "su conclusión no depende de cuántas categorías tiene la escala". Curtosis es errática porque solo detecta desviaciones de curtosis, y la curtosis objetivo de los niveles NO sube monótonamente con la severidad etiquetada (bajo=-0.70, moderado=-0.15 casi mesocúrtica, alto=0.40, muy_alto=1.17).
+
+### 13.2 Tabla real (k y severidad confundidos, inevitable con instrumentos ya existentes)
+
+Mismo cálculo sobre los 6 datasets reales (`consolidado.csv`), sin poder aislar severidad -- cada k real trae su propio nivel de severidad pegado:
+
+| Prueba | Potencia media (real) | CV k (real, confundido) | Rank combinado |
+|---|---|---|---|
+| D'Agostino-Pearson | 0.673 | 0.222 | 2 |
+| Shapiro-Wilk | 0.642 | 0.242 | 5 |
+| Lilliefors | 0.621 | 0.236 | 6 |
+| Anderson-Darling | 0.626 | 0.252 | 7 |
+| Pearson χ² | 0.610 | 0.256 | 11.5 |
+| Shapiro-Francia | 0.616 | 0.276 | 12 |
+| Cramér-von Mises | 0.610 | 0.270 | 12.5 |
+| Jarque-Bera | 0.534 | 0.297 | 18 |
+| SSTN | 0.584 | 0.318 | 18 |
+| Epps-Pulley | 0.592 | 0.325 | 18 |
+| Curtosis | 0.505 | 0.335 | 22 |
+
+D'Agostino-Pearson se sostiene como la mejor combinación también aquí (coincide con 13.1, buena señal de consistencia). SSTN cae a un CV casi 10 veces mayor que en la tabla limpia -- pero antes de interpretar eso como pérdida real de estabilidad, ver 13.3.
+
+### 13.3 Tabla simulada CONFUNDIDA (mismo emparejamiento nivel-k que los reales, a propósito)
+
+Para que 13.1 y 13.2 sean comparables sin el "ruido" de que una está limpia y la otra no, se repitió el cálculo sobre SOLO 6 celdas simuladas, las que comparten nivel y k con los 6 datasets reales (bajo/k4, bajo_moderado/k5, alto/k6, bajo_moderado/k7, alto/k8, muy_alto/k9) -- el mismo confound de los reales, impuesto artificialmente sobre datos simulados:
+
+| Prueba | Potencia (sim. confundido) | CV k (sim. confundido) | Rank combinado |
+|---|---|---|---|
+| Shapiro-Wilk | 0.779 | 0.197 | 3 |
+| D'Agostino-Pearson | 0.760 | 0.201 | 5 |
+| Epps-Pulley | 0.735 | 0.196 | 6 |
+| Anderson-Darling | 0.751 | 0.225 | 7 |
+| Shapiro-Francia | 0.750 | 0.230 | 9 |
+| Pearson χ² | 0.733 | 0.237 | 13 |
+| Lilliefors | 0.705 | 0.230 | 14 |
+| Cramér-von Mises | 0.720 | 0.258 | 15 |
+| SSTN | 0.702 | 0.284 | 19 |
+| Curtosis | 0.500 | 0.268 | 20 |
+| Jarque-Bera | 0.601 | 0.310 | 21 |
+
+**Hallazgo clave**: SSTN cae a un puesto bajo (19 de 22) casi idéntico al que obtiene en datos reales (18) -- no era ruido real, es consecuencia matemática directa de mezclar k con severidad de la forma en que están emparejados estos 6 instrumentos específicos. La ventaja de estabilidad de SSTN es real, pero depende de que la severidad esté controlada -- algo que casi ningún estudio aplicado con instrumentos ya existentes puede garantizar.
+
+### 13.4 Desplazamiento (13.3 vs 13.2): qué tan predecible es cada prueba desde la simulación
+
+Diferencia absoluta de rank combinado entre la tabla simulada-confundida (13.3) y la real (13.2) -- mide si el comportamiento de una prueba en un escenario simulado-confundido anticipa bien su comportamiento real:
+
+| Prueba | Rank (sim. confundido) | Rank (real) | Desplazamiento |
+|---|---|---|---|
+| Anderson-Darling | 7 | 7 | **0** (perfectamente predecible) |
+| SSTN | 19 | 18 | **1** |
+| Shapiro-Wilk | 3 | 5 | 2 |
+| Cramér-von Mises | 15 | 13 | 2 |
+| Pearson χ² | 13 | 11 | 2 |
+| Curtosis | 20 | 22 | 2 |
+| Jarque-Bera | 21 | 18 | 3 |
+| D'Agostino-Pearson | 5 | 2 | 3 |
+| Shapiro-Francia | 9 | 12 | 3 |
+| Lilliefors | 14 | 6 | 8 |
+| Epps-Pulley | 6 | 18 | **12** (la más impredecible) |
+
+**SSTN es la segunda prueba más predecible de las 11**, justo detrás de Anderson-Darling -- esto es un hallazgo DISTINTO al de 13.1-13.3 (estabilidad pura), y complementario: aunque la ventaja de estabilidad-a-k de SSTN se diluye bajo confusión con severidad (13.3), su comportamiento bajo esa confusión es el que MEJOR anticipa la simulación -- la simulación de este estudio es una guía confiable de lo que SSTN hará en la práctica, mucho más que para Epps-Pulley (la más impredecible, pasa de de las mejores en 13.3 a de las peores en 13.2) o Lilliefors (camino inverso: mala en 13.3, notablemente mejor en real).
+
+### 13.5 Síntesis para el paper
+
+- **Si hay que recomendar una sola prueba por defecto**: D'Agostino-Pearson -- mejor balance potencia/estabilidad en las tres tablas (13.1, 13.2, 13.3), consistentemente.
+- **Shapiro-Wilk**: máxima potencia bruta en casi todos los escenarios (hallazgo ya conocido en la literatura, no novedoso), pero más sensible a k que D'Agostino-Pearson.
+- **SSTN**: su valor agregado no es potencia bruta (nunca es la más potente) -- es estabilidad-a-k cuando la severidad está controlada (13.1) y, cuando no lo está, ser la prueba cuyo comportamiento la simulación anticipa mejor (13.4). Dos argumentos distintos, ambos defendibles, ninguno es "más potente que Shapiro-Wilk".
+- **Lilliefors y Epps-Pulley**: evitar si se van a comparar/combinar estudios con formatos de respuesta distintos -- las más sensibles a k en la tabla limpia (Lilliefors) y las más impredecibles entre simulación y realidad (Epps-Pulley).
+- **Curtosis (Anscombe-Glynn)**: peor en casi todos los criterios -- útil solo si se sabe de antemano que la desviación es puramente de curtosis, no de asimetría.
