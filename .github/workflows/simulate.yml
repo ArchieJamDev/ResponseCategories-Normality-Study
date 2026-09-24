@@ -8,17 +8,17 @@ name: Bloque real de categorias
 
 run-name: >-
   Bloque real:
-  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (4 datasets, k=4,5,7,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}${{ inputs.correr_calibracion_niveles && 'Calibracion de niveles (5 niveles x k=3..9) ' || '' }}${{ inputs.correr_consolidar_calibracion_niveles && 'Consolidar calibracion de niveles ' || '' }}${{ inputs.correr_simulacion_niveles && 'Simulacion de niveles (35 shards) ' || '' }}
+  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (5 datasets, k=4,5,6,7,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}${{ inputs.correr_calibracion_niveles && 'Calibracion de niveles (5 niveles x k=3..9) ' || '' }}${{ inputs.correr_consolidar_calibracion_niveles && 'Consolidar calibracion de niveles ' || '' }}${{ inputs.correr_simulacion_niveles && 'Simulacion de niveles (35 shards) ' || '' }}
 
 on:
   workflow_dispatch:
     inputs:
       correr_extraccion:
-        description: "Extrae los 4 datasets reales (RSE k=4, MACH-IV k=5, HEXACO k=7, RWAS k=9) desde data/raw/ -- correr esto primero"
+        description: "Extrae los 5 datasets reales (RSE k=4, MACH-IV k=5, NFC k=6, HEXACO k=7, RWAS k=9) desde data/raw/ -- correr esto primero"
         type: boolean
         default: false
       correr_bloque_real:
-        description: "Submuestreo m-out-of-N sobre los 4 datasets reales (R=10000, grid n identico al Bloque 5 simulado de SSTN-Normality-Study) -- requiere que correr_extraccion ya se haya corrido y su artifact este disponible"
+        description: "Submuestreo m-out-of-N sobre los 5 datasets reales (R=10000, misma grilla de n que el bloque de niveles simulado) -- requiere que correr_extraccion ya se haya corrido y su artifact este disponible"
         type: boolean
         default: false
       correr_agregacion:
@@ -58,7 +58,8 @@ jobs:
             any::purrr
             any::tidyr
             any::readr
-      - name: Extraer los 4 datasets reales
+            any::haven
+      - name: Extraer los 5 datasets reales
         run: Rscript R/01_extract_real_subscales.R
       - uses: actions/upload-artifact@v4
         with:
@@ -75,6 +76,7 @@ jobs:
         dataset:
           - rse_k4.csv
           - mach_k5.csv
+          - nfc_k6.csv
           - hexaco_k7.csv
           - rwas_k9.csv
       fail-fast: false
@@ -98,11 +100,11 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           # run-id fijo: no depende de correr_extraccion en el mismo
-          # dispatch (mismo criterio que simulate-plasmode en
-          # SSTN-Normality-Study) -- descarga el artifact de la ultima
-          # corrida de extract-real-data ya validada (35741701301). Si ese
-          # artifact expira, correr una vez con correr_extraccion=true y
-          # actualizar el run-id de abajo con el ID de la corrida nueva.
+          # dispatch -- descarga el artifact de la ultima corrida de
+          # extract-real-data ya validada. Si ese artifact expira, o si se
+          # agrega/cambia algun dataset (ej. el 5to, NFC), correr una vez
+          # con correr_extraccion=true y actualizar el run-id de abajo con
+          # el ID de la corrida nueva -- ver notes/DESIGN.md.
           name: real-data-processed
           path: data/processed
           run-id: 35741701301
@@ -124,7 +126,7 @@ jobs:
         with:
           packages: |
             any::readr
-      - name: Agregar los 4 datasets
+      - name: Agregar los 5 datasets
         run: Rscript R/99_aggregate_results.R
       - uses: actions/upload-artifact@v4
         with:

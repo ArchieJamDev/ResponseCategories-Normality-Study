@@ -1,8 +1,8 @@
 # 99_aggregate_results.R
 #
-# Consolida los 4 CSV del bloque real (uno por dataset: RSE k=4, MACH-IV
-# k=5, HEXACO k=7, RWAS k=9) en un solo dataset en formato largo, listo para
-# comparar directamente contra el Bloque 5 simulado de SSTN-Normality-Study
+# Consolida los 5 CSV del bloque real (uno por dataset: RSE k=4, MACH-IV
+# k=5, NFC k=6, HEXACO k=7, RWAS k=9) en un solo dataset en formato largo,
+# listo para comparar directamente contra el bloque de niveles simulado
 # (misma grilla de n, mismas 11 pruebas).
 #
 # No hace source("R/00_setup.R") -- solo necesita readr, igual que el
@@ -11,8 +11,8 @@
 # Uso: Rscript R/99_aggregate_results.R
 
 archivos <- sort(Sys.glob("data/results/bloque_real_*.csv"))
-if (length(archivos) != 4) {
-  stop(sprintf("Se esperaban 4 archivos del bloque real, se encontraron %d.", length(archivos)))
+if (length(archivos) != 5) {
+  stop(sprintf("Se esperaban 5 archivos del bloque real, se encontraron %d.", length(archivos)))
 }
 
 consolidado <- do.call(rbind, lapply(archivos, readr::read_csv, show_col_types = FALSE))
@@ -21,9 +21,9 @@ conteos_reales <- table(consolidado$k)
 cat("Filas por k:\n")
 print(conteos_reales)
 
-# 4 datasets x 8 tamaños de muestra = 32 filas esperadas
-if (nrow(consolidado) != 32) {
-  stop(sprintf("Se esperaban 32 filas (4 datasets x 8 n), se encontraron %d.", nrow(consolidado)))
+# 5 datasets x 8 tamaños de muestra = 40 filas esperadas
+if (nrow(consolidado) != 40) {
+  stop(sprintf("Se esperaban 40 filas (5 datasets x 8 n), se encontraron %d.", nrow(consolidado)))
 }
 
 cols_pruebas <- c(
@@ -39,6 +39,6 @@ if (any(tasas < 0 | tasas > 1, na.rm = TRUE)) {
 dir.create("data/results", showWarnings = FALSE, recursive = TRUE)
 readr::write_csv(consolidado, "data/results/consolidado.csv")
 
-cat(sprintf("\nConsolidado: %d filas (4 datasets x 8 n)\n", nrow(consolidado)))
+cat(sprintf("\nConsolidado: %d filas (5 datasets x 8 n)\n", nrow(consolidado)))
 cat("Guardado data/results/consolidado.csv\n")
 cat("Listo.\n")

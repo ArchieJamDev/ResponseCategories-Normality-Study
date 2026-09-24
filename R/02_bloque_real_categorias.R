@@ -1,29 +1,31 @@
 # 02_bloque_real_categorias.R
 #
-# Bloque real -- analogo al Bloque 5 simulado de SSTN-Normality-Study (efecto
-# de la cantidad de categorias de respuesta k sobre la potencia de las 11
-# pruebas de normalidad), pero sobre datos reales en vez de un factor comun
-# simulado. Mismo metodo de remuestreo que el Bloque 4 de ese proyecto
-# hermano ("m-out-of-N", ver su notes/DESIGN.md seccion 6): no hay una nula
-# verdadera conocida en datos reales, asi que se extraen R submuestras
-# aleatorias SIN reemplazo a cada tamaño n de la MISMA grilla usada en la
-# simulacion, y se calcula la tasa de rechazo empirica por prueba usando el N
-# completo del dataset como poblacion de referencia.
+# Bloque real -- analogo al bloque de niveles simulado (efecto de la
+# cantidad de categorias de respuesta k sobre la potencia de las 11 pruebas
+# de normalidad), pero sobre datos reales en vez de un factor comun
+# simulado. Submuestreo aleatorio sin reemplazo tipo "m-out-of-N": no hay
+# una nula verdadera conocida en datos reales, asi que se extraen R
+# submuestras aleatorias SIN reemplazo a cada tamaño n de la MISMA grilla
+# usada en la simulacion, y se calcula la tasa de rechazo empirica por
+# prueba usando el N completo del dataset como poblacion de referencia.
 #
-# Los 4 datasets (ver R/01_extract_real_subscales.R para las claves de
-# puntuacion) cubren 4 valores REALES de k, eligiendo deliberadamente los
+# Los 5 datasets (ver R/01_extract_real_subscales.R para las claves de
+# puntuacion) cubren 5 valores REALES de k, eligiendo deliberadamente los
 # valores mas cercanos a los extremos disponibles en datos abiertos
 # (ver notes/DESIGN.md):
 #   rse_k4.csv     k=4  (Rosenberg Self-Esteem Scale, N=46.546)
 #   mach_k5.csv    k=5  (MACH-IV, N=73.486)
+#   nfc_k6.csv     k=6  (Need for Cognitive Closure, submuestra Israel, N=1.688)
 #   hexaco_k7.csv  k=7  (HEXACO facet X:Expr, N=22.783)
 #   rwas_k9.csv    k=9  (Right-Wing Authoritarianism Scale, N=9.680)
 #
-# Grilla de n IDENTICA a la del Bloque 5 simulado de SSTN-Normality-Study
-# (mismo criterio de comparabilidad directa entre el hallazgo simulado y su
-# contraparte real): {10,25,50,100,250,500,1000,1500}. El N minimo de los 4
-# datasets (RWAS, 9.680) es muy superior a 1500, asi que el remuestreo sin
-# reemplazo es valido para los 4 sin ajuste.
+# Grilla de n IDENTICA a la del bloque de niveles simulado (mismo criterio
+# de comparabilidad directa entre el hallazgo simulado y su contraparte
+# real): {10,25,50,100,250,500,1000,1500}. El N minimo de los 5 datasets
+# (NFC, 1.688) sigue siendo superior a 1500, asi que el submuestreo sin
+# reemplazo es valido para los 5 -- pero con un margen mucho mas ajustado
+# que los otros 4 (188 casos de sobra, no varios miles), vale la pena
+# tenerlo presente si en el futuro se quisiera ampliar la grilla de n.
 #
 # Uso: Rscript R/02_bloque_real_categorias.R <dataset> [R] [n_list]
 #   <dataset>: nombre de archivo tal como aparece en data/processed/ (ej.
@@ -64,7 +66,7 @@ N <- length(x_completo)
 
 if (max(n_grid) >= N) {
   stop(sprintf(
-    "n maximo del grid (%d) >= N del dataset (%d) -- remuestreo sin reemplazo invalido.",
+    "n maximo del grid (%d) >= N del dataset (%d) -- submuestreo sin reemplazo invalido.",
     max(n_grid), N
   ))
 }

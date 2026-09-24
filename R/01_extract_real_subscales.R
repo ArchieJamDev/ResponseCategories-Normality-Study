@@ -1,7 +1,6 @@
 # 01_extract_real_subscales.R
 #
-# Extrae los puntajes compuestos de 4 datasets reales (data/raw/*.zip, todos
-# del catalogo de datos crudos de openpsychometrics.org) y los deja en
+# Extrae los puntajes compuestos de 5 datasets reales y los deja en
 # data/processed/ como un CSV por dataset (una columna, un renglon por
 # respondente con caso completo). Cada dataset tiene una cantidad NATIVA
 # distinta de categorias de respuesta k -- el objetivo de este proyecto es
@@ -9,11 +8,12 @@
 # normalidad, con muestras reales (no simuladas), via submuestreo aleatorio
 # (ver 02_bloque_real_categorias.R).
 #
-# Los 4 datasets y su k nativo:
-#   RSE     (data/raw/RSE.zip)          k=4, 10 items, unidimensional
-#   MACH-IV (data/raw/MACH_data.zip)    k=5, 20 items, unidimensional
-#   HEXACO  (data/raw/HEXACO.zip)       k=7, facet X:Expr (Expresividad), 10 items
-#   RWAS    (data/raw/RWAS.zip)         k=9, 22 items, unidimensional
+# Los 5 datasets y su k nativo:
+#   RSE     (data/raw/RSE.zip)              k=4, 10 items, unidimensional -- openpsychometrics.org
+#   MACH-IV (data/raw/MACH_data.zip)        k=5, 20 items, unidimensional -- openpsychometrics.org
+#   NFC     (data/raw/ZA5088_v1-0-0.sav)    k=6, 9 items, submuestra Israel -- GESIS (ver seccion propia abajo)
+#   HEXACO  (data/raw/HEXACO.zip)           k=7, facet X:Expr (Expresividad), 10 items -- openpsychometrics.org
+#   RWAS    (data/raw/RWAS.zip)             k=9, 22 items, unidimensional -- openpsychometrics.org
 #
 # OJO -- formato de archivo NO es uniforme entre los 4 zips: RSE, MACH-IV y
 # HEXACO traen data.csv delimitado por TAB (igual que en el proyecto hermano
@@ -57,6 +57,35 @@
 #     items invertidos reportada independientemente en
 #     db.arabpsychology.com/scales/right-wing-authoritarianism-scale/,
 #     misma lista {4,6,8,9,11,13,15,18,20,21} en ambas fuentes)
+#
+#   NFC -- Need for Cognitive Closure (Webster y Kruglanski, 1994), columnas
+#     nfc1..nfc9, Likert 1-6 (submuestra Israel; Alemania uso una version de
+#     7 puntos del mismo instrumento, no usada aqui), WITH items invertidos:
+#     Items invertidos = {3,5,6,7,9}
+#     Fuente del dataset: estudio GESIS ZA5088 "Identity Development and
+#     Value Transmission among Veteran and Migrant Adolescents and Their
+#     Families in Germany and Israel" (encuesta a adolescentes, ola 1).
+#     Segun el informe metodologico oficial del estudio (58 paginas,
+#     descargado de access.gesis.org/dbk/50866), se usaron 3 de las 5
+#     subescalas originales de Webster y Kruglanski (1994) -- incomodidad
+#     con la ambiguedad, decision, y cerrazon mental --, 3 items cada una:
+#       Incomodidad con ambiguedad (directos): nfc1, nfc2, nfc8
+#       Decision: nfc4 (directo); nfc3, nfc5 (invertidos -- "me describiria
+#         como indeciso"/"me siento dividido ante la mayoria de decisiones"
+#         son baja decision = baja necesidad de cierre)
+#       Cerrazon mental (invertidos -- entender ambos lados de un conflicto/
+#         considerar varios aspectos/ver varias soluciones son apertura
+#         mental = baja necesidad de cierre): nfc6, nfc7, nfc9
+#     El informe no publica una tabla de reversion item por item explicita;
+#     la clave de arriba se infiere cruzando el contenido semantico de cada
+#     item (etiquetas de valor reales del .sav) contra la estructura de 3
+#     subescalas de 3 items documentada en el informe -- mismo estandar de
+#     verificacion cruzada ya usado para RWAS en este proyecto.
+#     OJO -- el codebook de valores del .sav marca el valor 7 como "solo
+#     Alemania", pero el dato real muestra 6 respuestas sueltas en 7 dentro
+#     de la submuestra de Israel (6 de 16.182, 0.04% -- ruido, no un
+#     segundo formato real). Se excluyen esos casos explicitamente (ver
+#     abajo) en vez de ignorarlos, para que el k=6 quede limpio.
 #
 # NO se modela la presencia de datos faltantes a nivel de item: un caso solo
 # entra al puntaje total si todos los items de ese dataset tienen respuesta
@@ -140,5 +169,21 @@ rwas_reverse <- paste0("Q", c(4,6,8,9,11,13,15,18,20,21))
 rwas_total <- score_composite(rwas_raw, rwas_items, rwas_reverse, min_val = 1, max_val = 9)
 cat(sprintf("  n=%d\n", length(rwas_total)))
 readr::write_csv(data.frame(k = 9L, puntaje = rwas_total), "data/processed/rwas_k9.csv")
+
+# --- NFC, submuestra Israel (k=6) -------------------------------------
+
+cat("=== NFC Israel (k=6) ===\n")
+if (!requireNamespace("haven", quietly = TRUE)) {
+  install.packages("haven", repos = "https://cloud.r-project.org")
+}
+nfc_items <- paste0("nfc", 1:9)
+nfc_reverse <- paste0("nfc", c(3,5,6,7,9))
+nfc_raw <- haven::read_sav("data/raw/ZA5088_v1-0-0.sav",
+                            col_select = c("country", all_of(nfc_items)))
+israel <- nfc_raw[haven::as_factor(nfc_raw$country) == "Israel" & !is.na(nfc_raw$country), ]
+for (v in nfc_items) israel[[v]][israel[[v]] < 0] <- NA  # codigos de perdido GESIS (-991..-994)
+nfc_total <- score_composite(as.data.frame(israel), nfc_items, nfc_reverse, min_val = 1, max_val = 6)
+cat(sprintf("  n=%d\n", length(nfc_total)))
+readr::write_csv(data.frame(k = 6L, puntaje = nfc_total), "data/processed/nfc_k6.csv")
 
 cat("\nListo.\n")
