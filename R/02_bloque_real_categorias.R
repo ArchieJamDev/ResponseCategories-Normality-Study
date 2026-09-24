@@ -9,23 +9,37 @@
 # usada en la simulacion, y se calcula la tasa de rechazo empirica por
 # prueba usando el N completo del dataset como poblacion de referencia.
 #
-# Los 5 datasets (ver R/01_extract_real_subscales.R para las claves de
-# puntuacion) cubren 5 valores REALES de k, eligiendo deliberadamente los
+# Los 6 datasets (ver R/01_extract_real_subscales.R para las claves de
+# puntuacion) cubren 6 valores REALES de k, eligiendo deliberadamente los
 # valores mas cercanos a los extremos disponibles en datos abiertos
 # (ver notes/DESIGN.md):
 #   rse_k4.csv     k=4  (Rosenberg Self-Esteem Scale, N=46.546)
 #   mach_k5.csv    k=5  (MACH-IV, N=73.486)
 #   nfc_k6.csv     k=6  (Need for Cognitive Closure, submuestra Israel, N=1.688)
 #   hexaco_k7.csv  k=7  (HEXACO facet X:Expr, N=22.783)
+#   ahs_k8.csv     k=8  (Adult Hope Scale, ola T1, pacientes cronicos OSF 2anvx, N=1.036)
 #   rwas_k9.csv    k=9  (Right-Wing Authoritarianism Scale, N=9.680)
 #
 # Grilla de n IDENTICA a la del bloque de niveles simulado (mismo criterio
 # de comparabilidad directa entre el hallazgo simulado y su contraparte
 # real): {10,25,50,100,250,500,1000,1500}. El N minimo de los 5 datasets
-# (NFC, 1.688) sigue siendo superior a 1500, asi que el submuestreo sin
-# reemplazo es valido para los 5 -- pero con un margen mucho mas ajustado
-# que los otros 4 (188 casos de sobra, no varios miles), vale la pena
-# tenerlo presente si en el futuro se quisiera ampliar la grilla de n.
+# de la grilla completa (NFC, 1.688) sigue siendo superior a 1500, asi que
+# el submuestreo sin reemplazo es valido para esos 5 -- pero con un margen
+# mucho mas ajustado que los otros 4 (188 casos de sobra, no varios miles),
+# vale la pena tenerlo presente si en el futuro se quisiera ampliar la
+# grilla de n.
+#
+# EXCEPCION -- ahs_k8 (N=1.036) NO alcanza el maximo de la grilla (1500),
+# asi que corre con una grilla reducida {10,25,50,100,250,500,1000} (ver
+# .github/workflows/simulate.yml, que le pasa un tercer argumento distinto
+# solo a este dataset). Se evaluo combinar ahs_k8 con otros 2 datasets
+# abiertos que usan el mismo instrumento (Adult Hope Scale, misma escala
+# 1-8) para llegar a N>1500, pero se descarto: las 3 poblaciones (pacientes
+# cronicos, poblacion general, hombres gay/bisexuales) difieren
+# significativamente en el puntaje total (ANOVA F(2,2033)=48.44, p<.001,
+# eta2=.045), lo que violaria el supuesto de que el N completo representa
+# una sola poblacion de referencia -- ver R/01_extract_real_subscales.R
+# para el detalle completo de esta decision.
 #
 # Uso: Rscript R/02_bloque_real_categorias.R <dataset> [R] [n_list]
 #   <dataset>: nombre de archivo tal como aparece en data/processed/ (ej.

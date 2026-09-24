@@ -8,21 +8,21 @@ name: Bloque real de categorias
 
 run-name: >-
   Bloque real:
-  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (5 datasets, k=4,5,6,7,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}${{ inputs.correr_calibracion_niveles && 'Calibracion de niveles (5 niveles x k=3..9) ' || '' }}${{ inputs.correr_consolidar_calibracion_niveles && 'Consolidar calibracion de niveles ' || '' }}${{ inputs.correr_simulacion_niveles && 'Simulacion de niveles (35 shards) ' || '' }}
+  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (6 datasets, k=4,5,6,7,8,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}${{ inputs.correr_calibracion_niveles && 'Calibracion de niveles (5 niveles x k=3..9) ' || '' }}${{ inputs.correr_consolidar_calibracion_niveles && 'Consolidar calibracion de niveles ' || '' }}${{ inputs.correr_simulacion_niveles && 'Simulacion de niveles (35 shards) ' || '' }}
 
 on:
   workflow_dispatch:
     inputs:
       correr_extraccion:
-        description: "Extrae los 5 datasets reales (RSE k=4, MACH-IV k=5, NFC k=6, HEXACO k=7, RWAS k=9) desde data/raw/ -- correr esto primero"
+        description: "Extrae los 6 datasets reales (RSE k=4, MACH-IV k=5, NFC k=6, HEXACO k=7, AHS k=8, RWAS k=9) desde data/raw/ -- correr esto primero"
         type: boolean
         default: false
       correr_bloque_real:
-        description: "Submuestreo m-out-of-N sobre los 5 datasets reales (R=10000, misma grilla de n que el bloque de niveles simulado) -- requiere que correr_extraccion ya se haya corrido y su artifact este disponible"
+        description: "Submuestreo m-out-of-N sobre los 6 datasets reales (R=10000, misma grilla de n que el bloque de niveles simulado, salvo AHS k=8 que usa grilla reducida por N mas bajo) -- requiere que correr_extraccion ya se haya corrido y su artifact este disponible"
         type: boolean
         default: false
       correr_agregacion:
-        description: "Agrega los 4 CSV finales del bloque real en un consolidado"
+        description: "Agrega los 6 CSV finales del bloque real en un consolidado"
         type: boolean
         default: false
       correr_calibracion_niveles:
@@ -78,6 +78,7 @@ jobs:
           - mach_k5.csv
           - nfc_k6.csv
           - hexaco_k7.csv
+          - ahs_k8.csv
           - rwas_k9.csv
       fail-fast: false
     runs-on: ubuntu-latest
@@ -101,17 +102,25 @@ jobs:
         with:
           # run-id fijo: no depende de correr_extraccion en el mismo
           # dispatch -- descarga el artifact de la ultima corrida de
-          # extract-real-data ya validada (incluye los 5 datasets, NFC
-          # incluido). Si ese artifact expira, o si se agrega/cambia algun
-          # dataset, correr una vez con correr_extraccion=true y actualizar
-          # el run-id de abajo con el ID de la corrida nueva -- ver
-          # notes/DESIGN.md.
+          # extract-real-data ya validada (incluye los 6 datasets, NFC y
+          # AHS incluidos). Si ese artifact expira, o si se agrega/cambia
+          # algun dataset, correr una vez con correr_extraccion=true y
+          # actualizar el run-id de abajo con el ID de la corrida nueva --
+          # ver notes/DESIGN.md.
           name: real-data-processed
           path: data/processed
           run-id: 35977320445
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Bloque real -- submuestreo m-out-of-N (R=10000)
-        run: Rscript R/02_bloque_real_categorias.R ${{ matrix.dataset }}
+        # ahs_k8 (N=1.036) no alcanza el maximo de la grilla comun (1500) --
+        # usa una grilla reducida solo para este dataset, ver
+        # R/02_bloque_real_categorias.R.
+        run: |
+          if [ "${{ matrix.dataset }}" = "ahs_k8.csv" ]; then
+            Rscript R/02_bloque_real_categorias.R ${{ matrix.dataset }} 10000 10,25,50,100,250,500,1000
+          else
+            Rscript R/02_bloque_real_categorias.R ${{ matrix.dataset }}
+          fi
       - uses: actions/upload-artifact@v4
         with:
           name: bloque-real-${{ matrix.dataset }}

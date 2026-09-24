@@ -1,6 +1,6 @@
 # 01_extract_real_subscales.R
 #
-# Extrae los puntajes compuestos de 5 datasets reales y los deja en
+# Extrae los puntajes compuestos de 6 datasets reales y los deja en
 # data/processed/ como un CSV por dataset (una columna, un renglon por
 # respondente con caso completo). Cada dataset tiene una cantidad NATIVA
 # distinta de categorias de respuesta k -- el objetivo de este proyecto es
@@ -8,12 +8,13 @@
 # normalidad, con muestras reales (no simuladas), via submuestreo aleatorio
 # (ver 02_bloque_real_categorias.R).
 #
-# Los 5 datasets y su k nativo:
+# Los 6 datasets y su k nativo:
 #   RSE     (data/raw/RSE.zip)              k=4, 10 items, unidimensional -- openpsychometrics.org
 #   MACH-IV (data/raw/MACH_data.zip)        k=5, 20 items, unidimensional -- openpsychometrics.org
 #   NFC     (data/raw/ZA5088_v1-0-0.sav)    k=6, 9 items, submuestra Israel -- GESIS (ver seccion propia abajo)
 #   HEXACO  (data/raw/HEXACO.zip)           k=7, facet X:Expr (Expresividad), 10 items -- openpsychometrics.org
 #   RWAS    (data/raw/RWAS.zip)             k=9, 22 items, unidimensional -- openpsychometrics.org
+#   AHS     (data/raw/osf_2anvx_chronic_disease_T1-T5.sav) k=8, 8 items, ola T1 -- OSF (ver seccion propia abajo)
 #
 # OJO -- formato de archivo NO es uniforme entre los 4 zips: RSE, MACH-IV y
 # HEXACO traen data.csv delimitado por TAB (igual que en el proyecto hermano
@@ -86,6 +87,15 @@
 #     de la submuestra de Israel (6 de 16.182, 0.04% -- ruido, no un
 #     segundo formato real). Se excluyen esos casos explicitamente (ver
 #     abajo) en vez de ignorarlos, para que el k=6 quede limpio.
+#
+#   AHS -- Adult Hope Scale (Snyder et al., 1991/1994), version abreviada
+#     de 8 items, columnas AHS01.1..AHS08.1 (ola T1 del estudio
+#     longitudinal), Likert 1-8, SIN items invertidos.
+#     Fuente del dataset: OSF, codigo 2anvx, "Chronic Disease Longitudinal
+#     Study" (T1-T5), pacientes con enfermedad cronica, EE.UU. -- ver
+#     seccion propia abajo para el detalle de por que se eligio este de
+#     entre 3 datasets abiertos con la misma escala (y por que NO se
+#     combinaron pese a compartir instrumento identico).
 #
 # NO se modela la presencia de datos faltantes a nivel de item: un caso solo
 # entra al puntaje total si todos los items de ese dataset tienen respuesta
@@ -185,5 +195,44 @@ for (v in nfc_items) israel[[v]][israel[[v]] < 0] <- NA  # codigos de perdido GE
 nfc_total <- score_composite(as.data.frame(israel), nfc_items, nfc_reverse, min_val = 1, max_val = 6)
 cat(sprintf("  n=%d\n", length(nfc_total)))
 readr::write_csv(data.frame(k = 6L, puntaje = nfc_total), "data/processed/nfc_k6.csv")
+
+# --- AHS, ola T1 (k=8) --------------------------------------------------
+#
+# Adult Hope Scale (Snyder et al., 1994), version abreviada de 8 items (sin
+# los 4 items de relleno de la version original de 12 -- ver Snyder 1994,
+# "The Psychology of Hope"), escala Likert 1-8 (1 = definitivamente falso,
+# 8 = definitivamente verdadero), SIN items invertidos (los 8 items
+# puntuados de la AHS se califican todos en la misma direccion -- ver
+# manual original y confirmado empiricamente abajo, rango de la suma
+# observado 13-64 dentro del rango teorico 8-64).
+#
+# Fuente del dataset: estudio longitudinal OSF (codigo 2anvx) "Chronic
+# Disease Longitudinal Study" (T1-T5), donante con enfermedad cronica,
+# EE.UU. Se usa solo la ola T1 (linea base) para no introducir dependencia
+# intra-sujeto entre observaciones -- las olas T2-T5 del mismo dataset NO
+# se usan.
+#
+# OJO -- busqueda de un instrumento real con k=8 (ver notes/DESIGN.md):
+# se evaluaron 3 datasets abiertos con la Adult Hope Scale en escala 1-8
+# (OSF xwcu8 N=591 poblacion general, OSF db3h7 N=409 solo hombres
+# gay/bisexuales, OSF 2anvx N=1.036 pacientes cronicos). Se descarto
+# combinarlos en un solo dataset pese a compartir instrumento identico:
+# ANOVA de un factor sobre el puntaje total mostro diferencia significativa
+# entre las 3 poblaciones (F(2,2033)=48.44, p<.001, eta2=.045 -- medias
+# 50.18/43.88/48.50 respectivamente), lo que violaria el supuesto del
+# submuestreo m-out-of-N de que el N completo representa UNA sola
+# poblacion de referencia (mismo criterio ya aplicado para descartar un
+# candidato de k=6 restringido a un solo sexo). Se eligio 2anvx solo por
+# tener el N mas alto (1.036) y no tener restriccion demografica explicita
+# mas alla del diagnostico cronico. Como N=1.036 < 1.500 (el maximo de la
+# grilla de n usada en los otros 5 datasets), este dataset usa una grilla
+# de n reducida (hasta 1.000, no 1.500) -- ver R/02_bloque_real_categorias.R.
+cat("=== AHS ola T1 (k=8) ===\n")
+ahs_items <- paste0("AHS0", 1:8, ".1")
+ahs_raw <- haven::read_sav("data/raw/osf_2anvx_chronic_disease_T1-T5.sav",
+                            col_select = all_of(ahs_items))
+ahs_total <- score_composite(as.data.frame(ahs_raw), ahs_items, character(0), min_val = 1, max_val = 8)
+cat(sprintf("  n=%d\n", length(ahs_total)))
+readr::write_csv(data.frame(k = 8L, puntaje = ahs_total), "data/processed/ahs_k8.csv")
 
 cat("\nListo.\n")
