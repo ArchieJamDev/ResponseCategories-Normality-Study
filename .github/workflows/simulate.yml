@@ -101,13 +101,14 @@ jobs:
         with:
           # run-id fijo: no depende de correr_extraccion en el mismo
           # dispatch -- descarga el artifact de la ultima corrida de
-          # extract-real-data ya validada. Si ese artifact expira, o si se
-          # agrega/cambia algun dataset (ej. el 5to, NFC), correr una vez
-          # con correr_extraccion=true y actualizar el run-id de abajo con
-          # el ID de la corrida nueva -- ver notes/DESIGN.md.
+          # extract-real-data ya validada (incluye los 5 datasets, NFC
+          # incluido). Si ese artifact expira, o si se agrega/cambia algun
+          # dataset, correr una vez con correr_extraccion=true y actualizar
+          # el run-id de abajo con el ID de la corrida nueva -- ver
+          # notes/DESIGN.md.
           name: real-data-processed
           path: data/processed
-          run-id: 35741701301
+          run-id: 35977320445
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Bloque real -- submuestreo m-out-of-N (R=10000)
         run: Rscript R/02_bloque_real_categorias.R ${{ matrix.dataset }}
