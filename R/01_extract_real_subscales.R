@@ -11,7 +11,7 @@
 # Los 6 datasets y su k nativo:
 #   RSE     (data/raw/RSE.zip)              k=4, 10 items, unidimensional -- openpsychometrics.org
 #   MACH-IV (data/raw/MACH_data.zip)        k=5, 20 items, unidimensional -- openpsychometrics.org
-#   NFC     (data/raw/ZA5088_v1-0-0.sav)    k=6, 9 items, submuestra Israel -- GESIS (ver seccion propia abajo)
+#   SPS-10  (data/raw/covidistress_global_survey_2020-05-30.csv.gz) k=6, 10 items -- OSF (ver seccion propia abajo)
 #   HEXACO  (data/raw/HEXACO.zip)           k=7, facet X:Expr (Expresividad), 10 items -- openpsychometrics.org
 #   RWAS    (data/raw/RWAS.zip)             k=9, 22 items, unidimensional -- openpsychometrics.org
 #   AHS     (data/raw/osf_2anvx_chronic_disease_T1-T5.sav) k=8, 8 items, ola T1 -- OSF (ver seccion propia abajo)
@@ -59,34 +59,20 @@
 #     db.arabpsychology.com/scales/right-wing-authoritarianism-scale/,
 #     misma lista {4,6,8,9,11,13,15,18,20,21} en ambas fuentes)
 #
-#   NFC -- Need for Cognitive Closure (Webster y Kruglanski, 1994), columnas
-#     nfc1..nfc9, Likert 1-6 (submuestra Israel; Alemania uso una version de
-#     7 puntos del mismo instrumento, no usada aqui), WITH items invertidos:
-#     Items invertidos = {3,5,6,7,9}
-#     Fuente del dataset: estudio GESIS ZA5088 "Identity Development and
-#     Value Transmission among Veteran and Migrant Adolescents and Their
-#     Families in Germany and Israel" (encuesta a adolescentes, ola 1).
-#     Segun el informe metodologico oficial del estudio (58 paginas,
-#     descargado de access.gesis.org/dbk/50866), se usaron 3 de las 5
-#     subescalas originales de Webster y Kruglanski (1994) -- incomodidad
-#     con la ambiguedad, decision, y cerrazon mental --, 3 items cada una:
-#       Incomodidad con ambiguedad (directos): nfc1, nfc2, nfc8
-#       Decision: nfc4 (directo); nfc3, nfc5 (invertidos -- "me describiria
-#         como indeciso"/"me siento dividido ante la mayoria de decisiones"
-#         son baja decision = baja necesidad de cierre)
-#       Cerrazon mental (invertidos -- entender ambos lados de un conflicto/
-#         considerar varios aspectos/ver varias soluciones son apertura
-#         mental = baja necesidad de cierre): nfc6, nfc7, nfc9
-#     El informe no publica una tabla de reversion item por item explicita;
-#     la clave de arriba se infiere cruzando el contenido semantico de cada
-#     item (etiquetas de valor reales del .sav) contra la estructura de 3
-#     subescalas de 3 items documentada en el informe -- mismo estandar de
-#     verificacion cruzada ya usado para RWAS en este proyecto.
-#     OJO -- el codebook de valores del .sav marca el valor 7 como "solo
-#     Alemania", pero el dato real muestra 6 respuestas sueltas en 7 dentro
-#     de la submuestra de Israel (6 de 16.182, 0.04% -- ruido, no un
-#     segundo formato real). Se excluyen esos casos explicitamente (ver
-#     abajo) en vez de ignorarlos, para que el k=6 quede limpio.
+#   SPS-10 -- Social Provisions Scale, forma corta (Cutrona y Russell,
+#     1987), columnas SPS_1..SPS_10, Likert 1-6, SIN items invertidos.
+#     La forma corta de 10 items retiene deliberadamente solo los items
+#     redactados en sentido POSITIVO de la escala original de 24 items (que
+#     si tenia items negativos/invertidos por subescala) -- confirmado por
+#     fuente publicada (validacion de la SPS-10, ver notes/DESIGN.md) y
+#     verificado empiricamente: las 10 correlaciones entre items son todas
+#     positivas (0.39-0.77) sin ninguna reversion aplicada, alpha=0.92.
+#     Fuente del dataset: COVIDiSTRESS Global Survey (OSF, codigo z39us),
+#     encuesta global durante la pandemia de COVID-19 (marzo-mayo 2020),
+#     archivo final limpio del 30 de mayo de 2020. La escala de respuesta
+#     de este item set en esta encuesta especifica es 1-6 (no la forma mas
+#     comun de 1-4 de la SPS-10 publicada) -- confirmado por item, los 10
+#     items muestran los 6 niveles de respuesta.
 #
 #   AHS -- Adult Hope Scale (Snyder et al., 1991/1994), version abreviada
 #     de 8 items, columnas AHS01.1..AHS08.1 (ola T1 del estudio
@@ -180,21 +166,16 @@ rwas_total <- score_composite(rwas_raw, rwas_items, rwas_reverse, min_val = 1, m
 cat(sprintf("  n=%d\n", length(rwas_total)))
 readr::write_csv(data.frame(k = 9L, puntaje = rwas_total), "data/processed/rwas_k9.csv")
 
-# --- NFC, submuestra Israel (k=6) -------------------------------------
+# --- SPS-10, COVIDiSTRESS Global Survey (k=6) ---------------------------
 
-cat("=== NFC Israel (k=6) ===\n")
-if (!requireNamespace("haven", quietly = TRUE)) {
-  install.packages("haven", repos = "https://cloud.r-project.org")
-}
-nfc_items <- paste0("nfc", 1:9)
-nfc_reverse <- paste0("nfc", c(3,5,6,7,9))
-nfc_raw <- haven::read_sav("data/raw/ZA5088_v1-0-0.sav",
-                            col_select = c("country", all_of(nfc_items)))
-israel <- nfc_raw[haven::as_factor(nfc_raw$country) == "Israel" & !is.na(nfc_raw$country), ]
-for (v in nfc_items) israel[[v]][israel[[v]] < 0] <- NA  # codigos de perdido GESIS (-991..-994)
-nfc_total <- score_composite(as.data.frame(israel), nfc_items, nfc_reverse, min_val = 1, max_val = 6)
-cat(sprintf("  n=%d\n", length(nfc_total)))
-readr::write_csv(data.frame(k = 6L, puntaje = nfc_total), "data/processed/nfc_k6.csv")
+cat("=== SPS-10 COVIDiSTRESS (k=6) ===\n")
+sps_items <- paste0("SPS_", 1:10)
+sps_raw <- readr::read_csv("data/raw/covidistress_global_survey_2020-05-30.csv.gz",
+                            col_select = all_of(sps_items), col_types = readr::cols(.default = readr::col_double()),
+                            show_col_types = FALSE)
+sps_total <- score_composite(as.data.frame(sps_raw), sps_items, character(0), min_val = 1, max_val = 6)
+cat(sprintf("  n=%d\n", length(sps_total)))
+readr::write_csv(data.frame(k = 6L, puntaje = sps_total), "data/processed/sps_k6.csv")
 
 # --- AHS, ola T1 (k=8) --------------------------------------------------
 #

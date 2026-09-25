@@ -14,7 +14,7 @@ on:
   workflow_dispatch:
     inputs:
       correr_extraccion:
-        description: "Extrae los 6 datasets reales (RSE k=4, MACH-IV k=5, NFC k=6, HEXACO k=7, AHS k=8, RWAS k=9) desde data/raw/ -- correr esto primero"
+        description: "Extrae los 6 datasets reales (RSE k=4, MACH-IV k=5, SPS-10 k=6, HEXACO k=7, AHS k=8, RWAS k=9) desde data/raw/ -- correr esto primero"
         type: boolean
         default: false
       correr_bloque_real:
@@ -76,7 +76,7 @@ jobs:
         dataset:
           - rse_k4.csv
           - mach_k5.csv
-          - nfc_k6.csv
+          - sps_k6.csv
           - hexaco_k7.csv
           - ahs_k8.csv
           - rwas_k9.csv
@@ -102,7 +102,7 @@ jobs:
         with:
           # run-id fijo: no depende de correr_extraccion en el mismo
           # dispatch -- descarga el artifact de la ultima corrida de
-          # extract-real-data ya validada (incluye los 6 datasets, NFC y
+          # extract-real-data ya validada (incluye los 6 datasets, SPS-10 y
           # AHS incluidos). Si ese artifact expira, o si se agrega/cambia
           # algun dataset, correr una vez con correr_extraccion=true y
           # actualizar el run-id de abajo con el ID de la corrida nueva --

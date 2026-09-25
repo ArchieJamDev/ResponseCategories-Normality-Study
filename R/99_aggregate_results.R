@@ -1,7 +1,7 @@
 # 99_aggregate_results.R
 #
 # Consolida los 6 CSV del bloque real (uno por dataset: RSE k=4, MACH-IV
-# k=5, NFC k=6, HEXACO k=7, AHS k=8, RWAS k=9) en un solo dataset en
+# k=5, SPS-10 k=6, HEXACO k=7, AHS k=8, RWAS k=9) en un solo dataset en
 # formato largo, listo para comparar directamente contra el bloque de
 # niveles simulado (misma grilla de n, mismas 11 pruebas) -- salvo AHS k=8,
 # que usa una grilla de n reducida (ver R/02_bloque_real_categorias.R).
