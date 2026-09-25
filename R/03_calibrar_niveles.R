@@ -7,13 +7,32 @@
 # la distribucion, variando la forma en un solo eje ordenado en vez de
 # confundirla con k como pasaba en el bloque real (ver notes/DESIGN.md).
 #
+# Objetivos de asimetria/curtosis (25 sep 2026, recalibrados -- ver
+# notes/DESIGN.md Seccion 16): anclados a los percentiles 5/25/50/75/95 de
+# Cain, Zhang y Yuan (2017, Behavior Research Methods), un relevamiento de
+# asimetria y curtosis de 1.567 distribuciones univariadas reales publicadas
+# en Psychological Science y American Education Research Journal -- en vez
+# de valores elegidos ad-hoc o anclados a instrumentos propios del estudio.
+# Curtosis usa el percentil CON SIGNO tal cual lo publican (la direccion
+# importa: leptocurtica y platicurtica son formas distintas, no un espejo
+# una de la otra). Asimetria usa el percentil de |asimetria|, porque la
+# direccion no importa para la potencia de las pruebas de normalidad (son
+# estructuralmente simetricas al signo del sesgo) -- pero Cain et al. no
+# publican percentiles de |asimetria| directamente, asi que se derivaron
+# por interpolacion lineal de la CDF empirica implicita en su Tabla 1
+# (columna "Overall"), resolviendo P(|asimetria|<=m) = F(m) - F(-m) = p
+# para p=.05,.25,.50,.75,.95. Ver notes/DESIGN.md Seccion 16 para el codigo
+# de la interpolacion y la advertencia sobre su precision (aproximacion
+# sobre datos agregados publicados, no sobre las 1.567 observaciones
+# crudas, que no estan disponibles publicamente).
+#
 # Por que lambda libre: un chequeo de factibilidad (ver notes/DESIGN.md)
 # encontro que con lambda FIJO en 0.8 (diseño original de Bloque 5), el
 # mecanismo factor-comun + umbrales solo alcanza curtosis NEGATIVA -- los 12
 # escenarios de SSTN-Normality-Study son todos platicurticos. Dejando lambda
 # libre (mismo mecanismo, un parametro mas en la optimizacion) el espacio
-# alcanzable incluye curtosis positiva -- necesario para el Nivel 5 (muy
-# alto, ancla real: RWAS, asimetria=1.35 curtosis=+1.17).
+# alcanzable incluye curtosis positiva -- necesario para los niveles
+# recalibrados, en particular muy_alto (curtosis objetivo=9.48).
 #
 # Mismo metodo exacto que R/09b_calibrar_extension_bloque5.R de
 # SSTN-Normality-Study salvo por lambda libre: factor comun theta~N(0,1),
@@ -41,11 +60,11 @@ if (length(args) < 1) {
 nivel_elegido <- args[1]
 
 objetivos_niveles <- list(
-  bajo          = c(skew = 0.0,  kurt_exc = -0.70),
-  bajo_moderado = c(skew = 0.2,  kurt_exc = -0.55),
-  moderado      = c(skew = 0.7,  kurt_exc = -0.15),
-  alto          = c(skew = 1.0,  kurt_exc =  0.40),
-  muy_alto      = c(skew = 1.35, kurt_exc =  1.17)
+  bajo          = c(skew = 0.053, kurt_exc = -1.28),
+  bajo_moderado = c(skew = 0.276, kurt_exc = -0.57),
+  moderado      = c(skew = 0.688, kurt_exc =  0.07),
+  alto          = c(skew = 1.332, kurt_exc =  1.62),
+  muy_alto      = c(skew = 3.521, kurt_exc =  9.48)
 )
 if (!nivel_elegido %in% names(objetivos_niveles)) {
   stop(sprintf("Nivel desconocido: '%s'. Debe ser uno de: %s",
