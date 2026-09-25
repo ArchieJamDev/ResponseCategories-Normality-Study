@@ -61,6 +61,8 @@ Al correr el bloque real (Sección 5), surgió un problema de interpretación: R
 
 Cada nivel se calibra y simula en k=3..9 (7 valores, extendido un paso más allá del Bloque 5 de SSTN-Normality-Study para cubrir el k nativo de RWAS) x el mismo grid de n del resto del proyecto -- 5 x 7 = 35 celdas.
 
+**ACTUALIZACIÓN (25 sep 2026): los objetivos de asimetría/curtosis de esta tabla se recalibraron a una fuente empírica publicada -- ver Sección 16.** Esta sección se mantiene como registro histórico del diseño original (anclado a instrumentos propios del estudio, sin respaldo externo citable).
+
 ## 7. Por qué lambda libre, no fija en 0.8 (22 sep 2026)
 
 El diseño original de Bloque 5 (SSTN-Normality-Study) fija la carga factorial lambda=0.8 y solo calibra los umbrales -- por eso los 12 escenarios ya calibrados son TODOS platicúrticos (curtosis exceso entre -0.15 y -1.15): con lambda fija, el mecanismo factor-común + umbrales discretizados tiende estructuralmente hacia formas platicúrticas o casi-normales.
@@ -264,3 +266,53 @@ Severidad real: asimetría=-1.208, curtosis exceso=1.986 -- la más extrema de l
 **Validación real-vs-simulado con los 6 instrumentos actualizados**: correlación global r=0.945, y la relación entre distancia de ajuste y error de predicción no es perfectamente monótona (Spearman ρ=0.83) -- SPS-10 tiene la peor distancia de ajuste (0.828) de los 6, pero su error de predicción (dif. abs. media=0.123) es menor que el de MACH-IV (0.142) o AHS (0.155), que ajustan mejor. Explicación plausible: a un nivel de severidad tan extremo, la potencia de casi todas las pruebas ya está cerca del techo (1.0) tanto en la simulación como en la realidad, así que el error absoluto queda naturalmente acotado por el efecto techo, independientemente de qué tan bien calibrada esté la severidad -- el patrón general (peor ajuste → más error) se mantiene fuerte pero no es una ley perfecta.
 
 **Reevaluación de paridad (H4, ver `notes/resultados_borrador.md`)**: con SPS-10 asignada a "muy_alto" -- el mismo nivel que RWAS (k=9, impar) --, el nivel "muy_alto" pasa a tener un dataset par (SPS-10) y uno impar (RWAS), y el modelo `potencia ~ nivel + paridad` se vuelve técnicamente estimable (coeficiente negativo, par<impar, significativo en n=10,25,50; p<.0001; no significativo en n≥100). Pero un chequeo leave-one-out muestra que el coeficiente es IDÉNTICO sin importar cuál de los otros 4 datasets se excluya -- es decir, toda la identificación de "paridad" viene enteramente del contraste SPS-10 vs RWAS dentro de "muy_alto", ningún otro dataset aporta información. No es un test general de paridad, es una comparación pareada SPS-10-vs-RWAS disfrazada de ANCOVA, y como SPS-10 tiene el peor ajuste de severidad de los 6 (dist=0.828), ese contraste sigue estando confundido con severidad residual. **Conclusión**: la paridad de k solo tiene evidencia válida en el bloque simulado (diseño ortogonal a propósito), no en datos reales.
+
+**ACTUALIZACIÓN (25 sep 2026): los objetivos de los 5 niveles se recalibraron a percentiles de Cain et al. (2017) -- ver Sección 16.** Todos los números de esta sección (asignación de SPS-10 a "muy_alto", distancia=0.828, r=0.945, etc.) se calcularon contra la calibración ANTERIOR y quedan obsoletos una vez termine la recalibración -- se actualizan en `notes/resultados_borrador.md` cuando la nueva simulación esté lista.
+
+## 16. Recalibración de los 5 niveles con respaldo empírico publicado (25 sep 2026)
+
+**Motivación**: los objetivos de asimetría/curtosis de los 5 niveles (Secciones 6-9) estaban anclados a instrumentos propios del estudio (RSE, RWAS) o a puntos intermedios elegidos sin una fuente externa citable. Al revisar la solidez de las categorías "bajo/bajo-moderado/moderado/alto/muy alto" frente a una posible objeción de revisor ("¿de dónde salen estos números?"), se buscó una fuente empírica publicada que respaldara los cortes.
+
+**Fuente**: Cain, M. K., Zhang, Z., y Yuan, K.-H. (2017). Univariate and multivariate skewness and kurtosis for measuring nonnormality: Prevalence, influence and estimation. *Behavior Research Methods*, 49(5), 1716-1735. Los autores recolectaron asimetría y curtosis de 1.567 distribuciones univariadas de estudios publicados en *Psychological Science* (2013-2014) y *American Education Research Journal* (2010-2014), y reportan una tabla de percentiles (su Tabla 1a):
+
+| Percentil | Asimetría | Curtosis (exceso) |
+|---|---|---|
+| Mínimo | −10.87 | −2.20 |
+| 1º | −2.08 | −1.70 |
+| 5º | −1.17 | −1.28 |
+| 25º | −0.33 | −0.57 |
+| Mediana | 0.20 | 0.07 |
+| 75º | 0.94 | 1.62 |
+| 95º | 2.77 | 9.48 |
+| 99º | 6.32 | 95.75 |
+| Máximo | 25.54 | 1093.48 |
+
+**Decisión de diseño (curtosis vs. asimetría, tratamiento distinto y justificado)**:
+- **Curtosis**: se usa el percentil CON SIGNO tal cual lo publican. La dirección importa -- leptocúrtica (colas pesadas) y platicúrtica (colas livianas) son formas de no-normalidad genuinamente distintas, no un reflejo una de la otra, y las 11 pruebas pueden responder de forma distinta a cada una.
+- **Asimetría**: se usa el percentil de |asimetría|, no el valor con signo. La dirección del sesgo no importa para la potencia de las 11 pruebas (son estructuralmente simétricas al signo, por reflexión x → −x) -- de hecho, así es como el estudio ya venía asignando severidad a los instrumentos reales desde la Sección 11. Usar el percentil CON SIGNO habría sido incorrecto: el percentil 5º con signo (−1.17) no representa "poco sesgo", representa "sesgo negativo fuerte" (porque la distribución de asimetría real no es simétrica alrededor de 0 -- su mediana ya está en 0.20, no en 0). Tomar |−1.17| como objetivo de "bajo" habría hecho que ese nivel fuera MÁS severo que "moderado", rompiendo el orden creciente de severidad que da sentido a los 5 niveles.
+
+**Cálculo de percentiles de |asimetría|** (Cain et al. no los publican directamente, y los datos individuales de las 1.567 distribuciones no están disponibles públicamente): se interpoló linealmente la función de distribución acumulada empírica implícita en la tabla publicada (usando los 9 puntos conocidos: mínimo, 1º, 5º, 25º, mediana, 75º, 95º, 99º, máximo), y se resolvió P(|asimetría| ≤ m) = F(m) − F(−m) = p para p = .05, .25, .50, .75, .95, vía búsqueda de raíz (`uniroot`). Código completo en el commit que introduce esta sección (`R/03_calibrar_niveles.R`, comentario de cabecera). Resultado:
+
+| Percentil deseado | |Asimetría| interpolada |
+|---|---|
+| 5º | 0.053 |
+| 25º | 0.276 |
+| 50º | 0.688 |
+| 75º | 1.332 |
+| 95º | 3.521 |
+
+**Advertencia de precisión**: esto es una aproximación sobre datos agregados publicados (la tabla de percentiles), no un cálculo directo sobre las 1.567 observaciones crudas -- la interpolación lineal entre puntos conocidos es una simplificación, especialmente en la cola alta (95º), donde hay pocos puntos de referencia y la verdadera forma de la distribución podría no ser lineal entre ellos. Se reporta así explícitamente en el método, distinguiendo esta derivación (interpolada) de la de curtosis (percentil directo, sin transformación).
+
+**Nueva Tabla 2 (niveles recalibrados)**:
+
+| Nivel | Percentil (asimetría / curtosis) | Asimetría objetivo | Curtosis exceso objetivo |
+|---|---|---|---|
+| bajo | 5º / 5º | 0.053 | −1.28 |
+| bajo_moderado | 25º / 25º | 0.276 | −0.57 |
+| moderado | 50º / 50º | 0.688 | 0.07 |
+| alto | 75º / 75º | 1.332 | 1.62 |
+| muy_alto | 95º / 95º | 3.521 | 9.48 |
+
+**Chequeo de factibilidad antes de correr las 35 celdas en Actions**: una prueba local (no oficial, solo para verificar que el mecanismo puede alcanzar el objetivo más extremo antes de comprometer cómputo de Actions) calibró muy_alto en k=5 con 4 arranques: tardó 430 segundos y NO convergió bien (asimetría lograda=3.11 vs objetivo 3.52, curtosis lograda=9.55 vs objetivo 9.48, dist²=0.174 -- muy por encima del dist² ≈ 10⁻¹¹ que lograban los niveles originales, menos extremos). Esto confirma que el nuevo objetivo "muy_alto" está cerca del límite de lo alcanzable con el mecanismo actual (factor común + m=10 ítems discretizados), y que hacen falta más arranques que el default (8) para converger razonablemente.
+
+**Decisión**: correr la calibración completa en GitHub Actions (no localmente, por la Sección 8) con `n_starts=16` (el doble del default) en vez de aumentar la cantidad de ítems o relajar el objetivo -- ver commit que actualiza `.github/workflows/simulate.yml`. Pendiente: verificar tras la corrida si dist² sigue siendo alto para muy_alto incluso con 16 arranques, y decidir en ese caso si hace falta más cómputo aún o si hay que documentar el ajuste imperfecto como limitación del mecanismo generativo.

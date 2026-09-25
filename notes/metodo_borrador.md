@@ -28,7 +28,7 @@ Los seis instrumentos usados en el componente de datos reales se resumen en la T
 
 Los seis instrumentos difieren no solo en *k* sino también en su confiabilidad: MACH-IV es notablemente el más bajo (α≈.68–.70, un problema de consistencia interna ya documentado en la literatura sobre esta escala), mientras que SPS-10 y la Adult Hope Scale son los más altos (α=.92 ambos). Esta variación es una propiedad de los instrumentos tal como existen en la práctica real —no algo controlado por el diseño del estudio—, y se retoma en la Discusión al interpretar los resultados del componente de datos reales.
 
-Los seis instrumentos se eligieron conjuntamente para cubrir el rango de *k* más amplio posible disponible en datos abiertos, de *k*=4 (RSE) a *k*=9 (RWAS), con SPS-10 y la Adult Hope Scale completando los valores intermedios (*k*=6 y *k*=8) ausentes en el catálogo original. El proceso de búsqueda para estos dos últimos, incluido un candidato inicial de *k*=6 (Necesidad de Cierre Cognitivo, GESIS) descartado tras encontrar que la fuente de datos desaconseja explícitamente combinar sus ítems en un puntaje compuesto, se documenta en el registro de decisiones metodológicas del repositorio (no incluido aquí por extensión).
+Los seis instrumentos se eligieron conjuntamente para cubrir el rango de *k* más amplio posible disponible en datos abiertos, de *k*=4 (RSE) a *k*=9 (RWAS), con SPS-10 y la Adult Hope Scale completando los valores intermedios (*k*=6 y *k*=8) ausentes en el catálogo original. El proceso de búsqueda para estos dos últimos, incluido un candidato inicial de *k*=6 descartado tras encontrar que la fuente de datos desaconseja explícitamente combinar sus ítems en un puntaje compuesto, se documenta en el registro de decisiones metodológicas del repositorio (no incluido aquí por extensión).
 
 ## 2.3. Bloque de niveles: simulación de la severidad de no-normalidad
 
@@ -36,24 +36,26 @@ Cada nivel simula un compuesto de *m*=10 ítems generados a partir de un factor 
 
 La carga factorial λ se trata aquí como un parámetro libre de la calibración, junto con los umbrales, en vez de fijarse a un valor constante. Esta decisión responde a un chequeo de factibilidad previo: fijar λ a un valor constante limita el mecanismo factor-común más umbrales discretizados a combinaciones de asimetría/curtosis platicúrticas o cercanas a la normal; dejando λ libre, el espacio alcanzable se amplía sustancialmente e incluye curtosis positiva, necesaria para reproducir el nivel más extremo del diseño (véase más abajo).
 
-Se definieron cinco niveles ordenados de severidad de no-normalidad, con objetivos de asimetría y curtosis en exceso elegidos para cubrir de forma aproximadamente equiespaciada el rango observado entre instrumentos psicométricos reales, desde una forma cercana a la normal hasta una marcadamente asimétrica y leptocúrtica (Tabla 2).
+Se definieron cinco niveles ordenados de severidad de no-normalidad, con objetivos de asimetría y curtosis en exceso anclados a los percentiles 5º, 25º, 50º (mediana), 75º y 95º de la distribución de asimetría y curtosis reportada por Cain, Zhang y Yuan (2017) sobre 1.567 distribuciones univariadas reales de estudios publicados en *Psychological Science* y *American Education Research Journal* — en vez de valores elegidos ad-hoc, cada nivel corresponde a un punto empíricamente representativo de qué tan seguido se observa esa combinación de asimetría/curtosis en la práctica psicológica real (Tabla 2).
+
+Los objetivos de curtosis usan el percentil con signo tal cual lo reportan Cain et al., porque la dirección de la curtosis (leptocúrtica vs. platicúrtica) representa formas de no-normalidad genuinamente distintas. Los objetivos de asimetría usan el percentil de *|asimetría|* (magnitud, no signo), porque la potencia de las once pruebas de normalidad es estructuralmente simétrica a la dirección del sesgo; como Cain et al. no publican percentiles de asimetría en valor absoluto, estos se derivaron interpolando linealmente la función de distribución acumulada empírica implícita en su tabla de percentiles publicada, resolviendo *P*(|asimetría| ≤ *m*) = *F*(*m*) − *F*(−*m*) = *p* para *p* = .05, .25, .50, .75, .95. Esta es una aproximación sobre datos agregados publicados, no un cálculo directo sobre las distribuciones individuales (no disponibles públicamente) — se reporta así explícitamente para distinguirla del percentil directo usado para curtosis.
 
 **Tabla 2**
-*Niveles de severidad de no-normalidad y sus objetivos de calibración*
+*Niveles de severidad de no-normalidad y sus objetivos de calibración, anclados a percentiles de Cain, Zhang y Yuan (2017)*
 
-| Nivel | Asimetría objetivo | Curtosis en exceso objetivo |
-|---|---|---|
-| bajo | 0.00 | −0.70 |
-| bajo-moderado | 0.20 | −0.55 |
-| moderado | 0.70 | −0.15 |
-| alto | 1.00 | 0.40 |
-| muy alto | 1.35 | 1.17 |
+| Nivel | Percentil | Asimetría objetivo (|valor|, interpolado) | Curtosis en exceso objetivo (con signo, directo) |
+|---|---|---|---|
+| bajo | 5º | 0.053 | −1.28 |
+| bajo-moderado | 25º | 0.276 | −0.57 |
+| moderado | 50º (mediana) | 0.688 | 0.07 |
+| alto | 75º | 1.332 | 1.62 |
+| muy alto | 95º | 3.521 | 9.48 |
 
 **Calibración.** Para cada combinación de nivel y *k* (7 valores, 3 a 9; 35 celdas en total), λ y los *k*−1 umbrales se calibraron simultáneamente vía optimización numérica, minimizando la distancia cuadrática entre los momentos empíricos del compuesto simulado y los objetivos de la Tabla 2:
 
 *d*² = (asimetría_lograda − asimetría_objetivo)² + (curtosis_lograda − curtosis_objetivo)²
 
-Los umbrales se parametrizaron como *u₁* = *p*, *uⱼ* = *p* + Σᵢ₌₂ʲ exp(*gᵢ*) para *j* > 1 (con *p* el primer umbral y *g* los log-incrementos), lo que garantiza umbrales crecientes sin restringir el optimizador; λ se parametrizó como λ = expit(*z*) = 1 / (1 + *e*⁻ᶻ), lo que mantiene λ en (0, 1) sin restricciones explícitas. El vector de parámetros libres (*z*, *p*, *g*₁, ..., *g*ₖ₋₂) se optimizó con el algoritmo Nelder-Mead, con ocho puntos de partida distintos por celda —barriendo λ inicial de 0.15 a 0.85 y el corrimiento de los umbrales iniciales hacia el signo del objetivo— y quedándose con el resultado de menor *d*² entre los ocho. Los momentos empíricos de cada combinación de parámetros se calcularon sobre *N*=150.000 réplicas de números aleatorios comunes (misma semilla y mismos valores de θ y ε generados una sola vez, reusados en las 35 celdas), para que el ruido Monte Carlo no contaminara las comparaciones de forma entre celdas. Las 35 celdas calibraron con una distancia residual máxima *d*² = 3.8 × 10⁻¹¹, prácticamente exacta.
+Los umbrales se parametrizaron como *u₁* = *p*, *uⱼ* = *p* + Σᵢ₌₂ʲ exp(*gᵢ*) para *j* > 1 (con *p* el primer umbral y *g* los log-incrementos), lo que garantiza umbrales crecientes sin restringir el optimizador; λ se parametrizó como λ = expit(*z*) = 1 / (1 + *e*⁻ᶻ), lo que mantiene λ en (0, 1) sin restricciones explícitas. El vector de parámetros libres (*z*, *p*, *g*₁, ..., *g*ₖ₋₂) se optimizó con el algoritmo Nelder-Mead, con dieciséis puntos de partida distintos por celda —barriendo λ inicial de 0.15 a 0.85 y el corrimiento de los umbrales iniciales hacia el signo del objetivo— y quedándose con el resultado de menor *d*² entre los dieciséis. Los momentos empíricos de cada combinación de parámetros se calcularon sobre *N*=150.000 réplicas de números aleatorios comunes (misma semilla y mismos valores de θ y ε generados una sola vez, reusados en las 35 celdas), para que el ruido Monte Carlo no contaminara las comparaciones de forma entre celdas.
 
 Con los parámetros calibrados, cada celda (nivel × *k*) se simuló de forma independiente sobre la grilla completa de *n*, con *R*=10.000 réplicas por celda (280 celdas: 5 niveles × 7 valores de *k* × 8 tamaños de muestra).
 
