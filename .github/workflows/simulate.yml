@@ -109,7 +109,7 @@ jobs:
           # ver notes/DESIGN.md.
           name: real-data-processed
           path: data/processed
-          run-id: 35980262361
+          run-id: 36119256254
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Bloque real -- submuestreo m-out-of-N (R=10000)
         # ahs_k8 (N=1.036) no alcanza el maximo de la grilla comun (1500) --
