@@ -37,11 +37,11 @@ Ver comentario completo en `R/01_extract_real_subscales.R`. Resumen:
 
 A diferencia de SSTN-Normality-Study (los 4 zips de ese proyecto son TSV pese a la extensión .csv), en este proyecto **RWAS viene delimitado por COMA**, no por TAB -- único caso distinto encontrado hasta ahora en el catálogo de openpsychometrics.org. Confirmado con `head -1 data.csv | awk -F',' '{print NF}'` antes de escribir `R/01_extract_real_subscales.R`. RSE, MACH-IV y HEXACO sí son TSV, igual que en el proyecto hermano.
 
-## 5. Grilla de n y método de submuestreo (22 sep 2026; actualizado 24 sep 2026 tras agregar NFC y AHS -- ver Secciones 10 y 11)
+## 5. Grilla de n y método de submuestreo (22 sep 2026; actualizado 25 sep 2026 tras agregar SPS-10 y AHS -- ver Secciones 10, 11 y 14)
 
 Se usa la MISMA grilla de n que el Bloque 5 simulado de SSTN-Normality-Study -- {10,25,50,100,250,500,1000,1500} -- para que la comparación entre el hallazgo simulado y su contraparte real sea directa, celda por celda de n, no solo cualitativa. El N mínimo de los 4 datasets originales (RWAS, 9.680) es muy superior al n máximo del grid (1.500), así que el submuestreo sin reemplazo (mismo método "m-out-of-N" del Bloque 4 de SSTN-Normality-Study) es válido para los 4 sin ajuste.
 
-Con los 6 datasets finales (RSE k=4, MACH-IV k=5, NFC k=6, HEXACO k=7, AHS k=8, RWAS k=9), 5 de 6 siguen usando el grid completo (el N mínimo entre esos 5, NFC con 1.688, sigue siendo mayor que 1.500). La excepción es **AHS (k=8, N=1.036)**: no alcanza el n máximo de 1.500, así que corre con un grid reducido {10,25,50,100,250,500,1000} -- una asimetría explícita en el diseño, no un dato faltante (ver Sección 11).
+Con los 6 datasets finales (RSE k=4, MACH-IV k=5, SPS-10 k=6, HEXACO k=7, AHS k=8, RWAS k=9), 5 de 6 siguen usando el grid completo -- el N mínimo entre esos 5 (RWAS, 9.680) sigue siendo muy superior a 1.500, con margen amplio para los 5 (SPS-10, en particular, tiene N=91.658, el más alto de los 6). La excepción es **AHS (k=8, N=1.036)**: no alcanza el n máximo de 1.500, así que corre con un grid reducido {10,25,50,100,250,500,1000} -- una asimetría explícita en el diseño, no un dato faltante (ver Sección 11).
 
 ## 6. Bloque de niveles: separar el efecto de k/n/paridad de la forma real de la distribución (22 sep 2026)
 
@@ -99,6 +99,8 @@ La Sección 2 documentó la ausencia de datasets abiertos con k=6 o k=8 tras una
 
 Se encontró el estudio GESIS ZA5088 ("Identity Development and Value Transmission among Veteran and Migrant Adolescents and Their Families in Germany and Israel"), que en su submuestra de Israel aplicó la escala de Necesidad de Cierre Cognitivo (Webster y Kruglanski, 1994) en formato de 6 puntos (la submuestra de Alemania usó una versión de 7 puntos del mismo instrumento, por eso no se mezclan). Se extrajeron 3 de las 5 subescalas originales (9 ítems), N=1.688 tras exigir caso completo. Ver `R/01_extract_real_subscales.R` para la clave de puntuación (inferida cruzando el contenido semántico de los ítems contra la estructura documentada en el informe metodológico del estudio, ya que este no publica una tabla de reversión ítem por ítem) y la Sección 5 para su lugar en la grilla de n (usa el grid completo, con margen ajustado: solo 188 casos de sobra sobre el n máximo de 1.500).
 
+**ACTUALIZACIÓN (25 sep 2026): NFC se descartó posteriormente y se reemplazó por SPS-10 -- ver Secciones 14 y 15.** Esta sección se mantiene como registro histórico de cómo se encontró originalmente.
+
 ## 11. Hallazgo posterior de un instrumento real con k=8: Adult Hope Scale / OSF (24 sep 2026)
 
 Siguiendo la misma búsqueda intensiva de la Sección 10, el usuario aportó 5 enlaces de OSF con instrumentos de esperanza/bienestar. De esos, 3 datasets independientes usaban la Adult Hope Scale (Snyder et al., 1991/1994) en su escala original de 8 puntos, confirmando los 8 niveles de respuesta en los datos crudos:
@@ -141,7 +143,7 @@ m_items:         coef=0.0009, p=.853  (no significativo; correlación parcial ~0
 
 **Conclusión**: la brecha entre lo que predice la simulación y la potencia real observada se explica casi enteramente por qué tan bien calibrada está la severidad de cada instrumento (Sección 9/11) -- la cantidad de ítems, aunque varía de 8 a 22 frente a los m=10 fijos de la simulación, no aporta una distorsión sistemática detectable una vez controlada la severidad. Esto respalda usar los 6 instrumentos reales tal como están (con su cantidad nativa de ítems), sin necesidad de reconstruir compuestos artificiales de 10 ítems para el análisis principal del paper. Limitación honesta: con solo 6 datasets (3 gl residuales) la potencia para detectar un efecto pequeño de ítems es muy baja -- esto es evidencia de ausencia de un efecto GRANDE, no prueba definitiva de que no exista ningún efecto.
 
-## 13. Comparación de las 11 pruebas: potencia bruta, estabilidad a k, y qué tan predecible es su comportamiento real desde la simulación (24 sep 2026)
+## 13. Comparación de las 11 pruebas: potencia bruta, estabilidad a k, y qué tan predecible es su comportamiento real desde la simulación (24 sep 2026; 13.2-13.5 actualizadas 25 sep 2026 tras reemplazar NFC por SPS-10 -- ver Sección 14)
 
 Pregunta práctica para el paper: ¿cuál de las 11 pruebas conviene usar, bajo qué criterios de k, n y severidad? Se necesitan tres tablas distintas, no comparables directamente entre sí salvo con el cuidado que se explica abajo.
 
@@ -167,70 +169,102 @@ Usando las 280 filas del bloque de niveles (5 niveles × k=3..9 × 8 n), donde l
 
 D'Agostino-Pearson gana el balance general (potencia casi máxima + muy estable a k). SSTN no es la más potente (9no lugar en potencia) pero es la 3ra más estable a k -- su argumento no es "detecta mejor", es "su conclusión no depende de cuántas categorías tiene la escala". Curtosis es errática porque solo detecta desviaciones de curtosis, y la curtosis objetivo de los niveles NO sube monótonamente con la severidad etiquetada (bajo=-0.70, moderado=-0.15 casi mesocúrtica, alto=0.40, muy_alto=1.17).
 
-### 13.2 Tabla real (k y severidad confundidos, inevitable con instrumentos ya existentes)
+### 13.2 Tabla real (k y severidad confundidos, inevitable con instrumentos ya existentes) -- actualizada 25 sep 2026 con SPS-10 reemplazando a NFC (ver Sección 14)
 
 Mismo cálculo sobre los 6 datasets reales (`consolidado.csv`), sin poder aislar severidad -- cada k real trae su propio nivel de severidad pegado:
 
 | Prueba | Potencia media (real) | CV k (real, confundido) | Rank combinado |
 |---|---|---|---|
-| D'Agostino-Pearson | 0.673 | 0.222 | 2 |
-| Shapiro-Wilk | 0.642 | 0.242 | 5 |
-| Lilliefors | 0.621 | 0.236 | 6 |
-| Anderson-Darling | 0.626 | 0.252 | 7 |
-| Pearson χ² | 0.610 | 0.256 | 11.5 |
-| Shapiro-Francia | 0.616 | 0.276 | 12 |
-| Cramér-von Mises | 0.610 | 0.270 | 12.5 |
-| Jarque-Bera | 0.534 | 0.297 | 18 |
-| SSTN | 0.584 | 0.318 | 18 |
-| Epps-Pulley | 0.592 | 0.325 | 18 |
-| Curtosis | 0.505 | 0.335 | 22 |
+| D'Agostino-Pearson | 0.732 | 0.203 | 3 |
+| Epps-Pulley | 0.664 | 0.154 | 4 |
+| Shapiro-Wilk | 0.688 | 0.242 | 5 |
+| Anderson-Darling | 0.662 | 0.260 | 9 |
+| Lilliefors | 0.641 | 0.246 | 12 |
+| Shapiro-Francia | 0.658 | 0.286 | 13 |
+| Cramér-von Mises | 0.641 | 0.278 | 14 |
+| Pearson χ² | 0.630 | 0.267 | 15 |
+| SSTN | 0.648 | 0.288 | 15 |
+| Jarque-Bera | 0.582 | 0.304 | 20 |
+| Curtosis | 0.539 | 0.334 | 22 |
 
-D'Agostino-Pearson se sostiene como la mejor combinación también aquí (coincide con 13.1, buena señal de consistencia). SSTN cae a un CV casi 10 veces mayor que en la tabla limpia -- pero antes de interpretar eso como pérdida real de estabilidad, ver 13.3.
+D'Agostino-Pearson se sostiene como la mejor combinación también aquí (coincide con 13.1). Epps-Pulley sube notablemente (4to lugar, era 18vo con NFC) gracias a su CV muy bajo (0.154, el más bajo de los 11) -- con SPS-10 en vez de NFC, el patrón de sensibilidad a k de esta prueba se ve muy distinto. SSTN queda en la mitad de la tabla (rank 15, empatado con Pearson χ²).
 
 ### 13.3 Tabla simulada CONFUNDIDA (mismo emparejamiento nivel-k que los reales, a propósito)
 
-Para que 13.1 y 13.2 sean comparables sin el "ruido" de que una está limpia y la otra no, se repitió el cálculo sobre SOLO 6 celdas simuladas, las que comparten nivel y k con los 6 datasets reales (bajo/k4, bajo_moderado/k5, alto/k6, bajo_moderado/k7, alto/k8, muy_alto/k9) -- el mismo confound de los reales, impuesto artificialmente sobre datos simulados:
+Para que 13.1 y 13.2 sean comparables sin el "ruido" de que una está limpia y la otra no, se repitió el cálculo sobre SOLO 6 celdas simuladas, las que comparten nivel y k con los 6 datasets reales (bajo/k4, bajo_moderado/k5, **muy_alto/k6**, bajo_moderado/k7, alto/k8, muy_alto/k9) -- el mismo confound de los reales, impuesto artificialmente sobre datos simulados. Nota: con SPS-10 asignada a "muy_alto" (igual que RWAS, ver Sección 14), el nivel "muy_alto" aparece DOS veces en este emparejamiento (k=6 y k=9), a diferencia del emparejamiento con NFC donde cada nivel aparecía una sola vez:
 
 | Prueba | Potencia (sim. confundido) | CV k (sim. confundido) | Rank combinado |
 |---|---|---|---|
-| Shapiro-Wilk | 0.779 | 0.197 | 3 |
-| D'Agostino-Pearson | 0.760 | 0.201 | 5 |
-| Epps-Pulley | 0.735 | 0.196 | 6 |
-| Anderson-Darling | 0.751 | 0.225 | 7 |
-| Shapiro-Francia | 0.750 | 0.230 | 9 |
-| Pearson χ² | 0.733 | 0.237 | 13 |
-| Lilliefors | 0.705 | 0.230 | 14 |
-| Cramér-von Mises | 0.720 | 0.258 | 15 |
-| SSTN | 0.702 | 0.284 | 19 |
-| Curtosis | 0.500 | 0.268 | 20 |
-| Jarque-Bera | 0.601 | 0.310 | 21 |
+| Shapiro-Wilk | 0.791 | 0.209 | 4 |
+| D'Agostino-Pearson | 0.772 | 0.215 | 6 |
+| Epps-Pulley | 0.743 | 0.205 | 7 |
+| Anderson-Darling | 0.764 | 0.238 | 8 |
+| Shapiro-Francia | 0.762 | 0.243 | 10 |
+| Pearson χ² | 0.750 | 0.255 | 13 |
+| Curtosis | 0.550 | 0.207 | 13 |
+| Lilliefors | 0.721 | 0.248 | 15 |
+| Cramér-von Mises | 0.734 | 0.274 | 16 |
+| SSTN | 0.715 | 0.297 | 19 |
+| Jarque-Bera | 0.615 | 0.327 | 21 |
 
-**Hallazgo clave**: SSTN cae a un puesto bajo (19 de 22) casi idéntico al que obtiene en datos reales (18) -- no era ruido real, es consecuencia matemática directa de mezclar k con severidad de la forma en que están emparejados estos 6 instrumentos específicos. La ventaja de estabilidad de SSTN es real, pero depende de que la severidad esté controlada -- algo que casi ningún estudio aplicado con instrumentos ya existentes puede garantizar.
+Curtosis tiene un CV bajo aquí (0.207, casi tan bajo como Shapiro-Wilk) pero su potencia sigue siendo la más baja de las 11 (0.550) -- por eso su rank combinado (13, empatado con Pearson χ²) es solo mediocre, no el mejor. El CV bajo es plausible: tanto SPS-10 (kurt=1.986) como RWAS (kurt=1.17), el par que forma "muy_alto" aquí, tienen curtosis alta, así que curtosis (que solo reacciona a eso) ve un cambio menor entre esos dos extremos de k que en el resto de la tabla -- coincidencia de diseño del emparejamiento, no una propiedad general (en 13.1, con los 5 niveles limpios, curtosis sigue siendo la peor en ambos criterios).
 
 ### 13.4 Desplazamiento (13.3 vs 13.2): qué tan predecible es cada prueba desde la simulación
 
-Diferencia absoluta de rank combinado entre la tabla simulada-confundida (13.3) y la real (13.2) -- mide si el comportamiento de una prueba en un escenario simulado-confundido anticipa bien su comportamiento real:
+Diferencia absoluta de rank combinado entre la tabla simulada-confundida (13.3) y la real (13.2):
 
 | Prueba | Rank (sim. confundido) | Rank (real) | Desplazamiento |
 |---|---|---|---|
-| Anderson-Darling | 7 | 7 | **0** (perfectamente predecible) |
-| SSTN | 19 | 18 | **1** |
-| Shapiro-Wilk | 3 | 5 | 2 |
-| Cramér-von Mises | 15 | 13 | 2 |
-| Pearson χ² | 13 | 11 | 2 |
-| Curtosis | 20 | 22 | 2 |
-| Jarque-Bera | 21 | 18 | 3 |
-| D'Agostino-Pearson | 5 | 2 | 3 |
-| Shapiro-Francia | 9 | 12 | 3 |
-| Lilliefors | 14 | 6 | 8 |
-| Epps-Pulley | 6 | 18 | **12** (la más impredecible) |
+| Shapiro-Wilk | 4 | 5 | **1** |
+| Anderson-Darling | 8 | 9 | **1** |
+| Jarque-Bera | 21 | 20 | **1** |
+| Cramér-von Mises | 16 | 14 | 2 |
+| Pearson χ² | 13 | 15 | 2 |
+| Lilliefors | 15 | 12 | 3 |
+| D'Agostino-Pearson | 6 | 3 | 3 |
+| Shapiro-Francia | 10 | 13 | 3 |
+| Epps-Pulley | 7 | 4 | 3 |
+| SSTN | 19 | 15 | 4 |
+| Curtosis | 13 | 22 | **9** (la más impredecible) |
 
-**SSTN es la segunda prueba más predecible de las 11**, justo detrás de Anderson-Darling -- esto es un hallazgo DISTINTO al de 13.1-13.3 (estabilidad pura), y complementario: aunque la ventaja de estabilidad-a-k de SSTN se diluye bajo confusión con severidad (13.3), su comportamiento bajo esa confusión es el que MEJOR anticipa la simulación -- la simulación de este estudio es una guía confiable de lo que SSTN hará en la práctica, mucho más que para Epps-Pulley (la más impredecible, pasa de de las mejores en 13.3 a de las peores en 13.2) o Lilliefors (camino inverso: mala en 13.3, notablemente mejor en real).
+**Con SPS-10, el panorama de predictibilidad cambia respecto al que se había documentado con NFC.** Ahora Shapiro-Wilk, Anderson-Darling y Jarque-Bera son las más predecibles (desplazamiento=1 cada una) -- ninguna llega a desplazamiento cero esta vez. SSTN queda en un lugar intermedio (desplazamiento=4, ni de las mejores ni de las peores). Curtosis es la más impredecible por un margen amplio (9, casi el doble que la siguiente) -- consecuencia directa de la coincidencia de diseño señalada en 13.3: su CV bajo en el par muy_alto (SPS-10 y RWAS, ambos con curtosis alta) no se sostiene en el resto de la tabla real, donde los demás pares no comparten esa propiedad. **El hallazgo documentado en la sesión anterior con NFC ("SSTN es la 2da prueba más predecible, Anderson-Darling perfectamente predecible") ya NO se sostiene igual con SPS-10** -- esto confirma, con un segundo caso real, que la métrica de "predictibilidad" depende fuertemente de qué par de instrumentos ocupa cada nivel de severidad en el emparejamiento confundido, no es una propiedad fija de cada prueba. Reportar esta tabla en el paper exige esa advertencia explícita.
 
-### 13.5 Síntesis para el paper
+### 13.5 Síntesis para el paper (actualizada 25 sep 2026)
 
-- **Si hay que recomendar una sola prueba por defecto**: D'Agostino-Pearson -- mejor balance potencia/estabilidad en las tres tablas (13.1, 13.2, 13.3), consistentemente.
-- **Shapiro-Wilk**: máxima potencia bruta en casi todos los escenarios (hallazgo ya conocido en la literatura, no novedoso), pero más sensible a k que D'Agostino-Pearson.
-- **SSTN**: su valor agregado no es potencia bruta (nunca es la más potente) -- es estabilidad-a-k cuando la severidad está controlada (13.1) y, cuando no lo está, ser la prueba cuyo comportamiento la simulación anticipa mejor (13.4). Dos argumentos distintos, ambos defendibles, ninguno es "más potente que Shapiro-Wilk".
-- **Lilliefors y Epps-Pulley**: evitar si se van a comparar/combinar estudios con formatos de respuesta distintos -- las más sensibles a k en la tabla limpia (Lilliefors) y las más impredecibles entre simulación y realidad (Epps-Pulley).
-- **Curtosis (Anscombe-Glynn)**: peor en casi todos los criterios -- útil solo si se sabe de antemano que la desviación es puramente de curtosis, no de asimetría.
+- **Si hay que recomendar una sola prueba por defecto**: D'Agostino-Pearson -- mejor balance potencia/estabilidad en las tres tablas (13.1, 13.2, 13.3), consistentemente, tanto con NFC como con SPS-10 -- es el hallazgo más robusto de toda la Sección 13.
+- **Shapiro-Wilk**: máxima potencia bruta en casi todos los escenarios (hallazgo ya conocido en la literatura, no novedoso), pero más sensible a k que D'Agostino-Pearson; además, de las más predecibles entre escenarios con SPS-10.
+- **SSTN**: su valor agregado no es potencia bruta (nunca es la más potente) -- es estabilidad-a-k cuando la severidad está controlada (13.1, 3er lugar). Su predictibilidad entre escenarios (13.4) NO es un hallazgo robusto -- era la 2da mejor con NFC, es intermedia (4to lugar de desplazamiento) con SPS-10. Reportar solo la ventaja de 13.1 (robusta a ambos reemplazos), no la de 13.4 (sensible a qué instrumento ocupa k=6).
+- **La comparación NFC-vs-SPS-10 en sí misma es evidencia metodológica**: casi todos los rankings de las Secciones 13.2-13.4 cambian de forma no trivial al cambiar un solo instrumento real (k=6) -- ilustra cuán frágiles son las conclusiones sobre "qué prueba es mejor" cuando se basan en un solo conjunto de instrumentos reales, y refuerza la necesidad de la Tabla 13.1 (simulación limpia, con 7 valores de k por nivel) como ancla más estable para las recomendaciones del paper.
+- **Curtosis (Anscombe-Glynn)**: peor en el escenario limpio (13.1) y la más impredecible entre escenarios (13.4, con NFC o con SPS-10) -- útil solo si se sabe de antemano que la desviación es puramente de curtosis, no de asimetría.
+
+## 14. Se descarta NFC como instrumento real de k=6 (25 sep 2026)
+
+Al preparar la Tabla 1 del método (confiabilidad publicada por instrumento), se calculó por primera vez el alfa de Cronbach de NFC directamente sobre los datos: **α=0.043** con la clave de reversión documentada en la Sección 10 (ítems 3,5,6,7,9 invertidos) -- esencialmente cero, muy por debajo de cualquier umbral aceptable.
+
+Investigación del problema, en orden:
+
+1. **Sin ninguna reversión**, las 9 correlaciones entre ítems ya son todas positivas (0.02-0.47) -- α sube a 0.69, pero esto por sí solo no prueba que "no reversión" sea la clave correcta (podría ser aquiescencia, ver punto 3).
+2. **Verificación contra el codebook oficial de GESIS** (descargado de nuevo vía `access.gesis.org/dbk/50865`, 199 páginas, texto de los 9 ítems en inglés confirmado en pp. 43-45): la dirección de reversión semánticamente correcta (ítems 3, 5, 6, 7, 9 invertidos, según el contenido literal de cada ítem) coincide EXACTAMENTE con la que ya se había inferido antes en este proyecto -- no era un error de la clave.
+3. **El problema real, encontrado en la página 40 del mismo codebook**: *"it is recommended not to use the items to measure the three sub-scales of the original Need for Closure Scale by Webster and Kruglanski (1994), but rather use them as single items"* -- GESIS mismo desaconseja combinar estos ítems en subescalas o en un puntaje total en este dataset.
+4. **Confirmación empírica de por qué**: con la reversión semánticamente correcta, las 3 subescalas (ambigüedad, decisión, cerrazón -- 3 ítems cada una) tienen alfa razonable por separado (0.57, 0.36, 0.65) pero correlacionan NEGATIVAMENTE entre sí (-0.145, -0.379, 0.033) -- deberían correlacionar positivamente si midieran la misma "Necesidad de Cierre" subyacente. Explicación más plausible: aquiescencia en ítems redactados en sentido inverso, un problema bien documentado en muestras de niños/adolescentes (la muestra de ZA5088 es de 9-18 años) -- los respondientes probablemente no invirtieron mentalmente el sentido de las frases al responder.
+5. **Se descartaron dos posibles arreglos**: (a) usar una sola subescala de 3 ítems -- introduce discretización severa (solo 16 valores distintos posibles en escala 1-6) y las 3 subescalas dan severidades real distintas entre sí (asimetría de -0.86 a +0.88, incluso de signo opuesto), no hay una elección no arbitraria; (b) transformar el puntaje compuesto (multiplicar por constante, o transformación no lineal) -- no cambia la cantidad de valores distintos (transformación monótona conserva cardinalidad) ni resuelve el problema real (validez de constructo, no de escala), y una transformación no lineal para "mejorar" la forma constituiría manipular el resultado en vez de medirlo, violando la Sección 8.
+
+**Decisión**: descartar NFC del estudio. No es un error de codificación corregible -- es una propiedad documentada del instrumento en este dataset específico, corroborada independientemente por la fuente (GESIS) y por el análisis propio (incoherencia entre subescalas). Se retira `data/raw/ZA5088_v1-0-0.sav` del repositorio y se busca un nuevo candidato de k=6 (ver Sección 15).
+
+## 15. Nuevo instrumento real de k=6: Social Provisions Scale (SPS-10) / COVIDiSTRESS Global Survey (25 sep 2026)
+
+Búsqueda de un reemplazo para k=6, esta vez explorando datasets de encuestas grandes con formato de respuesta uniforme de 6 puntos (a diferencia de instrumentos psicométricos individuales, que rara vez usan k=6 -- ver Sección 2). Se encontró **COVIDiSTRESS Global Survey** (OSF, código z39us; Lieberoth et al., encuesta global durante la pandemia de COVID-19, marzo-mayo 2020, N=173.426 respondientes), cuyo archivo final limpio (`COVIDiSTRESS global survey May 30 2020 (***final cleaned file***).csv`, guid `f8h9w`) contiene varios bloques de ítems en escala 1-6 nativa.
+
+De los candidatos de ese dataset con escala 1-6 (PSS-10/UCLA usa 1-5, no 1-6; OECD trust usa 0-10; Corona_concerns y Compliance sí son 1-6 pero son escalas ad-hoc del estudio, no instrumentos validados publicados; BFF-15, Big Five, es 1-6 pero mide 5 rasgos DISTINTOS que no se pueden sumar en un solo puntaje, mismo problema categórico que NFC), se eligió la **Social Provisions Scale, forma corta de 10 ítems (SPS-10; Cutrona y Russell, 1987)**, columnas `SPS_1`..`SPS_10`.
+
+Verificación antes de usarla (aprendiendo la lección de NFC -- Sección 14):
+- **Confiabilidad**: α=0.92 sin ninguna reversión aplicada, N=91.658 casos completos (el mayor de los 6 instrumentos reales).
+- **Coherencia entre ítems**: las 10 correlaciones son todas positivas y fuertes (0.39-0.77), sin ninguna cercana a cero.
+- **Confirmación por fuente publicada**: la validación de la SPS-10 (búsqueda web, ver referencias) documenta que la forma corta retiene DELIBERADAMENTE solo los ítems redactados en sentido positivo de la escala original de 24 ítems (que sí tenía ítems negativos por subescala) -- confirma, con evidencia externa, que la ausencia de reversión no es un accidente sino el diseño publicado de este instrumento.
+- **Estructura unidimensional**: a diferencia de NFC (3 subescalas distintas) y de BFF-15 (5 rasgos distintos), la SPS-10 mide un solo constructo (apoyo social percibido) y se reporta históricamente como puntaje único, sin problema categórico de "qué subescala elegir".
+
+Severidad real: asimetría=-1.208, curtosis exceso=1.986 -- la más extrema de los 6 instrumentos reales (incluso más que RWAS). Por distancia euclidiana (|asimetría|, ver Sección 11), el nivel más cercano es **muy_alto** (dist=0.828) -- un ajuste notablemente peor que el de RWAS al mismo nivel (dist=0.002), porque la curtosis de SPS-10 (1.986) EXCEDE el extremo calibrado (muy_alto=1.17): es extrapolación en la dimensión de curtosis, mismo tipo de limitación ya documentada para RWAS respecto al rango k=3..9 de la simulación.
+
+**Validación real-vs-simulado con los 6 instrumentos actualizados**: correlación global r=0.945 (antes 0.909 con NFC), pero la relación entre distancia de ajuste y error de predicción ya NO es perfectamente monótona como con NFC (Spearman ρ=0.83, no 1.00) -- SPS-10 tiene la peor distancia de ajuste (0.828) de los 6, pero su error de predicción (dif. abs. media=0.123) es menor que el de MACH-IV (0.142) o AHS (0.155), que ajustan mejor. Explicación plausible: a un nivel de severidad tan extremo, la potencia de casi todas las pruebas ya está cerca del techo (1.0) tanto en la simulación como en la realidad, así que el error absoluto queda naturalmente acotado por el efecto techo, independientemente de qué tan bien calibrada esté la severidad -- una matización importante al hallazgo de la Sección 11 (que sí era perfectamente monótono con los 6 instrumentos de esa fecha), no una contradicción: el patrón general (peor ajuste → más error) se mantiene fuerte pero no es una ley perfecta.
+
+**Reevaluación de paridad (H4, ver `notes/resultados_borrador.md`)**: con NFC, `nivel` y `paridad` estaban perfectamente confundidos (todo nivel caía en un solo grupo de paridad). Con SPS-10 asignada a "muy_alto" -- el mismo nivel que RWAS (k=9, impar) --, el nivel "muy_alto" pasa a tener un dataset par (SPS-10) y uno impar (RWAS), y el modelo `potencia ~ nivel + paridad` se vuelve técnicamente estimable (coeficiente negativo, par<impar, significativo en n=10,25,50; p<.0001; no significativo en n≥100). Pero un chequeo leave-one-out muestra que el coeficiente es IDÉNTICO sin importar cuál de los otros 4 datasets se excluya -- es decir, toda la identificación de "paridad" viene enteramente del contraste SPS-10 vs RWAS dentro de "muy_alto", ningún otro dataset aporta información. No es un test general de paridad, es una comparación pareada SPS-10-vs-RWAS disfrazada de ANCOVA, y como SPS-10 tiene el peor ajuste de severidad de los 6 (dist=0.828), ese contraste sigue estando confundido con severidad residual -- mismo problema de fondo que con el Par 2 (NFC vs AHS) documentado antes. **Conclusión sin cambios respecto a la Sección 10 original**: la paridad de k solo tiene evidencia válida en el bloque simulado (diseño ortogonal a propósito), no en datos reales.
