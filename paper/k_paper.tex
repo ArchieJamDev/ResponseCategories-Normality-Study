@@ -199,14 +199,12 @@ Se evaluó la siguiente batería de 11 pruebas de normalidad: Shapiro-Wilk \pare
 \subsection{Implementación y reproducibilidad}
 \label{sec:implementation}
 
-Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1), sobre la infraestructura de GitHub Actions (\emph{runners} ubuntu-latest, paralelización por celda mediante \texttt{strategy: matrix}), con \texttt{r-lib/actions/setup-r-dependencies} para el cacheo de dependencias. Ninguna corrida real (extracción de datos, calibración, simulación, submuestreo) se ejecutó en una máquina local: los resultados reportados provienen exclusivamente de corridas archivadas en el repositorio de desarrollo, con historial de commits verificable. El código completo, incluida la configuración exacta de la infraestructura de simulación, está disponible en el repositorio citado en Disponibilidad de Datos y Código, al final de este artículo.
+Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1), sobre la infraestructura de GitHub Actions (\emph{runners} ubuntu-latest, paralelización por celda mediante \texttt{strategy: matrix}), con \texttt{r-lib/actions/setup-r-dependencies} para el cacheo de dependencias. El código completo, incluida la configuración exacta de la infraestructura de simulación, está disponible en el repositorio citado en Disponibilidad de Datos y Código, al final de este artículo.
 
 \subsection{Disponibilidad de datos y código}
 \label{sec:availability}
 
 El código completo (extracción de datos reales, calibración y simulación del bloque de niveles, submuestreo del bloque real, agregación de resultados, y la configuración de GitHub Actions que ejecuta cada paso) está disponible en el repositorio de desarrollo del estudio, citado en la sección de Disponibilidad de Datos y Código al final de este artículo.
-
-Los datos crudos de los seis instrumentos reales provienen de dos fuentes abiertas distintas: el catálogo de datos abiertos de openpsychometrics.org (RSE, MACH-IV, HEXACO faceta Expresividad, RWAS; \cite{osp2014rse, osp2019mach, osp2014hexaco, osp2016rwas}), y Open Science Framework para SPS-10 (COVIDiSTRESS Global Survey, código \texttt{z39us}; \cite{yamada2021}, archivo \texttt{COVIDiSTRESS global survey May 30 2020 (final cleaned file).csv}) y para la Adult Hope Scale (estudio longitudinal sobre enfermedad crónica, código \texttt{2anvx}; \cite{davis2021}, solo la ola T1 / línea base).
 
 Los datos de calibración, simulación y submuestreo generados por este estudio (no los datos crudos de terceros, que se redistribuyen según los términos de cada fuente) se archivan como parte del historial del repositorio, junto con los \emph{artifacts} de cada corrida de GitHub Actions.
 
