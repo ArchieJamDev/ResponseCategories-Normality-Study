@@ -33,7 +33,7 @@
 % solo implementa APA 6 y por eso NO se usa). Backend biber.
 % Las citas dentro de \caption{}/\tablenote{}/celdas de tabular se
 % escriben como texto fijo "(Autor, Año)".
-\documentclass[man,mask,donotrepeattitle]{apa7}
+\documentclass[man,mask,donotrepeattitle,floatsintext]{apa7}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -41,9 +41,12 @@
 \usepackage[spanish]{babel}
 \spanishdecimal{.}% punto decimal en modo matematico (babel-spanish lo cambia a coma)
 \usepackage{csquotes}
+\usepackage{float}
 \usepackage[backend=biber,style=apa,sortcites=true,sorting=nyt]{biblatex}
 \DeclareLanguageMapping{spanish}{spanish-apa}
 \addbibresource{k_paper.bib}
+% En el texto (no en la lista de referencias) se usa "y" entre dos autores.
+\DeclareDelimFormat[parencite]{finalnamedelim}{\ifnum\value{liststop}>2 \finalandcomma\fi\addspace\bibstring{and}\space}
 % APA 7: rangos de paginas con raya corta (en dash), no guion.
 \AtBeginDocument{\renewcommand*{\bibrangedash}{--}}
 
@@ -116,32 +119,22 @@ El estudio combina dos componentes complementarios, ambos evaluados con la misma
 \subsection{Instrumentos psicométricos reales}
 \label{sec:instruments}
 
-Los seis instrumentos usados en el componente de datos reales se resumen en la Tabla~\ref{tab:instrumentos}. Se seleccionaron específicamente por su cantidad nativa de categorías de respuesta ---no colapsada ni modificada post-hoc---, buscando cubrir el rango más amplio posible de $k$ disponible en datos abiertos: $k=4$ (RSE; \cite{osp2014rse}), $k=5$ (MACH-IV; \cite{osp2019mach}) y $k=7$ (HEXACO; \cite{osp2014hexaco}) vienen del catálogo de openpsychometrics.org; $k=9$ también (RWAS; \cite{osp2016rwas}); $k=6$ y $k=8$, ausentes de ese catálogo, se localizaron en Open Science Framework tras una búsqueda más amplia (SPS-10, de la encuesta COVIDiSTRESS Global Survey; \cite{yamada2021}; y la Adult Hope Scale, de un estudio longitudinal sobre enfermedad crónica; \cite{davis2021}).
+Se usaron seis instrumentos de acceso abierto, seleccionados por su cantidad nativa de categorías de respuesta ---no colapsada ni modificada---, para cubrir el mayor rango posible de $k$. Cada uno se indica con la cita de su origen y de su fuente de datos, $k$, cantidad de ítems, dimensiones, $N$ y confiabilidad ($\alpha$):
 
-\begin{table}[htbp]
-\small
-\caption{Instrumentos reales usados, su cantidad nativa de categorías de respuesta y parámetros psicométricos}
-\label{tab:instrumentos}
-\begin{tabular}{lccccl}
-\toprule
-Instrumento & $k$ & Ítems & Dimensiones & $N$ & $\alpha$ \\
-\midrule
-Escala de Autoestima de Rosenberg (Rosenberg, 1965) & 4 & 10 & Unidimensional & 46\,546 & .77--.88$^{\text{a}}$ \\
-MACH-IV (Christie y Geis, 1970) & 5 & 20 & Unidimensional$^{\text{b}}$ & 73\,486 & .68--.70$^{\text{a}}$ \\
-Social Provisions Scale, SPS-10 (Cutrona y Russell, 1987) & 6 & 10 & 5$^{\text{c}}$ & 91\,658 & .92$^{\text{d}}$ \\
-HEXACO, faceta Expresividad (Ashton et al., 2007) & 7 & 10 & Unidimensional$^{\text{e}}$ & 22\,783 & .84$^{\text{a}}$ \\
-Adult Hope Scale, 8 ítems (Snyder et al., 1991) & 8 & 8 & 2$^{\text{f}}$ & 1\,036 & .92$^{\text{d}}$ \\
-RWAS (Altemeyer, 1981) & 9 & 22 & Unidimensional & 9\,680 & $\approx$.90$^{\text{a}}$ \\
-\bottomrule
-\end{tabular}
-\tablenote{$N$ = tamaño del dataset real correspondiente; $\alpha$ = alfa de Cronbach. $^{\text{a}}$Confiabilidad publicada en el desarrollo original del instrumento o en estudios de validación citados (RSE: Blascovich y Tomaka, 1993; Rosenberg, 1986; HEXACO: Ashton et al., 2007, Tabla 2). $^{\text{b}}$Se usa como puntaje único pese a las tres facetas teóricas originales ---tácticas, visión del mundo, moralidad---, sin estructura factorial robusta en la práctica. $^{\text{c}}$Cinco dimensiones de dos ítems cada una: Apego/Apoyo emocional, Integración social, Reafirmación de valía, Alianza confiable, Orientación/Guía; se excluye la sexta provisión original (Oportunidad de crianza); puntaje total validado como dominado por un factor general (Sischka et al., 2025). $^{\text{d}}$Calculado en este estudio; no hay una cifra publicada disponible para la versión administrada en este dataset. $^{\text{e}}$Ya es una única faceta del dominio Extraversión, no el dominio completo. $^{\text{f}}$Dos dimensiones de cuatro ítems cada una: Agencia (energía orientada a metas) y Vías (planificación para alcanzar metas).}
-\end{table}
+\begin{itemize}
+\item \textbf{Escala de Autoestima de Rosenberg} (RSE; origen: \cite{rosenberg1965}; datos: \cite{osp2014rse}): $k=4$, 10 ítems, unidimensional, $N=46\,546$, $\alpha=.77$--$.88$ publicado \parencite{blascovichtomaka1993,rosenberg1986}.
+\item \textbf{MACH-IV} (origen: \cite{christiegeis1970}; datos: \cite{osp2019mach}): $k=5$, 20 ítems, $N=73\,486$, $\alpha=.68$--$.70$ publicado. Se usa como puntaje único pese a sus tres facetas teóricas (tácticas, visión del mundo, moralidad).
+\item \textbf{Social Provisions Scale, forma corta} (SPS-10; origen: \cite{cutronarussell1987}; datos: \cite{yamada2021}): $k=6$, 10 ítems, cinco dimensiones de dos ítems, $N=91\,658$, $\alpha=.92$ (calculado en este estudio). Su puntaje total está dominado por un factor general \parencite{sischka2025}.
+\item \textbf{HEXACO, faceta Expresividad} (origen: \cite{ashtonleegoldberg2007}; datos: \cite{osp2014hexaco}): $k=7$, 10 ítems, unidimensional, $N=22\,783$, $\alpha=.84$ publicado (\citeauthor{ashtonleegoldberg2007}).
+\item \textbf{Adult Hope Scale, versión de 8 ítems} (origen: \cite{snyder1991}; datos: \cite{davis2021}): $k=8$, dos dimensiones de cuatro ítems (Agencia y Vías), $N=1\,036$, $\alpha=.92$ (calculado en este estudio).
+\item \textbf{Escala de Autoritarismo de Derecha} (RWAS; origen: \cite{altemeyer1981}; datos: \cite{osp2016rwas}): $k=9$, 22 ítems, unidimensional, $N=9\,680$, $\alpha \approx .90$ publicado.
+\end{itemize}
 
 Los ítems invertidos se trataron según lo reportado para cada instrumento. El puntaje compuesto se calculó como la suma de sus ítems (con reversión donde correspondía), exigiendo caso completo. Todos los instrumentos, multidimensionales o no, se analizaron como puntaje compuesto único y no por subescala, porque el objeto de estudio es la potencia de las pruebas sobre el puntaje que efectivamente se somete a análisis paramétrico ---el total--- y porque así los seis instrumentos son comparables entre sí (una distribución univariada por instrumento).
 
 Los seis instrumentos difieren no solo en $k$ sino también en su confiabilidad: MACH-IV es notablemente el más bajo ($\alpha \approx .68$--$.70$, un problema de consistencia interna ya documentado en la literatura sobre esta escala), mientras que SPS-10 y la Adult Hope Scale son los más altos ($\alpha=.92$ ambos). Esta variación es una propiedad de los instrumentos tal como existen en la práctica real ---no algo controlado por el diseño del estudio---, y se retoma en la Discusión al interpretar los resultados del componente de datos reales.
 
-Los seis instrumentos se eligieron conjuntamente para cubrir el rango de $k$ más amplio posible disponible en datos abiertos, de $k=4$ (RSE) a $k=9$ (RWAS), con SPS-10 y la Adult Hope Scale completando los valores intermedios ($k=6$ y $k=8$) ausentes en el catálogo original. El proceso de búsqueda para estos dos últimos, incluido un candidato inicial de $k=6$ descartado tras encontrar que la fuente de datos desaconseja explícitamente combinar sus ítems en un puntaje compuesto, se documenta en el registro de decisiones metodológicas del repositorio (no incluido aquí por extensión).
+Los instrumentos de $k=6$ y $k=8$, ausentes del catálogo de openpsychometrics.org, se localizaron en Open Science Framework; la búsqueda, que incluyó un candidato inicial de $k=6$ descartado porque su fuente desaconseja combinar sus ítems en un puntaje compuesto, se documenta en el registro de decisiones del repositorio.
 
 \subsection{Bloque de niveles: simulación de la severidad de no-normalidad}
 \label{sec:niveles}
@@ -154,7 +147,7 @@ Se definieron cinco niveles ordenados de severidad de no-normalidad, con objetiv
 
 Los objetivos de curtosis usan el percentil con signo tal cual lo reportan \textcite{cain2017}, porque la dirección de la curtosis (leptocúrtica vs.\ platicúrtica) representa formas de no-normalidad genuinamente distintas. Los objetivos de asimetría usan el percentil de $|\text{asimetría}|$ (magnitud, no signo), porque la potencia de las once pruebas de normalidad es estructuralmente simétrica a la dirección del sesgo; como \citeauthor{cain2017} no publican percentiles de asimetría en valor absoluto, estos se derivaron interpolando linealmente la función de distribución acumulada empírica implícita en su tabla de percentiles publicada, resolviendo $P(|\text{asimetría}| \leq m) = F(m) - F(-m) = p$ para $p = .05, .25, .50, .75, .90$. Esta es una aproximación sobre datos agregados publicados, no un cálculo directo sobre las distribuciones individuales (no disponibles públicamente) ---se reporta así explícitamente para distinguirla del percentil directo usado para curtosis. El percentil de curtosis para el nivel más severo (90) también se interpoló, ya que \citeauthor{cain2017} solo publican el 75\textsuperscript{o} y el 95\textsuperscript{o} directamente, no el 90\textsuperscript{o}.
 
-\begin{table}[htbp]
+\begin{table}[H]
 \caption{Niveles de severidad de no-normalidad y sus objetivos de calibración, anclados a percentiles de Cain et al. (2017)}
 \label{tab:niveles}
 \begin{tabular}{lcccc}
@@ -184,7 +177,7 @@ Con los parámetros calibrados, cada celda (nivel $\times$ $k$) se simuló de fo
 \subsection{Bloque de datos reales: submuestreo aleatorio \emph{m-out-of-N}}
 \label{sec:realdata}
 
-Sobre cada uno de los seis instrumentos de la Tabla~\ref{tab:instrumentos} se aplicó submuestreo aleatorio sin reemplazo tipo \emph{m-out-of-N} \parencite{politisromanowolf1999}: para cada tamaño de muestra $n$ de la grilla, se extrajeron $R=10\,000$ submuestras aleatorias del puntaje compuesto completo del instrumento, y se calculó la tasa de rechazo empírica de cada prueba de normalidad frente al $N$ completo del instrumento como población de referencia. El $N$ mínimo entre cinco de los seis instrumentos (RWAS, 9\,680) es muy superior al $n$ máximo de la grilla (1\,500), por lo que el submuestreo sin reemplazo es válido para esos cinco sin necesidad de ajuste. La excepción es la Adult Hope Scale ($N=1\,036$): al no alcanzar el $n$ máximo de 1\,500, se usó una grilla reducida $\{10, 25, 50, 100, 250, 500, 1000\}$ solo para este instrumento.
+Sobre cada uno de los seis instrumentos se aplicó submuestreo aleatorio sin reemplazo tipo \emph{m-out-of-N} \parencite{politisromanowolf1999}: para cada tamaño de muestra $n$ de la grilla, se extrajeron $R=10\,000$ submuestras aleatorias del puntaje compuesto completo del instrumento, y se calculó la tasa de rechazo empírica de cada prueba de normalidad frente al $N$ completo del instrumento como población de referencia. El $N$ mínimo entre cinco de los seis instrumentos (RWAS, 9\,680) es muy superior al $n$ máximo de la grilla (1\,500), por lo que el submuestreo sin reemplazo es válido para esos cinco sin necesidad de ajuste. La excepción es la Adult Hope Scale ($N=1\,036$): al no alcanzar el $n$ máximo de 1\,500, se usó una grilla reducida $\{10, 25, 50, 100, 250, 500, 1000\}$ solo para este instrumento.
 
 En este componente $k$ no se manipula: lo fija cada instrumento, y por eso viene confundido con su cantidad de ítems y con la asimetría/curtosis real del constructo medido ---tal como ocurre en la práctica psicométrica aplicada---. La cantidad de ítems no se varía en ningún componente del estudio: en el bloque de niveles es constante ($m=10$), y en el bloque real es la que tiene cada instrumento. El bloque de niveles existe precisamente para aislar $k$ de la severidad, algo que los datos reales no permiten.
 
@@ -219,7 +212,7 @@ Los datos de calibración, simulación y submuestreo generados por este estudio 
 \item \textbf{Interacción.} Al aumentar la severidad, el $n$ donde la brecha es máxima se desplaza hacia tamaños menores ($n=50\to25\to10$ de moderado a muy alto) y con menor magnitud (Tabla~\ref{tab:brecha-n-nivel} y Figura~\ref{fig:brecha}); bajo$\to$bajo-moderado repite la excepción. Ninguna brecha se invierte de forma sostenida: $k=3$ iguala o supera a $k=9$ en casi toda la grilla.
 \end{enumerate}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \caption{Brecha de potencia media entre $k=3$ y $k=9$, por nivel de severidad (promediada sobre los 8 tamaños de muestra)}
 \label{tab:brecha-k}
 \begin{tabular}{lccc}
@@ -235,7 +228,7 @@ muy alto & 90\textsuperscript{o} / 90\textsuperscript{o} & 2.401 / 7.52 & .012 \
 \end{tabular}
 \end{table}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \caption{Brecha de potencia entre $k=3$ y $k=9$ por nivel de severidad y tamaño de muestra}
 \label{tab:brecha-n-nivel}
 \begin{tabular}{lccccc}
@@ -271,7 +264,7 @@ $n$ & bajo & bajo-moderado & moderado & alto & muy alto \\
 \item Al asignar cada instrumento a su nivel simulado más cercano (distancia euclidiana en asimetría/curtosis, con $|\text{asimetría}|$), RSE, MACH-IV y HEXACO caen en bajo-moderado, AHS en moderado y SPS-10 y RWAS en alto: el orden de potencia sigue la severidad real y no $k$.
 \end{enumerate}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \caption{Potencia media (11 pruebas) por instrumento real y tamaño de muestra}
 \label{tab:potencia-instrumento}
 \begin{tabular}{lcccccccc}
@@ -300,7 +293,7 @@ Se comparó la potencia observada de cada instrumento con la de su celda simulad
 \item La distancia de ajuste (0.066--0.450) se asocia de forma moderada con el error de predicción (Spearman $\rho=.37$): la calibración generaliza incluso sin un ajuste casi perfecto.
 \end{enumerate}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \small
 \caption{Correlación y error absoluto entre potencia real y potencia simulada, por instrumento}
 \label{tab:validacion}
@@ -334,9 +327,9 @@ Las hipótesis no provienen de literatura previa, que no cubre este cruce de fac
 \subsection{Comparación de las 11 pruebas: potencia bruta y estabilidad frente a \texorpdfstring{$k$}{k}}
 \label{sec:res-comparacion}
 
-Se compararon las 11 pruebas con un puntaje combinado (rango de potencia media $+$ rango del coeficiente de variación de la potencia a través de $k$; menor es mejor) en tres escenarios: simulado limpio (280 celdas, severidad aislada de $k$), real (seis instrumentos, $k$ y severidad confundidos) y simulado confundido (las mismas seis combinaciones nivel-$k$ de los instrumentos reales, para compararlos en igualdad de condiciones).
+Se compararon las 11 pruebas con un puntaje combinado (rango de potencia media $+$ rango del coeficiente de variación de la potencia a través de $k$; menor es mejor) en tres escenarios (Tabla~\ref{tab:ranking}): simulado limpio (280 celdas, severidad aislada de $k$), real (seis instrumentos, $k$ y severidad confundidos) y simulado confundido (las mismas seis combinaciones nivel-$k$ de los instrumentos reales, para compararlos en igualdad de condiciones).
 
-\begin{table}[htbp]
+\begin{table}[H]
 \small
 \caption{Puntaje combinado (rango de potencia $+$ rango de estabilidad a $k$) de las 11 pruebas en los tres escenarios}
 \label{tab:ranking}
