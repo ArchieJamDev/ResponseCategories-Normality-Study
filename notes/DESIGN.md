@@ -346,3 +346,35 @@ El optimizador encontró una "solución barata": colapsar el mecanismo a una var
 | muy_alto | 90º / 90º | 2.401 | 7.52 |
 
 **Verificación tras la corrida completa** (calibración run 36229461732, simulación run 36231310528): sin degeneración en ninguna de las 7 celdas de k -- λ entre 0.54 y 0.86 (lejos de 1), umbrales en rango razonable (0.4 a 2.2), dist² máxima 0.0003 en las 35 celdas totales. Los conteos de NA en la simulación completa volvieron a niveles normales (máximo 19 de 10.000 réplicas, salvo D'Agostino-Pearson en n=10 que sigue fallando el 100% de las veces -- limitación ya conocida de esa prueba específica en muestras muy chicas, no relacionada con este problema). Epps-Pulley pasó de potencia≈0 en todo n a un comportamiento sensible (0.34 en n=10, 1.00 desde n=250).
+
+## 18. Recálculo completo de resultados con los niveles corregidos (26 sep 2026)
+
+Con la calibración final (Secciones 16-17) se recalcularon todos los análisis que dependen del bloque de niveles.
+
+**Tabla 3 (brecha k3-k9 por nivel)**: bajo=0.027, bajo_moderado=0.045, moderado=0.036, alto=0.016, muy_alto=0.012. Desde bajo_moderado en adelante la brecha decae de forma monótona (0.045→0.036→0.016→0.012), igual que en el diseño original. La única excepción es "bajo" (0.027), que queda por debajo de "bajo_moderado" en vez de ser el máximo -- porque el objetivo de curtosis de "bajo" (−1.28, percentil 5 de Cain et al.) es una desviación real de la normalidad, no un punto cercano a ella como en el diseño anterior (que sí estaba anclado cerca de cero en ambas dimensiones). El hallazgo central del estudio se sostiene en su mayor parte, con esta salvedad real que hay que reportar explícitamente, no ocultar.
+
+**Tabla 5 (brecha por nivel × n, pico)**: bajo→n=50, bajo_moderado→n=100, moderado→n=50, alto→n=25, muy_alto→n=10. De moderado en adelante el desplazamiento a n cada vez más chico es monótono y limpio (n=50→25→10); bajo→bajo_moderado es la única inversión (mismo patrón que la Tabla 3).
+
+**Reasignación de severidad de los 6 instrumentos reales** (distancia euclidiana a los niveles corregidos, |asimetría| vs. curtosis con signo): RSE→bajo_moderado (dist=0.299), MACH-IV→bajo_moderado (dist=0.162), SPS-10→alto (dist=0.387), HEXACO→bajo_moderado (dist=0.066), AHS→moderado (dist=0.273), RWAS→alto (dist=0.450). Cambia sustancialmente respecto a la asignación anterior -- ahora 3 instrumentos comparten "bajo_moderado" (RSE, MACH-IV, HEXACO) y 2 comparten "alto" (SPS-10, RWAS), una estructura más rica que los pares aislados de antes. Las distancias son en general peores que en el diseño anterior (0.066-0.450 vs. 0.002-0.958) porque los niveles ya NO están anclados a instrumentos propios del estudio -- es la validación genuinamente independiente que motivó todo el rediseño (Sección 16).
+
+**Validación real-vs-simulado**: correlación global r=0.981 (mejor que las versiones anteriores, 0.909 y 0.945), con r individual por instrumento entre 0.957 (SPS-10, el peor) y 0.999 (MACH-IV, AHS). La relación entre distancia de ajuste y error de predicción se debilita bastante (Spearman ρ=0.37, Pearson r=0.40) respecto a las versiones anteriores (0.83-1.00) -- con niveles genuinamente independientes, la predicción se mantiene fuerte para los 6 instrumentos sin importar tanto la distancia exacta, a diferencia del diseño anterior donde la distancia predecía casi perfectamente el error (en parte reflejo de su propia circularidad).
+
+**H1 (efecto de k, controlando severidad) -- reevaluado con la nueva estructura**: dentro de "bajo_moderado" (3 instrumentos: RSE k=4, MACH-IV k=5, HEXACO k=7), la regresión de potencia sobre k (11 pruebas como pseudo-réplicas) da coeficiente NEGATIVO (dirección de H1) en 5 de 8 tamaños de *n* (50, 100, 250, 500, 1000), ninguno significativo individualmente (3 instrumentos, 1 gl para k). Dentro de "alto" (SPS-10 k=6 vs. RWAS k=9), la dirección se invierte y es significativa en *n*=10,25,50 (p<.001) -- mismo patrón que con el diseño anterior: SPS-10 sigue siendo el instrumento que rompe la dirección esperada en cualquier nivel donde caiga (su distancia de ajuste, 0.387, sigue siendo la 2da peor de los 6).
+
+**Tablas 13.2/13.3 (comparación de las 11 pruebas, real vs. simulado-confundido con el nuevo emparejamiento nivel-k: bajo_moderado/k4, bajo_moderado/k5, alto/k6, bajo_moderado/k7, moderado/k8, alto/k9)**:
+
+| Prueba | Rank real | Rank sim. confundido | Desplazamiento |
+|---|---|---|---|
+| D'Agostino-Pearson | 3 | 3 | **0** |
+| Epps-Pulley | 4 | 4 | **0** |
+| Shapiro-Wilk | 5 | 5 | **0** |
+| Anderson-Darling | 9 | 9 | **0** |
+| Jarque-Bera | 20 | 20 | **0** |
+| Curtosis | 22 | 22 | **0** |
+| Shapiro-Francia | 13 | 12 | 1 |
+| Cramér-von Mises | 14 | 15 | 1 |
+| Lilliefors | 12 | 13 | 1 |
+| SSTN | 15 | 17 | 2 |
+| Pearson χ² | 15 | 12 | 3 |
+
+**Mejora notable respecto a las versiones anteriores del estudio**: 6 de 11 pruebas tienen desplazamiento CERO (antes, con cualquiera de los dos instrumentos previos de k=6, el máximo era 1 prueba con desplazamiento cero y varias por encima de 8). D'Agostino-Pearson se mantiene #1 en ambos escenarios, consistente en las tres versiones del estudio (diseño original, con NFC, con SPS-10 solo, y ahora con niveles recalibrados). SSTN queda en un lugar intermedio de predictibilidad (desplazamiento=2), ni el mejor ni el peor -- ya no hay una ventaja de predictibilidad destacable para SSTN que reportar, a diferencia de lo que parecía en una versión anterior (que resultó no ser robusta, ver Sección 13.4 histórica).
