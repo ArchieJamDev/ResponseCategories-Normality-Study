@@ -6,47 +6,47 @@ Prosa continua, sin marcado LaTeX de plantilla todavía.
 
 ## 3.1. Bloque de niveles: efecto de *k*, *n* y severidad de no-normalidad
 
-**Efecto de *k*.** Promediando sobre las 11 pruebas y los ocho tamaños de muestra, la potencia decae de forma aproximadamente monotónica al aumentar *k*, en los cinco niveles de severidad (Tabla 3). La magnitud de esa brecha, sin embargo, no es constante: cae de 0.061 en el nivel más cercano a la normalidad a 0.012 en el nivel más severo —una razón de aproximadamente 5 a 1 entre el extremo bajo y el extremo alto de severidad—.
+**Efecto de *k*.** Promediando sobre las 11 pruebas y los ocho tamaños de muestra, la potencia decae al aumentar *k* en los cinco niveles de severidad (Tabla 3), con una excepción real que se explica más abajo. Desde el nivel bajo-moderado en adelante, la brecha decae de forma monótona (0.045→0.036→0.016→0.012) —una razón de aproximadamente 4 a 1 entre bajo-moderado y muy alto—. El nivel bajo (el más cercano a la normalidad en asimetría) queda por debajo de bajo-moderado en vez de ser el máximo: su objetivo de curtosis (−1.28, el percentil 5 de asimetría/curtosis observado en 1.567 distribuciones psicológicas reales; Cain, Zhang y Yuan, 2017) es una desviación de la normalidad no trivial, no un punto cercano a cero en ambas dimensiones.
 
 **Tabla 3**
 *Brecha de potencia media entre k=3 y k=9, por nivel de severidad (promediada sobre los 8 tamaños de muestra)*
 
-| Nivel | Asimetría / curtosis objetivo | Brecha *k*=3 − *k*=9 |
-|---|---|---|
-| bajo | 0.00 / −0.70 | 0.061 |
-| bajo-moderado | 0.20 / −0.55 | 0.049 |
-| moderado | 0.70 / −0.15 | 0.023 |
-| alto | 1.00 / 0.40 | 0.017 |
-| muy alto | 1.35 / 1.17 | 0.012 |
+| Nivel | Percentil (asimetría / curtosis) | Asimetría / curtosis objetivo | Brecha *k*=3 − *k*=9 |
+|---|---|---|---|
+| bajo | 5º / 5º | 0.053 / −1.28 | 0.027 |
+| bajo-moderado | 25º / 25º | 0.276 / −0.57 | 0.045 |
+| moderado | 50º / 50º | 0.688 / 0.07 | 0.036 |
+| alto | 75º / 75º | 1.332 / 1.62 | 0.016 |
+| muy alto | 90º / 90º | 2.401 / 7.52 | 0.012 |
 
-**Efecto de *n*.** Promediando sobre los cinco niveles y los siete valores de *k*, la potencia crece monotónicamente con *n*, como es esperable de cualquier prueba consistente: de 0.178 en *n*=10 a 0.983 en *n*=1500 (Tabla 4).
+**Efecto de *n*.** Promediando sobre los cinco niveles y los siete valores de *k*, la potencia crece monotónicamente con *n*, como es esperable de cualquier prueba consistente: de 0.238 en *n*=10 a 0.984 en *n*=1500 (Tabla 4).
 
 **Tabla 4**
 *Potencia media (11 pruebas, 5 niveles, 7 valores de k) por tamaño de muestra*
 
 | *n* | 10 | 25 | 50 | 100 | 250 | 500 | 1000 | 1500 |
 |---|---|---|---|---|---|---|---|---|
-| Potencia media | 0.178 | 0.352 | 0.515 | 0.655 | 0.845 | 0.957 | 0.979 | 0.983 |
+| Potencia media | 0.238 | 0.441 | 0.626 | 0.799 | 0.949 | 0.981 | 0.984 | 0.984 |
 
-**La interacción de los tres factores.** El hallazgo central del estudio surge de cruzar los dos anteriores: la brecha de potencia entre *k*=3 y *k*=9 no solo se achica al aumentar la severidad de la no-normalidad —como muestra la Tabla 3 de forma agregada—, sino que el tamaño de muestra en el que esa brecha alcanza su punto máximo **se desplaza hacia valores de *n* cada vez más pequeños** a medida que la severidad aumenta (Tabla 5 y Figura 1, `notes/figuras/brecha_k3_k9_por_n_y_nivel.svg`).
+**La interacción de los tres factores.** La brecha de potencia entre *k*=3 y *k*=9 no solo se achica al aumentar la severidad de la no-normalidad —como muestra la Tabla 3—, sino que el tamaño de muestra en el que esa brecha alcanza su punto máximo **se desplaza hacia valores de *n* cada vez más pequeños** a medida que la severidad aumenta (Tabla 5 y Figura 1, `notes/figuras/brecha_k3_k9_por_n_y_nivel.svg`) — con la misma excepción del nivel bajo que en la Tabla 3.
 
 **Tabla 5**
 *Brecha de potencia entre k=3 y k=9 por nivel de severidad y tamaño de muestra*
 
 | *n* | bajo | bajo-moderado | moderado | alto | muy alto |
 |---|---|---|---|---|---|
-| 10 | 0.008 | 0.005 | 0.013 | 0.027 | **0.064** |
-| 25 | 0.015 | 0.008 | 0.040 | **0.066** | 0.035 |
-| 50 | 0.038 | 0.026 | **0.088** | 0.043 | 0.000 |
-| 100 | 0.125 | 0.102 | 0.041 | 0.003 | −0.001 |
-| 250 | **0.258** | **0.227** | 0.000 | 0.000 | −0.001 |
-| 500 | 0.044 | 0.023 | 0.000 | −0.001 | 0.000 |
-| 1000 | 0.000 | −0.002 | 0.000 | −0.002 | 0.000 |
-| 1500 | 0.000 | 0.000 | 0.000 | −0.003 | 0.000 |
+| 10 | 0.015 | 0.008 | 0.014 | 0.055 | **0.099** |
+| 25 | 0.056 | 0.017 | 0.046 | **0.066** | −0.001 |
+| 50 | **0.097** | 0.051 | **0.117** | 0.011 | −0.001 |
+| 100 | 0.050 | **0.149** | 0.105 | −0.001 | −0.001 |
+| 250 | 0.000 | 0.132 | 0.002 | −0.002 | 0.000 |
+| 500 | 0.000 | 0.006 | 0.000 | 0.000 | 0.000 |
+| 1000 | 0.000 | 0.000 | 0.001 | 0.000 | 0.000 |
+| 1500 | 0.000 | 0.000 | 0.001 | 0.000 | 0.000 |
 
 *Nota.* En negrita, el *n* donde la brecha alcanza su máximo dentro de cada nivel.
 
-Para el nivel más cercano a la normalidad (bajo), el efecto de *k* es prácticamente nulo en muestras pequeñas (*n*≤25), crece hasta un máximo en *n*=250, y solo entonces empieza a decaer. Para el nivel más severo (muy alto, calibrado a la asimetría y curtosis de RWAS), el patrón se comprime hacia el extremo opuesto: el efecto ya es visible en *n*=10, alcanza su máximo ahí mismo, y se ha disipado casi por completo hacia *n*=50 —doscientas muestras antes de que el nivel bajo siquiera alcance su propio pico—. Los tres niveles intermedios se ubican, de forma ordenada, entre ambos extremos. En ningún nivel la dirección del efecto se invierte: *k*=3 iguala o supera a *k*=9 en toda la grilla de *n*, salvo diferencias de milésimas atribuibles a ruido Monte Carlo en las celdas donde la brecha ya es prácticamente cero.
+Desde moderado en adelante (moderado→alto→muy alto), el pico se desplaza de forma monótona a *n* cada vez más chico (*n*=50→25→10) y de magnitud cada vez menor, la misma historia que en el diseño original. La excepción es bajo→bajo-moderado: el pico se desplaza en la dirección contraria (de *n*=50 a *n*=100) antes de retomar la tendencia en moderado — refleja la misma particularidad del nivel bajo señalada en la Tabla 3 (su curtosis objetivo, −1.28, no es un punto cercano a la normalidad). En ningún nivel la dirección del efecto de *k* se invierte de forma sostenida: *k*=3 iguala o supera a *k*=9 en la enorme mayoría de la grilla, salvo diferencias de milésimas (ruido Monte Carlo) en celdas donde la brecha ya es prácticamente cero.
 
 ## 3.2. Bloque de datos reales: potencia por instrumento
 
@@ -66,7 +66,7 @@ Sobre los seis instrumentos reales, la potencia media (11 pruebas) crece con *n*
 
 *Nota.* AHS no tiene celda en *n*=1500 porque su *N* nativo (1.036) no alcanza ese tamaño de submuestra sin reemplazo (ver Método).
 
-Este patrón —potencia mayor en los instrumentos de *k* más alto o más bajo-medio pero severidad real más extrema (RWAS, SPS-10, AHS), no menor como predice el bloque de niveles (§3.1)— tiene una explicación cuantificada, no solo cualitativa: los 6 instrumentos reales difieren simultáneamente en *k* y en la asimetría/curtosis real del constructo medido, dos factores que el bloque de niveles mantiene deliberadamente separados. Asignando a cada instrumento su nivel de severidad simulado más cercano (distancia euclidiana en el espacio asimetría/curtosis, usando |asimetría| para no penalizar el signo), RWAS y SPS-10 caen en el nivel más severo (muy alto), AHS en el nivel alto, mientras RSE, MACH-IV y HEXACO caen en los menos severos (bajo y bajo-moderado) — el orden de potencia de la Tabla 6 sigue el orden de severidad real, no el de *k*. El desarrollo completo de este análisis está en §3.3–§3.5.
+Este patrón —potencia mayor en los instrumentos de severidad real más extrema (RWAS, SPS-10, AHS), no en un orden simple de *k*— tiene una explicación cuantificada, no solo cualitativa: los 6 instrumentos reales difieren simultáneamente en *k* y en la asimetría/curtosis real del constructo medido, dos factores que el bloque de niveles mantiene deliberadamente separados. Asignando a cada instrumento su nivel de severidad simulado más cercano (distancia euclidiana en el espacio asimetría/curtosis, usando |asimetría| para no penalizar el signo, sobre los niveles anclados a percentiles de Cain et al., 2017 — ver Tabla 3), RSE, MACH-IV y HEXACO caen en bajo-moderado; SPS-10 y RWAS caen en alto; AHS cae en moderado — el orden de potencia de la Tabla 6 sigue de cerca el orden de severidad real, no el de *k*. El desarrollo completo de este análisis está en §3.3–§3.5.
 
 ## 3.3. Validación de la calibración de niveles contra los 6 instrumentos reales
 
@@ -77,16 +77,18 @@ Para cada instrumento real se comparó la potencia observada (Tabla 6) contra la
 
 | Instrumento (*k*) | Nivel asignado | Distancia de ajuste | *r* (real vs. simulado) | Error absoluto medio |
 |---|---|---|---|---|
-| RSE (4) | bajo | 0.008 | 0.9995 | 0.009 |
-| MACH-IV (5) | bajo-moderado | 0.141 | 0.933 | 0.142 |
-| SPS-10 (6) | muy alto | 0.828 | 0.936 | 0.123 |
-| HEXACO (7) | bajo-moderado | 0.012 | 0.999 | 0.014 |
-| AHS (8) | alto | 0.247 | 0.909 | 0.155 |
-| RWAS (9) | muy alto | 0.002 | 1.000 | 0.003 |
+| RSE (4) | bajo-moderado | 0.299 | 0.986 | 0.058 |
+| MACH-IV (5) | bajo-moderado | 0.162 | 0.999 | 0.015 |
+| SPS-10 (6) | alto | 0.387 | 0.957 | 0.092 |
+| HEXACO (7) | bajo-moderado | 0.066 | 0.994 | 0.034 |
+| AHS (8) | moderado | 0.273 | 0.999 | 0.021 |
+| RWAS (9) | alto | 0.450 | 0.995 | 0.027 |
 
-Sobre las 47 celdas combinadas, la correlación global entre potencia real y simulada es *r*=0.945 (diferencia absoluta mediana=0.007). El patrón general de la Sección 11 del Método (a peor ajuste de severidad, peor predicción) se mantiene, pero con SPS-10 **ya no es perfectamente monótono**: SPS-10 tiene la peor distancia de ajuste de los 6 (0.828, sustancialmente peor que el resto porque su curtosis real, 1.986, excede el extremo que calibra el nivel muy alto, 1.17 — extrapolación en la dimensión de curtosis), pero su error de predicción (0.123) es menor que el de MACH-IV (0.142) o AHS (0.155), que ajustan mejor en términos de distancia (correlación de Spearman entre distancia y error con los 6 instrumentos: ρ=0.83, no ρ=1.00 como con el instrumento de *k*=6 evaluado anteriormente). La explicación más plausible es un efecto techo: a una severidad tan extrema, la potencia de casi todas las pruebas ya está cerca de 1 tanto en la simulación como en la realidad, así que el error absoluto queda naturalmente acotado por encima, independientemente de qué tan bien calibrada esté la severidad. El patrón general (peor ajuste → más error, en términos relativos) se sostiene con fuerza pero no es una ley perfecta — matiz importante a reportar, no una contradicción del hallazgo original.
+Sobre las 47 celdas combinadas, la correlación global entre potencia real y simulada es *r*=0.981 (mediana de diferencia absoluta muy baja). Un punto notable: estos niveles ya no están anclados a instrumentos propios del estudio (a diferencia de una versión anterior del diseño, donde los niveles se calibraban cerca de RSE y RWAS) — son niveles genuinamente independientes, anclados a percentiles de una fuente externa (Cain et al., 2017). Que la validación se sostenga igual de fuerte (r=0.981, incluso mejor que en la versión anterior) bajo esta condición más exigente es una confirmación más sólida de la calibración por niveles que la que ofrecía el diseño original.
 
-Esto valida la calibración por niveles (λ libre, Método §2.4) como una herramienta predictiva confiable *condicionada* a que la severidad real del constructo esté bien representada en el espacio calibrado — no como una predicción universal. La discusión de las hipótesis específicas puestas a prueba con estos 6 instrumentos (efecto de *k*, modulación por *n*, paridad, comparación de las 11 pruebas) se desarrolla en §3.4 y §3.5.
+La relación entre distancia de ajuste y error de predicción es positiva pero moderada (Spearman ρ=0.37) — más débil que en versiones anteriores del diseño, donde la distancia predecía casi perfectamente el error. Con niveles independientes, la predicción se mantiene fuerte (r≥0.957 en los 6 instrumentos) sin importar tanto la distancia exacta dentro del rango observado (0.066–0.450) — sugiere que, dentro de ese rango, la calibración por niveles generaliza razonablemente bien incluso sin un ajuste casi perfecto.
+
+Esto valida la calibración por niveles (λ libre, Método §2.4) como una herramienta predictiva confiable, ahora demostrada de forma no circular. La discusión de las hipótesis específicas puestas a prueba con estos 6 instrumentos (efecto de *k*, modulación por *n*, paridad, comparación de las 11 pruebas) se desarrolla en §3.4 y §3.5.
 
 ---
 
@@ -94,15 +96,15 @@ Esto valida la calibración por niveles (λ libre, Método §2.4) como una herra
 
 El bloque de niveles (§3.1) genera hipótesis; esta sección resume qué tanto se pudieron confirmar con los 6 instrumentos reales (RSE k=4, MACH-IV k=5, SPS-10 k=6, HEXACO k=7, AHS k=8, RWAS k=9). Ver `notes/DESIGN.md` Secciones 9-15 para el detalle estadístico completo de cada punto, incluido el proceso de selección del instrumento de *k*=6.
 
-**H1 — Menos categorías de respuesta (k) → más potencia.** Confirmada, pero solo donde fue evaluable: únicamente en pares de instrumentos con severidad real equivalente se pudo aislar el efecto de *k* de la severidad real. En el par bajo-moderado (MACH-IV k=5 vs HEXACO k=7) la dirección predicha se confirma, significativa en *n*=50 a *n*=500 (t pareado por prueba, p<.05 en 4 de 8 tamaños de muestra). En el par muy alto (SPS-10 k=6 vs RWAS k=9), la dirección va en contra (SPS-10 muestra MENOS potencia que RWAS en *n*=10-50, p<.001) — pero SPS-10 es, de los 6 instrumentos, el que peor ajusta a su nivel de severidad asignado (distancia=0.828, ver §3.3), así que esta comparación no es limpia y no se interpreta como una refutación genuina de H1. El ANCOVA agregado con los 6 instrumentos (potencia ~ nivel + k) da coeficiente de *k* POSITIVO y significativo en *n*=10-50 (dirección contraria a H1) — pero esto es un artefacto de que, en este conjunto específico de 6 instrumentos, los *k* altos (6, 8, 9) coinciden con las severidades más altas (alto, muy alto) mientras los *k* bajos (4, 5, 7) coinciden con las más bajas (bajo, bajo-moderado): el modelo agregado no aísla nada que la Tabla 6 no muestre ya. **Conclusión**: H1 se sostiene únicamente en el único par bien emparejado en severidad (bajo-moderado); no hay una prueba agregada confiable con solo 6 instrumentos, uno por *k*.
+**H1 — Menos categorías de respuesta (k) → más potencia.** Confirmada direccionalmente, pero solo donde fue evaluable. Con los niveles recalibrados (Tabla 3), la asignación de severidad agrupa 3 instrumentos en bajo-moderado (RSE k=4, MACH-IV k=5, HEXACO k=7) y 2 en alto (SPS-10 k=6, RWAS k=9) — una estructura más rica que un solo par. Dentro de bajo-moderado, la regresión de potencia sobre *k* (11 pruebas como pseudo-réplicas) da coeficiente **negativo** (dirección de H1) en 5 de 8 tamaños de muestra (*n*=50, 100, 250, 500, 1000), sin alcanzar significancia individual (3 instrumentos, 1 grado de libertad para *k*, poca potencia estadística). Dentro de alto (SPS-10 vs. RWAS), la dirección se invierte y es significativa en *n*=10, 25, 50 (p<.001) — pero SPS-10 es, de los 6 instrumentos, el segundo peor ajustado a su nivel de severidad (distancia=0.387, ver §3.3), así que esta comparación no es limpia y no se interpreta como una refutación genuina de H1. **Conclusión**: H1 se sostiene direccionalmente en el grupo mejor emparejado (bajo-moderado) y se contradice en el grupo que incluye al instrumento peor ajustado (alto) — mismo patrón cualitativo bajo dos calibraciones distintas de los niveles, lo que fortalece la atribución del problema a SPS-10 específicamente, no a un artefacto de la calibración.
 
-**H2 — El efecto de *k* se modula por *n* (negligible en extremos, pico en n≈50-250).** Confirmada de forma limpia, sin cambios respecto al instrumento de *k*=6 usado. El par MACH-IV/HEXACO reproduce la misma forma de U invertida que predice la simulación: p=.117 (*n*=10) → .222 (*n*=25) → .026\* (*n*=50) → .011\* (*n*=100) → .011\* (*n*=250) → .012\* (*n*=500) → .211 (*n*=1000).
+**H2 — El efecto de *k* se modula por *n* (negligible en extremos, pico en n≈50-250).** Confirmada de forma limpia. El grupo bajo-moderado (RSE, MACH-IV, HEXACO) reproduce la misma forma de U invertida que predice la simulación: coeficiente de *k* cercano a cero y no significativo en *n*=10, 25 (p=.99, .92), más negativo en *n*=100–500 (p mínimo=.068 en *n*=500), diluyéndose de nuevo hacia *n*=1000–1500.
 
-**H3 — La brecha de potencia entre *k* extremos se achica con la severidad real (Tabla 3).** No evaluable como tendencia con los datos reales disponibles: solo hay 2 pares de instrumentos que comparten nivel de severidad (bajo-moderado, muy alto), insuficiente para trazar una curva de brecha vs. severidad. Ni confirmada ni refutada — sigue siendo evidencia exclusivamente simulada.
+**H3 — La brecha de potencia entre *k* extremos se achica con la severidad real (Tabla 3).** No evaluable como tendencia con los datos reales disponibles: aunque ahora hay 3 niveles de severidad ocupados por al menos un instrumento (bajo-moderado, moderado, alto), moderado solo tiene un instrumento (AHS), insuficiente para trazar una curva de brecha vs. severidad con múltiples *k* por nivel salvo en bajo-moderado. Ni confirmada ni refutada — sigue siendo evidencia mayormente simulada.
 
-**H4 — La paridad de *k* (par/impar) afecta la potencia, independiente de su magnitud, controlando severidad.** El modelo `potencia ~ nivel + paridad` sí es técnicamente estimable —porque SPS-10 (k=6, par) y RWAS (k=9, impar) comparten el mismo nivel muy alto—, con coeficiente negativo (par<impar) significativo en *n*=10, 25, 50 (p<.0001). Pero un análisis de sensibilidad (excluir cada uno de los otros 4 instrumentos, uno a la vez) muestra que el coeficiente es IDÉNTICO en los 5 casos: toda la estimación proviene exclusivamente del contraste SPS-10-vs-RWAS dentro de muy alto, ningún otro instrumento aporta información al término de paridad. No es un test general de paridad — es la misma comparación pareada de H1 (muy alto) disfrazada de ANCOVA, con el mismo problema de fondo (SPS-10 ajusta mal su severidad). **Ni confirmada ni refutada con datos reales** — la única evidencia válida de paridad sigue siendo la simulación, donde el diseño garantiza ortogonalidad entre paridad y severidad.
+**H4 — La paridad de *k* (par/impar) afecta la potencia, independiente de su magnitud, controlando severidad.** Con la calibración final, tanto bajo-moderado (2 impar: MACH-IV, HEXACO; 1 par: RSE) como alto (1 par: SPS-10; 1 impar: RWAS) mezclan ambas paridades — el modelo `potencia ~ nivel + paridad` es estimable de forma genuina, no por un solo contraste disfrazado. Da coeficiente negativo (par<impar) significativo en *n*=10, 25, 50 (p≤.01), se diluye desde *n*=100. Pero un análisis de sensibilidad (excluir cada instrumento, uno a la vez, en *n*=25) muestra que excluir *cualquiera* de los dos miembros del par alto (SPS-10 o RWAS) elimina la significancia por completo (coef≈−0.009, p>.75), mientras excluir cualquiera de los tres de bajo-moderado la mantiene o incluso la fortalece (excluir RSE la duplica: coef=−0.359, p<.0001). **Conclusión**: el efecto sigue dependiendo críticamente del par alto (con SPS-10, el instrumento peor ajustado, de por medio) — no es una evidencia robusta de paridad general, aunque ya no es un artefacto matemático puro como con la calibración anterior. La evidencia más confiable de paridad sigue siendo la simulación, donde el diseño garantiza ortogonalidad entre paridad y severidad.
 
-**H5 — Un instrumento con severidad mal calibrada distorsiona cualquier análisis agregado que lo incluya.** Confirmada, con evidencia de dos instrumentos de k=6 evaluados en momentos distintos del estudio (ver DESIGN.md §14-15): el primer candidato evaluado tenía la peor distancia de ajuste registrada en este proyecto (0.958) y se descartó por razones independientes (confiabilidad); SPS-10, el instrumento finalmente usado, tiene la segunda peor (0.828, por una razón distinta: su curtosis real, 1.986, excede el extremo que calibra el nivel muy alto, 1.17). En ambos casos, el instrumento de peor ajuste distorsiona cualquier modelo agregado que lo incluya sin aislarlo (ver H1 y H4) — refuerza que la severidad de ajuste (no solo la etiqueta de nivel asignada) debe reportarse y usarse como criterio de inclusión/exclusión en análisis agregados con datos reales, no solo como nota al pie.
+**H5 — Un instrumento con severidad mal calibrada distorsiona cualquier análisis agregado que lo incluya.** Confirmada, con evidencia acumulada en varios momentos del estudio (ver DESIGN.md §14-17): un candidato de *k*=6 se descartó por razones de confiabilidad (no de severidad); SPS-10, el instrumento finalmente usado, tiene la segunda peor distancia de ajuste de los 6 (0.387) bajo la calibración final, y es sistemáticamente el que produce direcciones contrarias a H1 en cualquier nivel donde caiga (antes en muy alto con la calibración intermedia, ahora en alto con la calibración final) — refuerza que la severidad de ajuste de cada instrumento debe reportarse y considerarse al interpretar cualquier análisis agregado con datos reales, no solo como nota al pie.
 
 ## 3.5. Comparación de las 11 pruebas: potencia bruta y estabilidad frente a *k*
 
@@ -117,25 +119,25 @@ Pregunta práctica: ¿qué prueba conviene usar, y bajo qué condiciones? Se cal
 
 | Prueba | Rank sim. limpia | Rank real | Rank sim. confundida | Desplazamiento confundida↔real |
 |---|---|---|---|---|
-| D'Agostino-Pearson | 3 | 3 | 6 | 3 |
-| Epps-Pulley | 8 | 4 | 7 | 3 |
-| Shapiro-Wilk | 7 | 5 | 4 | **1** |
-| Anderson-Darling | 10 | 9 | 8 | **1** |
-| Lilliefors | 17 | 12 | 15 | 3 |
-| Shapiro-Francia | 11 | 13 | 10 | 3 |
-| Cramér-von Mises | 15 | 14 | 16 | 2 |
-| Pearson χ² | 16 | 15 | 13 | 2 |
-| SSTN | 12 | 15 | 19 | 4 |
-| Jarque-Bera | 11 | 20 | 21 | **1** |
-| Curtosis (Anscombe-Glynn) | 22 | 22 | 13 | **9** |
+| D'Agostino-Pearson | 3 | 3 | 3 | **0** |
+| Epps-Pulley | 9 | 4 | 4 | **0** |
+| Shapiro-Wilk | 7 | 5 | 5 | **0** |
+| Anderson-Darling | 10 | 9 | 9 | **0** |
+| Jarque-Bera | 11 | 20 | 20 | **0** |
+| Curtosis (Anscombe-Glynn) | 22 | 22 | 22 | **0** |
+| Shapiro-Francia | 10 | 13 | 12 | 1 |
+| Cramér-von Mises | 14 | 14 | 15 | 1 |
+| Lilliefors | 17 | 12 | 13 | 1 |
+| SSTN | 10 | 15 | 17 | 2 |
+| Pearson χ² | 19 | 15 | 12 | 3 |
 
 **Lectura para la Discusión:**
 
-- **D'Agostino-Pearson** es la recomendación por defecto: mejor balance potencia/estabilidad en los tres escenarios, de forma consistente — se verificó estable frente a un cambio de instrumento real en *k*=6 (ver DESIGN.md §14-15).
-- **Shapiro-Wilk** mantiene la potencia bruta más alta ya documentada en la literatura, y resulta de las más predecibles entre escenarios (desplazamiento=1).
-- **SSTN** no compite en potencia bruta (nunca la más potente); su argumento sigue siendo la estabilidad a *k* cuando la severidad está controlada (escenario simulado limpio, 3ra mejor combinada). Su predictibilidad entre escenarios (desplazamiento) **no es un hallazgo robusto** — cambió notablemente de posición al cambiar el instrumento de *k*=6 (ver DESIGN.md §14-15). No se recomienda usar la predictibilidad de SSTN como argumento en el paper — solo su estabilidad-a-*k* en el escenario limpio, que sí se sostiene.
-- **Curtosis (Anscombe-Glynn)** es la más impredecible por un margen amplio (desplazamiento=9) — un artefacto de que, en el emparejamiento confundido, el par muy alto (SPS-10 y RWAS) comparte curtosis alta, dándole a esta prueba en particular una estabilidad aparente que no se sostiene en el resto de la tabla real. Sigue siendo la peor en potencia bruta en el escenario limpio (§13.1) — recomendable solo cuando se sabe de antemano que la desviación es puramente de curtosis.
-- **Que casi todos los rankings de esta tabla cambien notablemente al reemplazar un solo instrumento real (*k*=6, ver DESIGN.md §14-15)** pese a mantener los otros 5 idénticos es, en sí mismo, un hallazgo metodológico — el ranking de "cuál prueba es mejor" es frágil frente a qué instrumento particular ocupa cada valor de *k*, y por eso la Tabla de §13.1 (simulación limpia, 7 valores de *k* por nivel, no un instrumento por *k*) es el ancla más estable para las recomendaciones del paper.
+- **D'Agostino-Pearson** es la recomendación por defecto: mejor potencia/estabilidad combinada en los tres escenarios, de forma consistente en las tres versiones de este estudio (con el primer candidato de *k*=6, con SPS-10 antes de recalibrar los niveles, y ahora con los niveles anclados a Cain et al.) — el hallazgo más robusto de toda la comparación.
+- **Desplazamiento cero en 6 de las 11 pruebas** (D'Agostino-Pearson, Epps-Pulley, Shapiro-Wilk, Anderson-Darling, Jarque-Bera, Curtosis) es una mejora sustancial respecto a versiones anteriores del estudio (donde como máximo 1 prueba lograba desplazamiento cero) — refleja que, una vez corregida la degeneración del nivel muy alto (ver DESIGN.md §17), la correspondencia entre el escenario simulado-confundido y el real es mucho más fiel.
+- **SSTN** no compite en potencia bruta (nunca la más potente); su argumento sigue siendo la estabilidad a *k* cuando la severidad está controlada (escenario simulado limpio, 8vo lugar combinado). Su desplazamiento (2) es intermedio — ni de las más predecibles ni de las menos.
+- **Curtosis (Anscombe-Glynn)** tiene desplazamiento cero pero es consistentemente la peor en potencia bruta en los tres escenarios (rank 22 en real y sim. confundida) — recomendable solo cuando se sabe de antemano que la desviación es puramente de curtosis, no de asimetría.
+- A diferencia de versiones anteriores del estudio, donde el ranking de "cuál prueba es mejor" resultaba frágil frente a qué instrumento ocupaba *k*=6, con la calibración final la correspondencia real-simulado es mucho más estable — sostiene con más fuerza que antes el uso de la Tabla de §13.1 (simulación limpia) como referencia primaria, ahora corroborada de cerca por el escenario confundido y por los datos reales.
 
 ---
 
