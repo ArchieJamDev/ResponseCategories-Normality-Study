@@ -195,15 +195,15 @@ jobs:
           # run-id fijo, no needs: -- mismo motivo que bloque-real-categorias
           # arriba (no depende de correr_calibracion_niveles en el mismo
           # dispatch). Apunta a la corrida de calibrate-niveles ya validada
-          # (36136389635, niveles recalibrados a percentiles de Cain et al. --
-          # ver notes/DESIGN.md Seccion 16 -- dist2 maxima 0.0173 en
-          # muy_alto, resto ~1e-15). Si ese artifact expira, correr una vez
+          # (36229461732, muy_alto corregido al percentil 90 -- ver
+          # notes/DESIGN.md Seccion 17 -- dist2 maxima 0.0003 en las 35
+          # celdas, sin degeneracion). Si ese artifact expira, correr una vez
           # con correr_calibracion_niveles=true y actualizar el run-id de
           # abajo.
           pattern: calibracion-nivel-*
           path: data/results
           merge-multiple: true
-          run-id: 36136389635
+          run-id: 36229461732
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Consolidar los 5 niveles
         run: Rscript R/03b_consolidar_calibracion_niveles.R
