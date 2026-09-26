@@ -43,6 +43,8 @@
 \usepackage[backend=biber,style=apa,sortcites=true,sorting=nyt]{biblatex}
 \DeclareLanguageMapping{spanish}{spanish-apa}
 \addbibresource{k_paper.bib}
+% APA 7: rangos de paginas con raya corta (en dash), no guion.
+\AtBeginDocument{\renewcommand*{\bibrangedash}{--}}
 
 % Same blinding helper as paper_brm.tex: #1 = real content (shown once
 % [mask] is removed for the final, identified version); #2 = placeholder

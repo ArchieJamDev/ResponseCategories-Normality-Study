@@ -1,0 +1,6 @@
+\begin{figure*}[hbt]
+\ifnextchar[{\eatarg}{}
+[htbp]
+\caption{[Figura pendiente: brecha de potencia entre $k=3$ y $k=9$ por $n$ y nivel de severidad -- fuente: notes/figuras/brecha\_k3\_k9\_por\_n\_y\_nivel.svg]}
+\label{fig:brecha}
+\end{figure*}

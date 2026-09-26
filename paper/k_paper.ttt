@@ -1,0 +1,165 @@
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[htbp]
+\small
+\caption{Instrumentos reales usados, su cantidad nativa de categorías de respuesta y parámetros psicométricos}
+\label{tab:instrumentos}
+\begin{tabular}{lccccl}
+\toprule
+Instrumento & $k$ & Ítems & Dimensiones & $N$ & $\alpha$ \\
+\midrule
+Escala de Autoestima de Rosenberg (Rosenberg, 1965) & 4 & 10 & Unidimensional & 46\,546 & .77--.88$^{\text{a}}$ \\
+MACH-IV (Christie y Geis, 1970) & 5 & 20 & Unidimensional$^{\text{b}}$ & 73\,486 & .68--.70$^{\text{a}}$ \\
+Social Provisions Scale, SPS-10 (Cutrona y Russell, 1987) & 6 & 10 & 5$^{\text{c}}$ & 91\,658 & .92$^{\text{d}}$ \\
+HEXACO, faceta Expresividad (Ashton et al., 2007) & 7 & 10 & Unidimensional$^{\text{e}}$ & 22\,783 & .84$^{\text{a}}$ \\
+Adult Hope Scale, 8 ítems (Snyder et al., 1991) & 8 & 8 & 2$^{\text{f}}$ & 1\,036 & .92$^{\text{d}}$ \\
+RWAS (Altemeyer, 1981) & 9 & 22 & Unidimensional & 9\,680 & $\approx$.90$^{\text{a}}$ \\
+\bottomrule
+\end{tabular}
+\tablenote{$N$ = tamaño del dataset real correspondiente; $\alpha$ = alfa de Cronbach. $^{\text{a}}$Confiabilidad publicada en el desarrollo original del instrumento o en estudios de validación citados (RSE: Blascovich y Tomaka, 1993; Rosenberg, 1986; HEXACO: Ashton et al., 2007, Tabla 2). $^{\text{b}}$Se usa como puntaje único pese a las tres facetas teóricas originales ---tácticas, visión del mundo, moralidad---, sin estructura factorial robusta en la práctica. $^{\text{c}}$Cinco dimensiones de dos ítems cada una: Apego/Apoyo emocional, Integración social, Reafirmación de valía, Alianza confiable, Orientación/Guía; se excluye la sexta provisión original (Oportunidad de crianza); puntaje total validado como dominado por un factor general (Sischka et al., 2025). $^{\text{d}}$Calculado en este estudio; no hay una cifra publicada disponible para la versión administrada en este dataset. $^{\text{e}}$Ya es una única faceta del dominio Extraversión, no el dominio completo. $^{\text{f}}$Dos dimensiones de cuatro ítems cada una: Agencia (energía orientada a metas) y Vías (planificación para alcanzar metas).}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[htbp]
+\caption{Niveles de severidad de no-normalidad y sus objetivos de calibración, anclados a percentiles de Cain et al. (2017)}
+\label{tab:niveles}
+\begin{tabular}{lcccc}
+\toprule
+Nivel & Percentil & \multicolumn{2}{c}{Objetivo} \\
+& & Asimetría ($|\text{valor}|$, interpolado) & Curtosis en exceso (con signo, directo) \\
+\midrule
+bajo & 5\textsuperscript{o} & 0.053 & $-1.28$ \\
+bajo-moderado & 25\textsuperscript{o} & 0.276 & $-0.57$ \\
+moderado & 50\textsuperscript{o} (mediana) & 0.688 & 0.07 \\
+alto & 75\textsuperscript{o} & 1.332 & 1.62 \\
+muy alto & 90\textsuperscript{o} & 2.401 & 7.52 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[htbp]
+\caption{Brecha de potencia media entre $k=3$ y $k=9$, por nivel de severidad (promediada sobre los 8 tamaños de muestra)}
+\label{tab:brecha-k}
+\begin{tabular}{lccc}
+\toprule
+Nivel & Percentil (asimetría / curtosis) & Asimetría / curtosis objetivo & Brecha $k=3-k=9$ \\
+\midrule
+bajo & 5\textsuperscript{o} / 5\textsuperscript{o} & 0.053 / $-1.28$ & .027 \\
+bajo-moderado & 25\textsuperscript{o} / 25\textsuperscript{o} & 0.276 / $-0.57$ & .045 \\
+moderado & 50\textsuperscript{o} / 50\textsuperscript{o} & 0.688 / 0.07 & .036 \\
+alto & 75\textsuperscript{o} / 75\textsuperscript{o} & 1.332 / 1.62 & .016 \\
+muy alto & 90\textsuperscript{o} / 90\textsuperscript{o} & 2.401 / 7.52 & .012 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[htbp]
+\caption{Potencia media (11 pruebas, 5 niveles, 7 valores de $k$) por tamaño de muestra}
+\label{tab:potencia-n}
+\begin{tabular}{lcccccccc}
+\toprule
+$n$ & 10 & 25 & 50 & 100 & 250 & 500 & 1000 & 1500 \\
+\midrule
+Potencia media & .238 & .441 & .626 & .799 & .949 & .981 & .984 & .984 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[htbp]
+\caption{Brecha de potencia entre $k=3$ y $k=9$ por nivel de severidad y tamaño de muestra}
+\label{tab:brecha-n-nivel}
+\begin{tabular}{lccccc}
+\toprule
+$n$ & bajo & bajo-moderado & moderado & alto & muy alto \\
+\midrule
+10 & .015 & .008 & .014 & .055 & \textbf{.099} \\
+25 & .056 & .017 & .046 & \textbf{.066} & $-.001$ \\
+50 & \textbf{.097} & .051 & \textbf{.117} & .011 & $-.001$ \\
+100 & .050 & \textbf{.149} & .105 & $-.001$ & $-.001$ \\
+250 & .000 & .132 & .002 & $-.002$ & .000 \\
+500 & .000 & .006 & .000 & .000 & .000 \\
+1000 & .000 & .000 & .001 & .000 & .000 \\
+1500 & .000 & .000 & .001 & .000 & .000 \\
+\bottomrule
+\end{tabular}
+\tablenote{En negrita, el $n$ donde la brecha alcanza su máximo dentro de cada nivel.}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[htbp]
+\caption{Potencia media (11 pruebas) por instrumento real y tamaño de muestra}
+\label{tab:potencia-instrumento}
+\begin{tabular}{lcccccccc}
+\toprule
+Instrumento ($k$) & 10 & 25 & 50 & 100 & 250 & 500 & 1000 & 1500 \\
+\midrule
+RSE (4) & .048 & .063 & .108 & .248 & .719 & .983 & 1.000 & 1.000 \\
+MACH-IV (5) & .052 & .076 & .131 & .282 & .760 & .989 & 1.000 & 1.000 \\
+SPS-10 (6) & .158 & .390 & .691 & .924 & .991 & .999 & 1.000 & 1.000 \\
+HEXACO (7) & .049 & .068 & .104 & .212 & .644 & .967 & 1.000 & 1.000 \\
+AHS (8) & .099 & .217 & .434 & .750 & .919 & .929 & .961 & --- \\
+RWAS (9) & .364 & .749 & .928 & .954 & .984 & .998 & 1.000 & 1.000 \\
+\bottomrule
+\end{tabular}
+\tablenote{AHS no tiene celda en $n=1500$ porque su $N$ nativo (1\,036) no alcanza ese tamaño de submuestra sin reemplazo (ver Método).}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[htbp]
+\small
+\caption{Correlación y error absoluto entre potencia real y potencia simulada, por instrumento}
+\label{tab:validacion}
+\begin{tabular}{lcccc}
+\toprule
+Instrumento ($k$) & Nivel asignado & Distancia de ajuste & $r$ (real vs.\ simulado) & Error absoluto medio \\
+\midrule
+RSE (4) & bajo-moderado & 0.299 & .986 & .058 \\
+MACH-IV (5) & bajo-moderado & 0.162 & .999 & .015 \\
+SPS-10 (6) & alto & 0.387 & .957 & .092 \\
+HEXACO (7) & bajo-moderado & 0.066 & .994 & .034 \\
+AHS (8) & moderado & 0.273 & .999 & .021 \\
+RWAS (9) & alto & 0.450 & .995 & .027 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+\efloatseparator
+ 
+\begin{table*}[hbt]
+\ifnextchar[{\eatarg}{}
+[htbp]
+\small
+\caption{Ranking combinado (potencia $+$ estabilidad a $k$) de las 11 pruebas, en los tres escenarios}
+\label{tab:ranking}
+\begin{tabular}{lcccc}
+\toprule
+Prueba & Rank sim.\ limpia & Rank real & Rank sim.\ confundida & Desplazamiento confundida$\leftrightarrow$real \\
+\midrule
+D'Agostino-Pearson & 3 & 3 & 3 & \textbf{0} \\
+Epps-Pulley & 9 & 4 & 4 & \textbf{0} \\
+Shapiro-Wilk & 7 & 5 & 5 & \textbf{0} \\
+Anderson-Darling & 10 & 9 & 9 & \textbf{0} \\
+Jarque-Bera & 11 & 20 & 20 & \textbf{0} \\
+Curtosis (Anscombe-Glynn) & 22 & 22 & 22 & \textbf{0} \\
+Shapiro-Francia & 10 & 13 & 12 & 1 \\
+Cramér-von Mises & 14 & 14 & 15 & 1 \\
+Lilliefors & 17 & 12 & 13 & 1 \\
+SSTN & 10 & 15 & 17 & 2 \\
+Pearson $\chi^2$ & 19 & 15 & 12 & 3 \\
+\bottomrule
+\end{tabular}
+\end{table*}
