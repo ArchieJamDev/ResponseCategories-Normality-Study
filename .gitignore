@@ -14,3 +14,14 @@ data/processed/*.rds
 # Sistema
 .DS_Store
 Thumbs.db
+
+# LaTeX (paper/) -- artefactos de compilacion, no el .tex/.bib fuente
+paper/*.aux
+paper/*.bbl
+paper/*.bcf
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.run.xml
+paper/*.pdf
+paper/*.synctex.gz

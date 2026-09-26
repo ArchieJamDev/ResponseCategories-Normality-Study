@@ -1,0 +1,217 @@
+% k_paper.tex -- manuscript for Methodology (European Journal of Research
+% Methods for the Behavioral and Social Sciences, PsychOpen GOLD/ZPID).
+% See notes/referencias_pendientes.md and metodo_borrador.md for the
+% verified Spanish-language source material this is drafted from -- see
+% [[project-responsecategories-normality-study]] memory for the target-
+% journal decision and its submission constraints (2026-09-26): 6,000-word
+% hard limit (incl. references/tables/figures, max 6 figures), abstract
+% <=150 words, mandatory double-blind anonymization, APA 7th throughout.
+%
+% Skeleton only at this stage: section headers and structure are in
+% place, content is ported/translated from the Spanish drafts
+% incrementally. Word-count triage against the 6,000-word cap happens
+% once content is in, not before.
+%
+% Modeled directly on the proven double-blind APA7 pattern already used
+% for FiabilityLab's BRM submission
+% (../../FiabilityLab-CHJS/paper/paper_brm.tex): apa7.cls with
+% [man,mask,donotrepeattitle], biblatex-apa, and the \blindtext{}{} macro
+% for anonymizing the repository link during review.
+%
+% [man]: manuscript/submission mode (double-spaced, running head, single
+% column), not [jou] (the final typeset format produced after
+% acceptance).
+% [mask]: apa7's built-in double-blind option -- suppresses author name/
+% affiliation/running-head-by-author from the compiled PDF. Methodology
+% additionally wants a SEPARATE title-page file at first submission (not
+% just a masked single file) -- that separate title-page .tex is created
+% later, once we're ready to submit; this file is the anonymized main
+% text.
+% [donotrepeattitle]: avoids the title repeating as a running header
+% immediately above the body on page 1.
+\documentclass[man,mask,donotrepeattitle]{apa7}
+
+\usepackage{amsmath}
+\usepackage[american]{babel}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=apa,sortcites=true,sorting=nyt]{biblatex}
+\DeclareLanguageMapping{american}{american-apa}
+\addbibresource{k_paper.bib}
+
+% Same blinding helper as paper_brm.tex: #1 = real content (shown once
+% [mask] is removed for the final, identified version); #2 = placeholder
+% shown during blind review (temporary anonymized link, per Methodology's
+% author guidelines on anonymizing external materials).
+\makeatletter
+\newcommand{\blindtext}[2]{\@ifundefined{apaSeven@maskauthoridentity}{#1}{#2}}
+\makeatother
+
+\title{When Does the Number of Response Categories Matter? A Monte Carlo and Composite-Score Study of Its Interaction With Sample Size and Non-Normality Severity Across Eleven Normality Tests}
+\shorttitle{RESPONSE CATEGORIES AND NORMALITY TEST POWER}
+
+\authorsnames{Arqu\'imedes Chac\'on}
+\authorsaffiliations{Universidad Cat\'olica Andr\'es Bello, Caracas, Venezuela}
+\authornote{Correspondence concerning this article should be addressed to
+  Arqu\'imedes Chac\'on, Universidad Cat\'olica Andr\'es Bello, Caracas,
+  Venezuela. Email: arquimedeschacon@gmail.com}
+
+\leftheader{Chac\'on}
+
+% TODO: draft to <=150 words once Results/Discussion content is final --
+% see notes/resultados_borrador.md and the practical-utility synthesis in
+% notes/DESIGN.md Section 19 for the source material.
+\abstract{[Abstract -- max. 150 words. Draft after Results/Discussion are
+ported and trimmed to the 6,000-word cap; source material: the
+hypothesis-by-hypothesis synthesis in notes/resultados\_borrador.md and
+the practical-utility paragraph in notes/DESIGN.md Section 19.]}
+
+\keywords{Likert scale, response categories, normality tests, Monte Carlo simulation, non-normality severity, composite score}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+\label{sec:introduction}
+% Port/translate from notes/introduccion_borrador.md (v4). Source
+% structure (6 paragraphs + closing, see that file's own "Que cambio"
+% notes for revision history):
+%   1. Why response-category count (k) is an open, unsettled design
+%      decision (Dillman et al., 2009; Foddy, 1994; Pearse, 2011;
+%      Lozano, Garcia-Cueto & Muniz, 2008).
+%   2. What is known about k's effect on downstream statistical
+%      behavior -- fragmented, rarely aimed at normality testing
+%      specifically (Weijters et al., 2010; Kurtulus et al., 2026;
+%      Ho & Yu, 2014; Sathyanarayana, 2026; Cain et al., 2017).
+%   3. The parallel tradition of comparing normality-test power, which
+%      varies distribution shape but never k as an independent factor
+%      (Razali & Wah, 2011; Shapiro & Wilk, 1965; Yap & Sim, 2011;
+%      Bantu et al., 2025; Matamoros-Mota, 2026; Kamath et al., 2025).
+%   4. The specific, uncovered gap: how k, n, and non-normality severity
+%      jointly affect normality-test power.
+%   5. The two-component study design (simulated niveles block + 6 real
+%      instruments), stated explicitly.
+%   6. [Closing with explicit study objectives -- still a placeholder in
+%      the Spanish draft too, pending final Results section order.]
+%
+% NOTE: several citations here (Pearse 2011, Lozano et al. 2008,
+% Weijters et al. 2010, Kurtulus et al. 2026, Ho & Yu 2014,
+% Sathyanarayana 2026, Razali & Wah 2011, Yap & Sim 2011, Bantu et al.
+% 2025, Matamoros-Mota 2026, Kamath et al. 2025) are NOT YET in
+% k_paper.bib -- verify and add before citing with \parencite{}.
+
+\section{Method}
+\label{sec:method}
+
+\subsection{General Design}
+\label{sec:design}
+% Port from notes/metodo_borrador.md Section 2.1.
+
+\subsection{Real Psychometric Instruments}
+\label{sec:instruments}
+% Port Table 1 (instrument characteristics: k, items, dimensions, N,
+% alpha, reverse-scored items, dataset source) and surrounding prose from
+% notes/metodo_borrador.md Section 2.2. Dataset citations already
+% verified and in k_paper.bib: \parencite{osp2014rse, osp2019mach,
+% yamada2021, osp2014hexaco, davis2021, osp2016rwas}. Instrument-origin
+% citations also ready: \parencite{rosenberg1965, christiegeis1970,
+% cutronarussell1987, ashtonleegoldberg2007, snyder1991, altemeyer1981}.
+% SPS-10 dimensionality citation: \parencite{sischka2025}. RSE alpha
+% support: \parencite{blascovichtomaka1993, rosenberg1986}.
+
+\subsection{Niveles Block: Simulating Non-Normality Severity}
+\label{sec:niveles}
+% Port from notes/metodo_borrador.md Section 2.3, including Table 2
+% (five severity levels anchored to Cain et al. 2017 percentiles) and
+% the calibration procedure (free-lambda Nelder-Mead, 16 starts,
+% N=150,000 common-random-number replicates). Cite \parencite{cain2017}.
+
+\subsection{Real-Data Block: \emph{m}-out-of-\emph{N} Subsampling}
+\label{sec:realdata}
+% Port from notes/metodo_borrador.md Section 2.4. Cite
+% \parencite{politisromanowolf1999}.
+
+\subsection{Normality Tests Evaluated}
+\label{sec:tests}
+% Port from notes/metodo_borrador.md Section 2.5 (eleven-test battery).
+% Citations ready: \parencite{shapirowilk1965, andersondarling1954,
+% lilliefors1967, jarquebera1980, dagostinopearson1973, csorgofaraway1996,
+% shapirofrancia1972, pearson1900, anscombeglynn1983, anaratschwender2026}.
+% Epps-Pulley has no formal citation in the Spanish draft either --
+% resolve before finalizing this subsection.
+
+\subsection{Implementation and Reproducibility}
+\label{sec:implementation}
+% Port from notes/metodo_borrador.md Section 2.6.
+
+\subsection{Data and Code Availability}
+\label{sec:availability}
+% Port from notes/metodo_borrador.md Section 2.7. Use \blindtext{}{} for
+% the repository link, same pattern as the Software/Data/Code
+% Availability sections below.
+
+\section{Results}
+\label{sec:results}
+% Port from notes/resultados_borrador.md: Tables 3-7, Figure 1, the H1-H5
+% hypothesis tests, the validation against real data (r = .981), and the
+% eleven-test comparison. Methodology allows a maximum of six figures --
+% check notes/resultados_borrador.md's figure count against that cap
+% before porting.
+
+\section{Discussion}
+\label{sec:discussion}
+% Port/expand from the practical-utility synthesis in
+% notes/DESIGN.md Section 19, plus limitations (e.g., the
+% percentile-90-vs-95 degenerate-calibration lesson from Section 17,
+% worth stating explicitly as a methodological contribution in its own
+% right).
+
+\section*{Data Availability}
+% TODO: finalize once the repository's public/anonymized status is
+% decided (see the "Pendiente" note in notes/metodo_borrador.md Section
+% 2.7's surrounding notes). Placeholder pattern below matches
+% FiabilityLab's Anonymous GitHub approach.
+The full per-cell simulation and subsampling results analyzed in this
+study are available at \blindtext{\url{https://github.com/ArchieJamDev/ResponseCategories-Normality-Study}}{an anonymized mirror of the repository (identifying information removed for double-blind review; the original link will be restored upon acceptance)}. Raw data for the six real instruments are publicly available from their original sources, cited where first used in Section~\ref{sec:instruments}.
+
+\section*{Code Availability}
+The complete code (real-data extraction, niveles-block calibration and
+simulation, real-data-block subsampling, results aggregation, and the
+GitHub Actions configuration that runs every step) is available at
+\blindtext{\url{https://github.com/ArchieJamDev/ResponseCategories-Normality-Study}}{an anonymized mirror of the repository (identifying information removed for double-blind review; the original link will be restored upon acceptance)}.
+
+\section*{Use of Generative Artificial Intelligence}
+Generative artificial intelligence (Claude, Anthropic) was used to
+implement and run R code -- including the simulation and real-data
+analysis scripts reported in this article -- and as a writing assistant
+for the text, always under the author's direct review and direction.
+Conceptual and methodological decisions -- what to simulate, how to
+design each block, which real instruments to use, how to interpret each
+finding, and the article's overall structure and argument -- were the
+author's.
+
+\section*{Declarations}
+
+\textbf{Funding.} The author received no specific funding for this work.
+
+\textbf{Competing interests.} The author declares no competing interests.
+
+\textbf{Ethics approval.} Not applicable. No new data were collected from
+human participants; all real-data examples reuse previously published,
+publicly available, de-identified datasets (see Section~\ref{sec:instruments}
+and the Data Availability statement above).
+
+\textbf{Consent to participate and consent for publication.} Not
+applicable.
+
+\textbf{Author contributions.} Single-author manuscript; A.C. conceived
+the study, designed and ran the analyses, and wrote the manuscript.
+
+\section*{Open Practices Statement}
+No part of this study was preregistered; it is a methodological and
+simulation study, not a confirmatory hypothesis test. All simulation and
+subsampling code, and the full per-cell results, are available as
+described in the Data and Code Availability statements above.
+
+\printbibliography
+
+\end{document}

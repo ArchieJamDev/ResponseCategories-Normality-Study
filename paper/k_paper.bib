@@ -1,0 +1,314 @@
+% k_paper.bib -- bibliography for k_paper.tex (Methodology submission).
+%
+% Every entry below was individually verified this session against
+% Crossref, arXiv, or a direct bibliographic/API source (not just quoted
+% from a secondary citation) -- see notes/referencias_pendientes.md and
+% metodo_borrador.md's "Referencias de datasets" section for the
+% verification trail (DOIs resolved, author lists cross-checked against
+% signed publications, etc.).
+%
+% Still MISSING (cited in introduccion_borrador.md but not yet verified
+% or entered here): Pearse (2011), Lozano, Garcia-Cueto y Muniz (2008),
+% Weijters, Cabooter y Schillewaert (2010), Kurtulus, Basfirinci y
+% Cilingir Uk (2026), Ho y Yu (2014), Sathyanarayana (2026), Razali y Wah
+% (2011), Yap y Sim (2011), Bantu, Kozyra y Wiora (2025),
+% Matamoros-Mota (2026), Kamath, Poojari y Varsha (2025). Add these
+% before the Introduction section is finalized in k_paper.tex.
+
+% NOTE on the "titleaddon = {{Data set}}" fields below: apa.bbx's
+% dedicated @dataset driver duplicates a plain `type` field (prints
+% "Data set" twice -- once via the shared title macro's addinfo1/addinfo3
+% chain, once via its own bare \printfield{type} call). Using
+% `titleaddon` instead renders correctly once, in the right place
+% (title [Data set]. URL) -- verified by full compile+biber check,
+% 2026-09-26. The double braces protect "Data set" from titleaddon's
+% built-in \MakeSentenceCase*.
+@dataset{osp2014hexaco,
+  author     = {{Open-Source Psychometrics Project}},
+  title      = {{IPIP}-{HEXACO} equivalent scales: Raw data},
+  titleaddon = {{Data set}},
+  year       = {2014},
+  url        = {https://openpsychometrics.org/_rawdata/HEXACO.zip}
+}
+
+@dataset{osp2014rse,
+  author     = {{Open-Source Psychometrics Project}},
+  title      = {Rosenberg self-esteem scale: Raw data},
+  titleaddon = {{Data set}},
+  year       = {2014},
+  url        = {https://openpsychometrics.org/_rawdata/RSE.zip}
+}
+
+@dataset{osp2016rwas,
+  author     = {{Open-Source Psychometrics Project}},
+  title      = {Right-wing authoritarianism scale: Raw data},
+  titleaddon = {{Data set}},
+  year       = {2016},
+  url        = {https://openpsychometrics.org/_rawdata/RWAS.zip}
+}
+
+@dataset{osp2019mach,
+  author     = {{Open-Source Psychometrics Project}},
+  title      = {Machiavellianism test ({MACH-IV}): Raw data},
+  titleaddon = {{Data set}},
+  year       = {2019},
+  url        = {https://openpsychometrics.org/_rawdata/MACH_data.zip}
+}
+
+@article{yamada2021,
+  author  = {Yamada, Yuki and {\'C}epuli{\'c}, Dominik-Borna and {{COVIDiSTRESS Global Survey Consortium}} and Lieberoth, Andreas},
+  title   = {{COVIDiSTRESS} Global Survey Dataset on Psychological and Behavioural Consequences of the {COVID-19} Outbreak},
+  journal = {Scientific Data},
+  volume  = {8},
+  number  = {3},
+  year    = {2021},
+  doi     = {10.1038/s41597-020-00784-9}
+}
+
+@dataset{davis2021,
+  author     = {Davis, Edward B. and Cowden, Richard G. and VanderWeele, Tyler J. and Worthington, Jr., Everett L. and McElroy-Heltzel, Stacey E. and Hook, Joshua N. and Davis, Don E. and Van Tongeren, Daryl R. and Rueger, Sandra Y. and Shannonhouse, Laura R. and Lemke, Austin W. and Glowiak, Kevin J.},
+  title      = {Psychological and spiritual health and resilience among {U.S.} adults with chronic disease},
+  titleaddon = {{Data set}},
+  year       = {2021},
+  url        = {https://osf.io/2anvx/}
+}
+
+@article{sischka2025,
+  author  = {Sischka, Philipp E. and Albert, Isabelle and Kornadt, Anna E.},
+  title   = {Validation of the 10-Item Social Provision Scale ({SPS-10}): Evaluating Factor Structure, Reliability, Measurement Invariance, and Nomological Network Across 38 Countries},
+  journal = {Assessment},
+  volume  = {32},
+  number  = {7},
+  pages   = {1027--1048},
+  year    = {2025},
+  doi     = {10.1177/10731911241283609}
+}
+
+@book{dillman2009,
+  author    = {Dillman, Don A. and Smyth, Jolene D. and Christian, Leah Melani},
+  title     = {Internet, Mail, and Mixed-Mode Surveys: The Tailored Design Method},
+  edition   = {3},
+  publisher = {Wiley},
+  address   = {Hoboken, NJ},
+  year      = {2009}
+}
+
+@book{foddy1994,
+  author    = {Foddy, William},
+  title     = {Constructing Questions for Interviews and Questionnaires: Theory and Practice in Social Research},
+  publisher = {Cambridge University Press},
+  year      = {1994}
+}
+
+@article{cain2017,
+  author  = {Cain, Meghan K. and Zhang, Zhiyong and Yuan, Ke-Hai},
+  title   = {Univariate and Multivariate Skewness and Kurtosis for Measuring Nonnormality: Prevalence, Influence and Estimation},
+  journal = {Behavior Research Methods},
+  volume  = {49},
+  number  = {5},
+  pages   = {1716--1735},
+  year    = {2017},
+  doi     = {10.3758/s13428-016-0814-1}
+}
+
+@book{rosenberg1965,
+  author    = {Rosenberg, Morris},
+  title     = {Society and the Adolescent Self-Image},
+  publisher = {Princeton University Press},
+  address   = {Princeton, NJ},
+  year      = {1965}
+}
+
+@book{christiegeis1970,
+  editor    = {Christie, Richard and Geis, Florence L.},
+  title     = {Studies in Machiavellianism},
+  publisher = {Academic Press},
+  address   = {New York, NY},
+  year      = {1970}
+}
+
+% NOTE: apa.bbx renders this as "(pp. 37-67, Vol. 1)" instead of the
+% standard APA "(Vol. 1, pp. 37-67)" ordering -- a minor, known
+% formatting quirk of this biblatex-apa version for @incollection with
+% both volume and pages set. Fix by hand in the final compiled reference
+% list if it survives to submission; not worth chasing further for one
+% entry (verified 2026-09-26).
+@incollection{cutronarussell1987,
+  author    = {Cutrona, Carolyn E. and Russell, Daniel W.},
+  title     = {The Provisions of Social Relationships and Adaptation to Stress},
+  booktitle = {Advances in Personal Relationships},
+  editor    = {Jones, Warren H. and Perlman, Daniel},
+  volume    = {1},
+  pages     = {37--67},
+  publisher = {JAI Press},
+  address   = {Greenwich, CT},
+  year      = {1987}
+}
+
+@article{ashtonleegoldberg2007,
+  author  = {Ashton, Michael C. and Lee, Kibeom and Goldberg, Lewis R.},
+  title   = {The {IPIP-HEXACO} Scales: An Alternative, Public-Domain Measure of the Personality Constructs in the {HEXACO} Model},
+  journal = {Personality and Individual Differences},
+  volume  = {42},
+  number  = {8},
+  pages   = {1515--1526},
+  year    = {2007},
+  doi     = {10.1016/j.paid.2006.10.027}
+}
+
+@article{snyder1991,
+  author  = {Snyder, C. R. and Harris, Cheri and Anderson, John R. and Holleran, Sharon A. and Irving, Lori M. and Sigmon, Sandra T. and Yoshinobu, Lauren and Gibb, June and Langelle, Charyle and Harney, Pat},
+  title   = {The Will and the Ways: Development and Validation of an Individual-Differences Measure of Hope},
+  journal = {Journal of Personality and Social Psychology},
+  volume  = {60},
+  number  = {4},
+  pages   = {570--585},
+  year    = {1991},
+  doi     = {10.1037/0022-3514.60.4.570}
+}
+
+@book{altemeyer1981,
+  author    = {Altemeyer, Bob},
+  title     = {Right-Wing Authoritarianism},
+  publisher = {University of Manitoba Press},
+  address   = {Winnipeg, Canada},
+  year      = {1981}
+}
+
+@book{politisromanowolf1999,
+  author    = {Politis, Dimitris N. and Romano, Joseph P. and Wolf, Michael},
+  title     = {Subsampling},
+  series    = {Springer Series in Statistics},
+  publisher = {Springer},
+  address   = {New York, NY},
+  year      = {1999}
+}
+
+@article{shapirowilk1965,
+  author  = {Shapiro, S. S. and Wilk, M. B.},
+  title   = {An Analysis of Variance Test for Normality (Complete Samples)},
+  journal = {Biometrika},
+  volume  = {52},
+  number  = {3-4},
+  pages   = {591--611},
+  year    = {1965},
+  doi     = {10.1093/biomet/52.3-4.591}
+}
+
+@article{andersondarling1954,
+  author  = {Anderson, T. W. and Darling, D. A.},
+  title   = {A Test of Goodness of Fit},
+  journal = {Journal of the American Statistical Association},
+  volume  = {49},
+  number  = {268},
+  pages   = {765--769},
+  year    = {1954},
+  doi     = {10.1080/01621459.1954.10501232}
+}
+
+@article{lilliefors1967,
+  author  = {Lilliefors, Hubert W.},
+  title   = {On the {Kolmogorov-Smirnov} Test for Normality With Mean and Variance Unknown},
+  journal = {Journal of the American Statistical Association},
+  volume  = {62},
+  number  = {318},
+  pages   = {399--402},
+  year    = {1967},
+  doi     = {10.1080/01621459.1967.10482916}
+}
+
+@article{jarquebera1980,
+  author  = {Jarque, Carlos M. and Bera, Anil K.},
+  title   = {Efficient Tests for Normality, Homoscedasticity and Serial Independence of Regression Residuals},
+  journal = {Economics Letters},
+  volume  = {6},
+  number  = {3},
+  pages   = {255--259},
+  year    = {1980},
+  doi     = {10.1016/0165-1765(80)90024-5}
+}
+
+@article{dagostinopearson1973,
+  author  = {D'Agostino, Ralph B. and Pearson, Egon S.},
+  title   = {Tests for Departure From Normality. Empirical Results for the Distributions of $b_2$ and $\sqrt{b_1}$},
+  journal = {Biometrika},
+  volume  = {60},
+  number  = {3},
+  pages   = {613--622},
+  year    = {1973},
+  doi     = {10.1093/biomet/60.3.613}
+}
+
+@article{csorgofaraway1996,
+  author  = {Cs{\"o}rg{\H o}, S{\'a}ndor and Faraway, Julian J.},
+  title   = {The Exact and Asymptotic Distributions of {Cram{\'e}r-von Mises} Statistics},
+  journal = {Journal of the Royal Statistical Society: Series B},
+  volume  = {58},
+  number  = {1},
+  pages   = {221--234},
+  year    = {1996},
+  doi     = {10.1111/j.2517-6161.1996.tb02077.x}
+}
+
+@article{shapirofrancia1972,
+  author  = {Shapiro, S. S. and Francia, R. S.},
+  title   = {An Approximate Analysis of Variance Test for Normality},
+  journal = {Journal of the American Statistical Association},
+  volume  = {67},
+  number  = {337},
+  pages   = {215--216},
+  year    = {1972},
+  doi     = {10.1080/01621459.1972.10481232}
+}
+
+@article{pearson1900,
+  author  = {Pearson, Karl},
+  title   = {On the Criterion That a Given System of Deviations From the Probable in the Case of a Correlated System of Variables Is Such That It Can Be Reasonably Supposed to Have Arisen From Random Sampling},
+  journal = {The London, Edinburgh, and Dublin Philosophical Magazine and Journal of Science},
+  series  = {5},
+  volume  = {50},
+  number  = {302},
+  pages   = {157--175},
+  year    = {1900},
+  doi     = {10.1080/14786440009463897}
+}
+
+@article{anscombeglynn1983,
+  author  = {Anscombe, F. J. and Glynn, William J.},
+  title   = {Distribution of the Kurtosis Statistic $b_2$ for Normal Samples},
+  journal = {Biometrika},
+  volume  = {70},
+  number  = {1},
+  pages   = {227--234},
+  year    = {1983},
+  doi     = {10.1093/biomet/70.1.227}
+}
+
+@misc{anaratschwender2026,
+  author       = {Anarat, Akin and Schwender, Holger},
+  title        = {A Test for Normality Based on Self-Similarity},
+  year         = {2026},
+  eprint       = {2604.03810},
+  eprinttype   = {arxiv},
+  eprintclass  = {stat.ME},
+  url          = {https://arxiv.org/abs/2604.03810}
+}
+
+@incollection{blascovichtomaka1993,
+  author    = {Blascovich, Jim and Tomaka, Joseph},
+  title     = {Measures of Self-Esteem},
+  booktitle = {Measures of Personality and Social Psychological Attitudes},
+  editor    = {Robinson, John P. and Shaver, Phillip R. and Wrightsman, Lawrence S.},
+  edition   = {3},
+  pages     = {115--160},
+  publisher = {Institute for Social Research},
+  year      = {1993}
+}
+
+@book{rosenberg1986,
+  author    = {Rosenberg, Morris},
+  title     = {Conceiving the Self},
+  publisher = {Robert E. Krieger},
+  address   = {Malabar, FL},
+  year      = {1986}
+}
