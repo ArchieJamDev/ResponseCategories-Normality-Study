@@ -368,12 +368,16 @@ Pearson $\chi^2$ & 19 & 15 & 12 & 3 \\
 
 \section{Discusión}
 \label{sec:discussion}
-% Portar/ampliar desde el párrafo de utilidad práctica de
-% notes/DESIGN.md, Sección 19, más limitaciones (p. ej., la lección de
-% la calibración degenerada al percentil 90 vs. 95, Sección 17, que
-% amerita mencionarse explícitamente como aporte metodológico en sí
-% mismo). Todavía no está redactado como prosa conectada en el borrador
-% en español -- pendiente.
+
+El efecto de la cantidad de categorías de respuesta sobre la potencia de las pruebas de normalidad existe, pero es pequeño y acotado. En simulación, la brecha entre $k=3$ y $k=9$ no supera .045 en promedio y solo alcanza magnitudes apreciables (hasta .149) con tamaños de muestra intermedios, que se desplazan hacia $n$ menores al aumentar la severidad; con $n \geq 500$ prácticamente desaparece. Esto no justifica reducir categorías, pues la confiabilidad y la validez factorial se deterioran por debajo de cuatro (Lozano et al., 2008); indica que, al elegir la prueba de normalidad, $k$ pesa menos que $n$ y que la asimetría y curtosis esperadas.
+
+Los datos reales no permiten aislar $k$: el orden de potencia entre instrumentos siguió la severidad de cada constructo y no su $k$, porque ambos van confundidos. Aun así, la simulación predijo la potencia real con alta concordancia ($r=.981$), lo que respalda la calibración como herramienta de planificación. La modulación por $n$ (H2) fue la única hipótesis confirmada sin reservas.
+
+Entre las pruebas, D'Agostino-Pearson fue la más consistente; el SSTN no superó en potencia a las clásicas y la prueba de curtosis solo conviene ante desviaciones de curtosis.
+
+Un aporte metodológico es una advertencia sobre la calibración: el percentil 95 de asimetría y curtosis de \textcite{cain2017} solo podía alcanzarse con un mecanismo degenerado (casi binario), por lo que se usó el percentil 90. Conviene revisar el mecanismo generativo, no solo la distancia a los objetivos.
+
+Las limitaciones incluyen un compuesto de 10 ítems con un único factor común, un instrumento real por valor de $k$ (con SPS-10 mal ajustado) y que la paridad de $k$ y la tendencia de la brecha con la severidad no pudieron evaluarse en datos reales. Los resultados aplican a puntajes compuestos, no a ítems individuales.
 
 \section*{Disponibilidad de datos}
 % TODO: finalizar una vez decidido el estatus público/anonimizado del
