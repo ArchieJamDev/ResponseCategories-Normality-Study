@@ -334,21 +334,15 @@ Las hipótesis no provienen de literatura previa, que no cubre este cruce de fac
 \subsection{Comparación de las 11 pruebas: potencia bruta y estabilidad frente a \texorpdfstring{$k$}{k}}
 \label{sec:res-comparacion}
 
-Pregunta práctica: ¿qué prueba conviene usar, y bajo qué condiciones? Se calcularon tres versiones comparables de la misma tabla (potencia media $+$ coeficiente de variación de la potencia a través de $k$, como medida de estabilidad):
-
-\begin{enumerate}
-\item \textbf{Simulada limpia} (280 celdas, severidad aislada de $k$ por diseño ---verificado: la asimetría/curtosis lograda por la calibración varía menos de $10^{-5}$ entre los 7 valores de $k$ dentro de cada nivel).
-\item \textbf{Real} (seis instrumentos, $k$ y severidad inevitablemente confundidos).
-\item \textbf{Simulada confundida} (mismas seis combinaciones nivel-$k$ que los instrumentos reales, impuestas artificialmente sobre datos simulados, para poder comparar 1 y 2 en igualdad de condiciones).
-\end{enumerate}
+Se compararon las 11 pruebas con un puntaje combinado (rango de potencia media $+$ rango del coeficiente de variación de la potencia a través de $k$; menor es mejor) en tres escenarios: simulado limpio (280 celdas, severidad aislada de $k$), real (seis instrumentos, $k$ y severidad confundidos) y simulado confundido (las mismas seis combinaciones nivel-$k$ de los instrumentos reales, para compararlos en igualdad de condiciones).
 
 \begin{table}[htbp]
 \small
-\caption{Ranking combinado (potencia $+$ estabilidad a $k$) de las 11 pruebas, en los tres escenarios}
+\caption{Puntaje combinado (rango de potencia $+$ rango de estabilidad a $k$) de las 11 pruebas en los tres escenarios}
 \label{tab:ranking}
 \begin{tabular}{lcccc}
 \toprule
-Prueba & Rank sim.\ limpia & Rank real & Rank sim.\ confundida & Desplazamiento confundida$\leftrightarrow$real \\
+Prueba & Sim.\ limpia & Real & Sim.\ confundida & Desplazamiento confundida$\leftrightarrow$real \\
 \midrule
 D'Agostino-Pearson & 3 & 3 & 3 & \textbf{0} \\
 Epps-Pulley & 9 & 4 & 4 & \textbf{0} \\
@@ -365,14 +359,11 @@ Pearson $\chi^2$ & 19 & 15 & 12 & 3 \\
 \end{tabular}
 \end{table}
 
-\textbf{Lectura para la Discusión:}
-
 \begin{itemize}
-\item \textbf{D'Agostino-Pearson} es la recomendación por defecto: mejor potencia/estabilidad combinada en los tres escenarios, de forma consistente en las tres versiones de este estudio (con el primer candidato de $k=6$, con SPS-10 antes de recalibrar los niveles, y ahora con los niveles anclados a Cain et al.) ---el hallazgo más robusto de toda la comparación.
-\item \textbf{Desplazamiento cero en 6 de las 11 pruebas} (D'Agostino-Pearson, Epps-Pulley, Shapiro-Wilk, Anderson-Darling, Jarque-Bera, Curtosis) es una mejora sustancial respecto a versiones anteriores del estudio (donde como máximo una prueba lograba desplazamiento cero) ---refleja que, una vez corregida la degeneración del nivel muy alto, la correspondencia entre el escenario simulado-confundido y el real es mucho más fiel.
-\item \textbf{SSTN} no compite en potencia bruta (nunca la más potente); su argumento sigue siendo la estabilidad a $k$ cuando la severidad está controlada (escenario simulado limpio, octavo lugar combinado). Su desplazamiento (2) es intermedio ---ni de las más predecibles ni de las menos.
-\item \textbf{Curtosis (Anscombe-Glynn)} tiene desplazamiento cero pero es consistentemente la peor en potencia bruta en los tres escenarios (rank 22 en real y sim.\ confundida) ---recomendable solo cuando se sabe de antemano que la desviación es puramente de curtosis, no de asimetría.
-\item A diferencia de versiones anteriores del estudio, donde el ranking de ``cuál prueba es mejor'' resultaba frágil frente a qué instrumento ocupaba $k=6$, con la calibración final la correspondencia real-simulado es mucho más estable ---sostiene con más fuerza que antes el uso de la Tabla~\ref{tab:ranking} (simulación limpia) como referencia primaria, ahora corroborada de cerca por el escenario confundido y por los datos reales.
+\item \textbf{D'Agostino-Pearson} tiene el mejor puntaje combinado en los tres escenarios, el hallazgo más robusto de la comparación.
+\item Seis de las 11 pruebas tienen desplazamiento cero entre el escenario simulado confundido y el real (D'Agostino-Pearson, Epps-Pulley, Shapiro-Wilk, Anderson-Darling, Jarque-Bera y curtosis), lo que respalda usar la simulación limpia como referencia primaria.
+\item \textbf{SSTN} nunca es la más potente; su puntaje en la simulación limpia (10) queda a medio camino y su desplazamiento (2) es intermedio.
+\item La prueba de \textbf{curtosis} (Anscombe-Glynn) es la peor en los tres escenarios pese a su desplazamiento cero, y solo conviene si se sabe que la desviación es de curtosis.
 \end{itemize}
 
 \section{Discusión}
