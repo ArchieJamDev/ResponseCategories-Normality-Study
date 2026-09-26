@@ -345,4 +345,4 @@ El optimizador encontró una "solución barata": colapsar el mecanismo a una var
 | alto | 75º / 75º | 1.332 | 1.62 |
 | muy_alto | 90º / 90º | 2.401 | 7.52 |
 
-Pendiente: correr la calibración completa de muy_alto en GitHub Actions con el nuevo objetivo, verificar ausencia de degeneración en las 7 celdas de k (no solo k=5), y re-ejecutar la simulación completa antes de recalcular las tablas de resultados.
+**Verificación tras la corrida completa** (calibración run 36229461732, simulación run 36231310528): sin degeneración en ninguna de las 7 celdas de k -- λ entre 0.54 y 0.86 (lejos de 1), umbrales en rango razonable (0.4 a 2.2), dist² máxima 0.0003 en las 35 celdas totales. Los conteos de NA en la simulación completa volvieron a niveles normales (máximo 19 de 10.000 réplicas, salvo D'Agostino-Pearson en n=10 que sigue fallando el 100% de las veces -- limitación ya conocida de esa prueba específica en muestras muy chicas, no relacionada con este problema). Epps-Pulley pasó de potencia≈0 en todo n a un comportamiento sensible (0.34 en n=10, 1.00 desde n=250).
