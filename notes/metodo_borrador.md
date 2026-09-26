@@ -111,15 +111,9 @@ Notas sobre estas seis referencias:
 - **COVIDiSTRESS**: se usa el descriptor de datos publicado en *Scientific Data* (Yamada et al., 2021) en vez de citar el nodo OSF `z39us` directamente, siguiendo la guía APA de citar la publicación del dataset cuando existe una, en vez del repositorio crudo. El autor-grupo intermedio ("COVIDiSTRESS Global Survey Consortium") es el que usa el propio artículo publicado (más de 40 colaboradores individuales), evitando tener que reconstruir esa lista completa.
 - **Adult Hope Scale / OSF `2anvx`**: no se encontró un descriptor de datos publicado equivalente al de COVIDiSTRESS, así que se cita el dataset de OSF directamente. Lista completa de 12 colaboradores bibliográficos (orden e identidad) obtenida de `api.osf.io/v2/nodes/2anvx/bibliographic_contributors/?embed=users`; año confirmado por `date_created` del nodo (2021-01-27). Cada nombre completo se verificó además contra una publicación firmada por esa misma persona (no solo el perfil de OSF, que puede quedar desactualizado), lo que corrigió dos discrepancias: (1) el perfil de OSF lista varios colaboradores sin segundo nombre/inicial en absoluto ("Richard Cowden", "Everett Worthington", "kevin glowiak", "austin lemke", "Laura Shannonhouse") que sí publican con inicial — confirmado como R. G. Cowden, A. W. Lemke y K. J. Glowiak vía Cowden et al. (2021, *Wellbeing, Space and Society*, 2, Article 100048), como E. L. Worthington, Jr. vía su CV institucional (VCU) y múltiples publicaciones recientes, y como L. R. Shannonhouse vía su perfil de publicaciones (Universidad de Iowa/Florida); (2) el perfil de OSF lista el apellido de soltera "McElroy", pero esta autora publica como "McElroy-Heltzel" desde al menos 2019 (confirmado en Sage Journals) — ya vigente para la fecha de registro del dataset (2021), así que se usa el apellido con el que efectivamente publica.
 
-## Pendientes: referencias completas (formato APA, distintas de las de datasets de arriba)
+## Pendientes: referencias completas
 
-Citas usadas en el cuerpo del Método que aún no tienen su referencia completa en ningún lado (ni aquí ni en `introduccion_borrador.md`) — son referencias de método/técnica, no de instrumento ni de dataset:
-
-- Politis, Romano y Wolf (1999) — submuestreo *m-out-of-N* (§2.4).
-- Las once pruebas de normalidad (§2.5): Shapiro y Wilk (1965), Anderson y Darling (1954), Lilliefors (1967), Jarque y Bera (1980), D'Agostino y Pearson (1973), Csörgő y Faraway (1996), Shapiro y Francia (1972), Pearson (1900), Anscombe y Glynn (1983), Anarat y Schwender (2026).
-- Blascovich y Tomaka (1993) y Rosenberg (1986) — respaldan el rango de α publicado de RSE en la Tabla 1 (distinta de Rosenberg 1965, que es el origen de la escala y ya está en la lista de `introduccion_borrador.md`).
-
-Nota: las citas de origen de cada instrumento (Rosenberg 1965, Christie y Geis 1970, Cutrona y Russell 1987, Ashton, Lee y Goldberg 2007, Snyder et al. 1991, Altemeyer 1981) y Cain, Zhang y Yuan (2017) ya están en la lista "Pendientes" de `introduccion_borrador.md` — no se duplican aquí.
+Ver `notes/referencias_pendientes.md` — lista única consolidada (antes duplicada entre este archivo e `introduccion_borrador.md`). Las referencias de dataset (Open-Source Psychometrics Project ×4, Yamada et al., Davis et al.) y la de Sischka et al. (2025) ya están completas arriba, en "Referencias de datasets", y no están en ese archivo.
 
 ## Notas para revisión
 

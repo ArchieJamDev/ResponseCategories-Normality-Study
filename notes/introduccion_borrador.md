@@ -32,4 +32,4 @@ El presente estudio responde esa pregunta con dos aproximaciones complementarias
 
 ## Pendientes
 
-- Referencias completas (formato APA) de: Dillman et al. 2009, Foddy 1994, Rosenberg 1965, Christie y Geis 1970, Cutrona y Russell 1987, Ashton, Lee y Goldberg 2007, Snyder et al. 1991, Altemeyer 1981, Cain, Zhang y Yuan 2017.
+- Referencias completas: ver `notes/referencias_pendientes.md` — lista única consolidada (antes duplicada entre este archivo y `metodo_borrador.md`).
