@@ -39,6 +39,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage[spanish]{babel}
+\spanishdecimal{.}% punto decimal en modo matematico (babel-spanish lo cambia a coma)
 \usepackage{csquotes}
 \usepackage[backend=biber,style=apa,sortcites=true,sorting=nyt]{biblatex}
 \DeclareLanguageMapping{spanish}{spanish-apa}
@@ -212,7 +213,11 @@ Los datos de calibración, simulación y submuestreo generados por este estudio 
 \subsection{Bloque de niveles: efecto de \texorpdfstring{$k$}{k}, \texorpdfstring{$n$}{n} y severidad de no-normalidad}
 \label{sec:res-niveles}
 
-\textbf{Efecto de $k$.} Promediando sobre las 11 pruebas y los ocho tamaños de muestra, la potencia decae al aumentar $k$ en los cinco niveles de severidad (Tabla~\ref{tab:brecha-k}), con una excepción real que se explica más abajo. Desde el nivel bajo-moderado en adelante, la brecha decae de forma monótona (.045$\to$.036$\to$.016$\to$.012) ---una razón de aproximadamente 4 a 1 entre bajo-moderado y muy alto---. El nivel bajo (el más cercano a la normalidad en asimetría) queda por debajo de bajo-moderado en vez de ser el máximo: su objetivo de curtosis ($-1.28$, el percentil 5 de asimetría/curtosis observado en 1.567 distribuciones psicológicas reales; \cite{cain2017}) es una desviación de la normalidad no trivial, no un punto cercano a cero en ambas dimensiones.
+\begin{enumerate}
+\item \textbf{Efecto de $k$.} La potencia decae al aumentar $k$ en los cinco niveles: la brecha entre $k=3$ y $k=9$ va de .012 a .045 (Tabla~\ref{tab:brecha-k}) y decrece de forma monótona desde bajo-moderado hasta muy alto. El nivel bajo es la excepción (.027), porque su curtosis objetivo ($-1.28$) no está cerca de la normalidad.
+\item \textbf{Efecto de $n$.} La potencia media crece con $n$, de .238 en $n=10$ a .984 en $n=1500$.
+\item \textbf{Interacción.} Al aumentar la severidad, el $n$ donde la brecha es máxima se desplaza hacia tamaños menores ($n=50\to25\to10$ de moderado a muy alto) y con menor magnitud (Tabla~\ref{tab:brecha-n-nivel} y Figura~\ref{fig:brecha}); bajo$\to$bajo-moderado repite la excepción. Ninguna brecha se invierte de forma sostenida: $k=3$ iguala o supera a $k=9$ en casi toda la grilla.
+\end{enumerate}
 
 \begin{table}[htbp]
 \caption{Brecha de potencia media entre $k=3$ y $k=9$, por nivel de severidad (promediada sobre los 8 tamaños de muestra)}
@@ -229,22 +234,6 @@ muy alto & 90\textsuperscript{o} / 90\textsuperscript{o} & 2.401 / 7.52 & .012 \
 \bottomrule
 \end{tabular}
 \end{table}
-
-\textbf{Efecto de $n$.} Promediando sobre los cinco niveles y los siete valores de $k$, la potencia crece monotónicamente con $n$, como es esperable de cualquier prueba consistente: de .238 en $n=10$ a .984 en $n=1500$ (Tabla~\ref{tab:potencia-n}).
-
-\begin{table}[htbp]
-\caption{Potencia media (11 pruebas, 5 niveles, 7 valores de $k$) por tamaño de muestra}
-\label{tab:potencia-n}
-\begin{tabular}{lcccccccc}
-\toprule
-$n$ & 10 & 25 & 50 & 100 & 250 & 500 & 1000 & 1500 \\
-\midrule
-Potencia media & .238 & .441 & .626 & .799 & .949 & .981 & .984 & .984 \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\textbf{La interacción de los tres factores.} La brecha de potencia entre $k=3$ y $k=9$ no solo se achica al aumentar la severidad de la no-normalidad ---como muestra la Tabla~\ref{tab:brecha-k}---, sino que el tamaño de muestra en el que esa brecha alcanza su punto máximo \textbf{se desplaza hacia valores de $n$ cada vez más pequeños} a medida que la severidad aumenta (Tabla~\ref{tab:brecha-n-nivel} y Figura~\ref{fig:brecha}) ---con la misma excepción del nivel bajo que en la Tabla~\ref{tab:brecha-k}.
 
 \begin{table}[htbp]
 \caption{Brecha de potencia entre $k=3$ y $k=9$ por nivel de severidad y tamaño de muestra}
@@ -265,8 +254,6 @@ $n$ & bajo & bajo-moderado & moderado & alto & muy alto \\
 \end{tabular}
 \tablenote{En negrita, el $n$ donde la brecha alcanza su máximo dentro de cada nivel.}
 \end{table}
-
-Desde moderado en adelante (moderado$\to$alto$\to$muy alto), el pico se desplaza de forma monótona a $n$ cada vez más chico ($n=50\to25\to10$) y de magnitud cada vez menor, la misma historia que en el diseño original. La excepción es bajo$\to$bajo-moderado: el pico se desplaza en la dirección contraria (de $n=50$ a $n=100$) antes de retomar la tendencia en moderado ---refleja la misma particularidad del nivel bajo señalada en la Tabla~\ref{tab:brecha-k} (su curtosis objetivo, $-1.28$, no es un punto cercano a la normalidad). En ningún nivel la dirección del efecto de $k$ se invierte de forma sostenida: $k=3$ iguala o supera a $k=9$ en la enorme mayoría de la grilla, salvo diferencias de milésimas (ruido Monte Carlo) en celdas donde la brecha ya es prácticamente cero.
 
 % TODO: insertar Figura 1 (notes/figuras/brecha\_k3\_k9\_por\_n\_y\_nivel.svg,
 % convertida a PDF/PNG de alta resolución) con \label{fig:brecha}.
