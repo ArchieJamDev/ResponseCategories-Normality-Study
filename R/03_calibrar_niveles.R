@@ -8,7 +8,7 @@
 # confundirla con k como pasaba en el bloque real (ver notes/DESIGN.md).
 #
 # Objetivos de asimetria/curtosis (25 sep 2026, recalibrados -- ver
-# notes/DESIGN.md Seccion 16): anclados a los percentiles 5/25/50/75/95 de
+# notes/DESIGN.md Secciones 16-17): anclados a percentiles de
 # Cain, Zhang y Yuan (2017, Behavior Research Methods), un relevamiento de
 # asimetria y curtosis de 1.567 distribuciones univariadas reales publicadas
 # en Psychological Science y American Education Research Journal -- en vez
@@ -20,9 +20,22 @@
 # estructuralmente simetricas al signo del sesgo) -- pero Cain et al. no
 # publican percentiles de |asimetria| directamente, asi que se derivaron
 # por interpolacion lineal de la CDF empirica implicita en su Tabla 1
-# (columna "Overall"), resolviendo P(|asimetria|<=m) = F(m) - F(-m) = p
-# para p=.05,.25,.50,.75,.95. Ver notes/DESIGN.md Seccion 16 para el codigo
-# de la interpolacion y la advertencia sobre su precision (aproximacion
+# (columna "Overall"), resolviendo P(|asimetria|<=m) = F(m) - F(-m) = p.
+# Ver notes/DESIGN.md Seccion 16 para el codigo de la interpolacion y la
+# advertencia sobre su precision (aproximacion
+# sobre datos agregados publicados, no sobre las 1.567 observaciones
+# crudas, que no estan disponibles publicamente).
+#
+# OJO -- muy_alto usa el percentil 90, NO el 95 (a diferencia de los otros
+# 4, que usan 5/25/50/75): el objetivo del percentil 95 (asimetria=3.521,
+# curtosis=9.48) resulto ser demasiado extremo para el mecanismo generativo
+# con m=10 items -- el optimizador convergia a una solucion degenerada
+# (lambda=1, umbrales practicamente inalcanzables salvo el primero), que
+# solo permitia 2 valores posibles del compuesto en vez de un rango
+# Likert real, y causaba ~50% de NA en las 11 pruebas por varianza
+# muestral cero en n chicos. El percentil 90 (asimetria=2.401,
+# curtosis=7.52) calibra sin degeneracion (lambda=0.854, umbrales
+# razonables, dist2=4.3e-5) -- ver Seccion 17 de notes/DESIGN.md.
 # sobre datos agregados publicados, no sobre las 1.567 observaciones
 # crudas, que no estan disponibles publicamente).
 #
@@ -64,7 +77,7 @@ objetivos_niveles <- list(
   bajo_moderado = c(skew = 0.276, kurt_exc = -0.57),
   moderado      = c(skew = 0.688, kurt_exc =  0.07),
   alto          = c(skew = 1.332, kurt_exc =  1.62),
-  muy_alto      = c(skew = 3.521, kurt_exc =  9.48)
+  muy_alto      = c(skew = 2.401, kurt_exc =  7.52)
 )
 if (!nivel_elegido %in% names(objetivos_niveles)) {
   stop(sprintf("Nivel desconocido: '%s'. Debe ser uno de: %s",

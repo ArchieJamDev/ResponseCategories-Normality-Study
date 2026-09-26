@@ -317,4 +317,32 @@ Severidad real: asimetría=-1.208, curtosis exceso=1.986 -- la más extrema de l
 
 **Decisión**: correr la calibración completa en GitHub Actions (no localmente, por la Sección 8) con `n_starts=16` (el doble del default) en vez de aumentar la cantidad de ítems o relajar el objetivo -- ver commit que actualiza `.github/workflows/simulate.yml`.
 
-**Resultado de la corrida completa** (run 36136389635, 55m29s): con 16 arranques, muy_alto mejoró 10x respecto a la prueba local con 4 arranques -- dist²=0.0173 en las 7 celdas de k (vs. 0.174 con 4 arranques), asimetría lograda=3.39 (objetivo 3.52, diferencia ~4%), curtosis lograda=9.50 (objetivo 9.48, prácticamente exacta). Los otros 4 niveles (bajo, bajo_moderado, moderado, alto) calibraron prácticamente exactos, dist²≈10⁻¹⁵. Se acepta este ajuste (dist²=0.0173 en muy_alto, dist²≈0 en los otros 4) como suficientemente bueno -- no se justifica más cómputo por una diferencia de 4% en un solo nivel, y se documenta explícitamente en el método que muy_alto es una aproximación, no un ajuste exacto como los otros 4.
+**Resultado de la corrida completa** (run 36136389635, 55m29s): con 16 arranques, muy_alto mejoró 10x respecto a la prueba local con 4 arranques -- dist²=0.0173 en las 7 celdas de k (vs. 0.174 con 4 arranques), asimetría lograda=3.39 (objetivo 3.52, diferencia ~4%), curtosis lograda=9.50 (objetivo 9.48, prácticamente exacta). Los otros 4 niveles (bajo, bajo_moderado, moderado, alto) calibraron prácticamente exactos, dist²≈10⁻¹⁵.
+
+**CORRECCIÓN (25-26 sep 2026): la aceptación de este ajuste fue prematura -- ver Sección 17.** Un dist² bajo NO garantiza una solución no degenerada; se encontró que muy_alto convergió a un mecanismo generativo inválido (ver Sección 17 para el detalle completo y la solución).
+
+## 17. El objetivo "muy_alto" al percentil 95 produce un mecanismo generativo degenerado -- se usa el percentil 90 en su lugar (26 sep 2026)
+
+Al recalcular las tablas de resultados con los niveles recalibrados (Sección 16), la comparación de las 11 pruebas mostró algo imposible: Epps-Pulley con potencia≈0 en el nivel muy_alto en TODOS los tamaños de muestra, incluso n=1500 -- matemáticamente implausible para una desviación tan extrema de la normalidad (cualquier prueba razonable debería tener potencia cercana a 1 ahí).
+
+**Investigación**: revisando los conteos de NA por prueba y n en `nivel_muy_alto_k5.csv`, se encontró que no era un problema exclusivo de Epps-Pulley -- prácticamente TODAS las pruebas (excepto Pearson χ², que no depende de la varianza muestral de la misma forma) tenían ~50% de réplicas con NA en n=10 (4.978 a 5.746 de 10.000), y D'Agostino-Pearson el 100%.
+
+**Causa raíz**: los parámetros calibrados para muy_alto (`data/results/calibracion_niveles.csv`, run 36136389635) eran degenerados: λ=1.0 (sin ruido idiosincrático en ningún ítem -- los 10 ítems quedan perfectamente correlacionados, copias exactas unas de otras) y umbrales `[1.48, 365.03, 365.04, 365.04]` para k=5 -- solo el primer umbral es alcanzable por una normal estándar; los demás están a ~365 desviaciones estándar, inalcanzables en la práctica. Con k=5 categorías nominales, el compuesto solo puede tomar 2 valores reales (10 o 20), con P(compuesto=10)≈0.93. La probabilidad de que una muestra de n=10 caiga TODA en el mismo valor es 0.93¹⁰≈49.2% -- coincide exactamente con el ~50% de NA observado. Cuando eso ocurre, la varianza muestral es cero y cualquier estadístico que divida por ella (la mayoría de las 11 pruebas) queda indefinido.
+
+El optimizador encontró una "solución barata": colapsar el mecanismo a una variable casi binaria satisface el objetivo numérico de momentos (asimetría, curtosis) sin producir una distribución que se parezca a un compuesto Likert real de *k* categorías y *m*=10 ítems -- el dist² bajo (0.0173) no detecta esto porque el objetivo de calibración solo mide distancia en momentos, no plausibilidad del mecanismo generativo.
+
+**Contexto adicional que motivó revisar el objetivo en vez de solo arreglar el optimizador**: ninguno de los 6 instrumentos reales del estudio se acerca al percentil 95 de Cain et al. -- la curtosis real más alta es SPS-10 con 1.986 (Sección 15), muy por debajo de 9.48. Un "muy_alto" tan extremo no tiene ningún instrumento real cerca para validar, además de ser generativamente inalcanzable de forma no degenerada.
+
+**Decisión**: usar el **percentil 90** en vez del 95 para muy_alto -- asimetría=2.401, curtosis=7.52 (mismo método de interpolación que en la Sección 16 para |asimetría|; curtosis con signo directo de Cain et al., interpolada linealmente entre el 75º y 95º ya que el 90º no es uno de los percentiles que publican). Verificación local (no oficial, solo factibilidad) con 6 arranques: λ=0.854 (razonable, lejos de 1), umbrales `[0.70, 1.68, 2.36, 2.54]` (todos alcanzables), dist²=4.3×10⁻⁵ -- ajuste casi exacto y sin degeneración. Se descartó la opción de restringir el optimizador contra soluciones degeneradas (más trabajo, sin garantía de que exista una solución no degenerada al percentil 95 con m=10 ítems) y la de aumentar la cantidad de ítems (cambiaría la comparabilidad del diseño).
+
+**Nueva Tabla 2 (definitiva)**:
+
+| Nivel | Percentil (asimetría / curtosis) | Asimetría objetivo | Curtosis exceso objetivo |
+|---|---|---|---|
+| bajo | 5º / 5º | 0.053 | −1.28 |
+| bajo_moderado | 25º / 25º | 0.276 | −0.57 |
+| moderado | 50º / 50º | 0.688 | 0.07 |
+| alto | 75º / 75º | 1.332 | 1.62 |
+| muy_alto | 90º / 90º | 2.401 | 7.52 |
+
+Pendiente: correr la calibración completa de muy_alto en GitHub Actions con el nuevo objetivo, verificar ausencia de degeneración en las 7 celdas de k (no solo k=5), y re-ejecutar la simulación completa antes de recalcular las tablas de resultados.
