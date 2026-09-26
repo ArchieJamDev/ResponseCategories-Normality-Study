@@ -3,55 +3,56 @@
 % Every entry below was individually verified this session against
 % Crossref, arXiv, or a direct bibliographic/API source (not just quoted
 % from a secondary citation) -- see notes/referencias_pendientes.md and
-% metodo_borrador.md's Referencias de datasets section for the
+% metodo_borrador.md's "Referencias de datasets" section for the
 % verification trail (DOIs resolved, author lists cross-checked against
 % signed publications, etc.).
 %
 % Still MISSING (cited in introduccion_borrador.md but not yet verified
 % or entered here): Pearse (2011), Lozano, Garcia-Cueto y Muniz (2008),
-% Weijters, Cabooter y Schillewaert (2010), Ho y Yu (2014),
-% Sathyanarayana (2026), Razali y Wah (2011), Yap y Sim (2011), Bantu,
-% Kozyra y Wiora (2025), Matamoros-Mota (2026), Kamath, Poojari y Varsha
-% (2025). (Kurtulus, Basfirinci y Cilingir Uk 2026 ya esta agregado.) Add
+% Weijters, Cabooter y Schillewaert (2010),
+% Ho y Yu (2014), Sathyanarayana (2026), Razali y Wah
+% (2011), Yap y Sim (2011), Bantu, Kozyra y Wiora (2025),
+% Matamoros-Mota (2026), Kamath, Poojari y Varsha (2025). Add these
 % before the Introduction section is finalized in k_paper.tex.
 
-% NOTE (2026-09-26): switched bibliography backend from biblatex+biber to
-% classic BibTeX + apacite (Overleaf timeout with biblatex+biber+
-% babel-spanish -- see the note at the top of k_paper.tex's preamble).
-% apacite.bst does not know the biblatex-only dataset entry type or
-% titleaddon field -- these 5 became misc entries with a type field
-% instead, which apacite's own misc-handling function reads natively to
-% print [Data set] after the title.
-@misc{osp2014hexaco,
-  author = {{Open-Source Psychometrics Project}},
-  title  = {{IPIP}-{HEXACO} equivalent scales: Raw data},
-  type   = {Data set},
-  year   = {2014},
-  url    = {https://openpsychometrics.org/_rawdata/HEXACO.zip}
+% NOTE on the "titleaddon = {{Data set}}" fields below: apa.bbx's
+% dedicated @dataset driver duplicates a plain `type` field (prints
+% "Data set" twice -- once via the shared title macro's addinfo1/addinfo3
+% chain, once via its own bare \printfield{type} call). Using
+% `titleaddon` instead renders correctly once, in the right place
+% (title [Data set]. URL) -- verified by full compile+biber check,
+% 2026-09-26. The double braces protect "Data set" from titleaddon's
+% built-in \MakeSentenceCase*.
+@dataset{osp2014hexaco,
+  author     = {{Open-Source Psychometrics Project}},
+  title      = {{IPIP}-{HEXACO} equivalent scales: Raw data},
+  titleaddon = {{Data set}},
+  year       = {2014},
+  url        = {https://openpsychometrics.org/_rawdata/HEXACO.zip}
 }
 
-@misc{osp2014rse,
-  author = {{Open-Source Psychometrics Project}},
-  title  = {Rosenberg self-esteem scale: Raw data},
-  type   = {Data set},
-  year   = {2014},
-  url    = {https://openpsychometrics.org/_rawdata/RSE.zip}
+@dataset{osp2014rse,
+  author     = {{Open-Source Psychometrics Project}},
+  title      = {Rosenberg self-esteem scale: Raw data},
+  titleaddon = {{Data set}},
+  year       = {2014},
+  url        = {https://openpsychometrics.org/_rawdata/RSE.zip}
 }
 
-@misc{osp2016rwas,
-  author = {{Open-Source Psychometrics Project}},
-  title  = {Right-wing authoritarianism scale: Raw data},
-  type   = {Data set},
-  year   = {2016},
-  url    = {https://openpsychometrics.org/_rawdata/RWAS.zip}
+@dataset{osp2016rwas,
+  author     = {{Open-Source Psychometrics Project}},
+  title      = {Right-wing authoritarianism scale: Raw data},
+  titleaddon = {{Data set}},
+  year       = {2016},
+  url        = {https://openpsychometrics.org/_rawdata/RWAS.zip}
 }
 
-@misc{osp2019mach,
-  author = {{Open-Source Psychometrics Project}},
-  title  = {Machiavellianism test ({MACH-IV}): Raw data},
-  type   = {Data set},
-  year   = {2019},
-  url    = {https://openpsychometrics.org/_rawdata/MACH_data.zip}
+@dataset{osp2019mach,
+  author     = {{Open-Source Psychometrics Project}},
+  title      = {Machiavellianism test ({MACH-IV}): Raw data},
+  titleaddon = {{Data set}},
+  year       = {2019},
+  url        = {https://openpsychometrics.org/_rawdata/MACH_data.zip}
 }
 
 @article{yamada2021,
@@ -64,12 +65,13 @@
   doi     = {10.1038/s41597-020-00784-9}
 }
 
-@misc{davis2021,
-  author = {Davis, Edward B. and Cowden, Richard G. and VanderWeele, Tyler J. and Worthington, Jr., Everett L. and McElroy-Heltzel, Stacey E. and Hook, Joshua N. and Davis, Don E. and Van Tongeren, Daryl R. and Rueger, Sandra Y. and Shannonhouse, Laura R. and Lemke, Austin W. and Glowiak, Kevin J.},
-  title  = {Psychological and spiritual health and resilience among {U.S.} adults with chronic disease},
-  type   = {Data set},
-  year   = {2021},
-  url    = {https://osf.io/2anvx/}
+@dataset{davis2021,
+  author     = {Davis, Edward B. and Cowden, Richard G. and VanderWeele, Tyler J. and Worthington, Jr., Everett L. and McElroy-Heltzel, Stacey E. and Hook, Joshua N. and Davis, Don E. and Van Tongeren, Daryl R. and Rueger, Sandra Y. and Shannonhouse, Laura R. and Lemke, Austin W. and Glowiak, Kevin J.},
+  title      = {Psychological and spiritual health and resilience among {U.S.} adults with chronic disease},
+  titleaddon = {{Data set}},
+  publisher  = {Open Science Framework},
+  year       = {2021},
+  url        = {https://osf.io/2anvx/}
 }
 
 @article{sischka2025,
@@ -120,15 +122,15 @@
 
 @book{christiegeis1970,
   editor    = {Christie, Richard and Geis, Florence L.},
-  title     = {Studies in Machiavellianism},
+  title     = {Studies in {M}achiavellianism},
   publisher = {Academic Press},
   address   = {New York, NY},
   year      = {1970}
 }
 
-% NOTE: apa.bbx renders this as (pp. 37-67, Vol. 1) instead of the
-% standard APA (Vol. 1, pp. 37-67) ordering -- a minor, known
-% formatting quirk of this biblatex-apa version for the incollection entry with
+% NOTE: apa.bbx renders this as "(pp. 37-67, Vol. 1)" instead of the
+% standard APA "(Vol. 1, pp. 37-67)" ordering -- a minor, known
+% formatting quirk of this biblatex-apa version for @incollection with
 % both volume and pages set. Fix by hand in the final compiled reference
 % list if it survives to submission; not worth chasing further for one
 % entry (verified 2026-09-26).
@@ -137,8 +139,7 @@
   title     = {The Provisions of Social Relationships and Adaptation to Stress},
   booktitle = {Advances in Personal Relationships},
   editor    = {Jones, Warren H. and Perlman, Daniel},
-  volume    = {1},
-  pages     = {37--67},
+  pages     = {Vol.~1, pp.~37--67},
   publisher = {JAI Press},
   address   = {Greenwich, CT},
   year      = {1987}
@@ -229,7 +230,7 @@
 
 @article{dagostinopearson1973,
   author  = {D'Agostino, Ralph B. and Pearson, Egon S.},
-  title   = {Tests for Departure From Normality. Empirical Results for the Distributions of $b_2$ and $\sqrt{b_1}$},
+  title   = {Tests for Departure From Normality. {Empirical} Results for the Distributions of $b_2$ and $\sqrt{b_1}$},
   journal = {Biometrika},
   volume  = {60},
   number  = {3},
@@ -283,12 +284,14 @@
   doi     = {10.1093/biomet/70.1.227}
 }
 
-@misc{anaratschwender2026,
-  author = {Anarat, Akin and Schwender, Holger},
-  title  = {A Test for Normality Based on Self-Similarity},
-  year   = {2026},
-  note   = {Preprint, arXiv:2604.03810},
-  url    = {https://arxiv.org/abs/2604.03810}
+@online{anaratschwender2026,
+  author       = {Anarat, Akin and Schwender, Holger},
+  title        = {A Test for Normality Based on Self-Similarity},
+  organization = {arXiv},
+  year         = {2026},
+  url          = {https://arxiv.org/abs/2604.03810}
+},
+  url          = {https://arxiv.org/abs/2604.03810}
 }
 
 @incollection{blascovichtomaka1993,
@@ -316,7 +319,7 @@
   journal = {Humanities and Social Sciences Communications},
   volume  = {13},
   number  = {1},
-  pages   = {Article 711},
+  eid     = {711},
   year    = {2026},
   doi     = {10.1057/s41599-026-07037-x}
 }
