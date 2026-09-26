@@ -95,6 +95,8 @@ Brecha de potencia media (11 pruebas, promediada sobre n) entre k=3 y k=9, por n
 
 Implicación práctica para el paper: el efecto de k sobre la potencia de las pruebas de normalidad no es una propiedad fija del diseño del instrumento -- depende de qué tan cerca de la normalidad está el constructo que se está midiendo. Es más consecuente para constructos con desviaciones sutiles (la mayoría de la práctica psicométrica aplicada) que para constructos con desviaciones extremas y obvias.
 
+**ACTUALIZACIÓN (26 sep 2026): la tabla y los niveles de esta sección son los del diseño original (anclados a instrumentos propios) -- ver Sección 18 para los valores recalculados con los niveles anclados a Cain et al. (2017).** La dirección del hallazgo se sostiene, pero la magnitud ya NO decae de forma perfectamente monótona en los 5 niveles (hay una excepción real en el nivel "bajo", ver Sección 18 y Tabla 3 de `notes/resultados_borrador.md`) -- esta sección se mantiene como registro histórico del hallazgo original.
+
 ## 10. Búsqueda de un instrumento real con k=6 (23-25 sep 2026)
 
 La Sección 2 documentó la ausencia de datasets abiertos con k=6 o k=8 tras una búsqueda en openpsychometrics.org, OSF, Kaggle y candidatos específicos de la literatura. Antes de dar la limitación por cerrada, se hizo una segunda búsqueda más intensiva, extendida a repositorios institucionales de ciencias sociales y con la colaboración directa del usuario. Un primer candidato encontrado en esa búsqueda se descartó tras verificación (ver Sección 14 para el criterio de descarte); el instrumento finalmente usado es SPS-10 (Sección 15).
@@ -130,16 +132,29 @@ La simulación de niveles (Sección 6) usa siempre m=10 ítems fijos (`R/04_simu
 
 La FORMA del compuesto (asimetría, curtosis) se mantiene estable entre el compuesto completo y el promedio de subconjuntos de 10 ítems en ambos casos -- la confiabilidad sí cae con menos ítems (esperado por Spearman-Brown), más en MACH-IV (escala multifacética) que en RWAS (escala muy homogénea), pero eso es un hecho psicométrico esperado, no evidencia de que la forma del compuesto esté distorsionada por tener más ítems que la simulación.
 
-**Prueba cuantitativa directa** (¿los datasets con más ítems predicen sistemáticamente mejor la potencia real, más allá de lo que ya explica el ajuste de severidad?): usando los 6 instrumentos como unidad de análisis (`m_items`, `dist_severidad` de la Sección 11 y el error absoluto medio real-vs-simulado de la sección de validación), la correlación simple entre cantidad de ítems y error de predicción es engañosa (ρ=-0.75, más ítems parece asociarse a menos error) porque RWAS combina a la vez el mayor N de ítems (22) y el mejor ajuste de severidad (dist=0.002) -- pura coincidencia entre las dos variables, no un efecto de ítems.
+**Prueba cuantitativa directa** (¿los datasets con más ítems predicen sistemáticamente mejor la potencia real, más allá de lo que ya explica el ajuste de severidad?): usando los 6 instrumentos como unidad de análisis (`m_items`, `dist_severidad` y el error absoluto medio real-vs-simulado de §3.3 del Resultados).
 
-Controlando `dist_severidad` (regresión múltiple `error_abs ~ dist_severidad + m_items`, N=6, 3 gl residuales):
+**ACTUALIZACIÓN (26 sep 2026): recalculado con las distancias de severidad de la calibración final (Sección 18), que ya no son las mismas que cuando se hizo este análisis por primera vez** (los niveles ya no están anclados a instrumentos propios, así que ninguna distancia es artificialmente cercana a cero):
 
 ```
-dist_severidad:  coef=0.272,  p=.038 *
-m_items:         coef=0.0009, p=.853  (no significativo; correlación parcial ~0.12)
+                dist_severidad  dif_abs_media  m_items
+rse_k4          0.299           0.058          10
+mach_k5         0.162           0.015          20
+sps_k6          0.387           0.092          10
+hexaco_k7       0.066           0.034          10
+ahs_k8          0.273           0.021          8
+rwas_k9         0.450           0.027          22
 ```
 
-**Conclusión**: la brecha entre lo que predice la simulación y la potencia real observada se explica casi enteramente por qué tan bien calibrada está la severidad de cada instrumento (Sección 9/11) -- la cantidad de ítems, aunque varía de 8 a 22 frente a los m=10 fijos de la simulación, no aporta una distorsión sistemática detectable una vez controlada la severidad. Esto respalda usar los 6 instrumentos reales tal como están (con su cantidad nativa de ítems), sin necesidad de reconstruir compuestos artificiales de 10 ítems para el análisis principal del paper. Limitación honesta: con solo 6 datasets (3 gl residuales) la potencia para detectar un efecto pequeño de ítems es muy baja -- esto es evidencia de ausencia de un efecto GRANDE, no prueba definitiva de que no exista ningún efecto.
+Regresión múltiple `error_abs ~ dist_severidad + m_items` (N=6, 3 gl residuales):
+
+```
+dist_severidad:  coef=0.109,  p=.307  (ya no significativo)
+m_items:         coef=-0.0028, p=.277  (tampoco significativo)
+modelo completo: F=1.32, p=.388
+```
+
+**Conclusión actualizada**: con las distancias no circulares, NI la severidad de ajuste NI la cantidad de ítems alcanzan significancia individual en esta regresión de 6 puntos -- el mensaje central se mantiene (no hay evidencia de que la cantidad de ítems distorsione sistemáticamente la validación), pero ahora es un resultado de potencia baja en ambos predictores, no una demostración limpia de que la severidad domina y los ítems no. Con solo 6 datasets (3 gl residuales) esta regresión nunca tuvo mucha potencia -- es evidencia de ausencia de un efecto GRANDE de cualquiera de los dos predictores, no prueba definitiva de que ninguno tenga efecto. Sigue respaldando usar los 6 instrumentos reales tal como están, sin necesidad de reconstruir compuestos artificiales de 10 ítems.
 
 ## 13. Comparación de las 11 pruebas: potencia bruta, estabilidad a k, y qué tan predecible es su comportamiento real desde la simulación (24-25 sep 2026)
 
