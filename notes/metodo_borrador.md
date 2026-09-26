@@ -10,7 +10,7 @@ El estudio combina dos componentes complementarios, ambos evaluados con la misma
 
 ## 2.2. Instrumentos psicométricos reales
 
-Los seis instrumentos usados en el componente de datos reales se resumen en la Tabla 1. Se seleccionaron específicamente por su cantidad nativa de categorías de respuesta —no colapsada ni modificada post-hoc—, buscando cubrir el rango más amplio posible de *k* disponible en datos abiertos: *k*=4, 5 y 7 vienen del catálogo de openpsychometrics.org (RSE, MACH-IV, HEXACO); *k*=9 también (RWAS); *k*=6 y *k*=8, ausentes de ese catálogo, se localizaron en Open Science Framework tras una búsqueda más amplia (SPS-10, de la encuesta COVIDiSTRESS Global Survey; y la Adult Hope Scale, de un estudio longitudinal sobre enfermedad crónica).
+Los seis instrumentos usados en el componente de datos reales se resumen en la Tabla 1. Se seleccionaron específicamente por su cantidad nativa de categorías de respuesta —no colapsada ni modificada post-hoc—, buscando cubrir el rango más amplio posible de *k* disponible en datos abiertos: *k*=4, 5 y 7 vienen del catálogo de openpsychometrics.org (Open-Source Psychometrics Project, s.f.) (RSE, MACH-IV, HEXACO); *k*=9 también (RWAS); *k*=6 y *k*=8, ausentes de ese catálogo, se localizaron en Open Science Framework tras una búsqueda más amplia (SPS-10, de la encuesta COVIDiSTRESS Global Survey; Yamada, Ćepulić, COVIDiSTRESS Global Survey Consortium y Lieberoth, 2021; y la Adult Hope Scale, de un estudio longitudinal sobre enfermedad crónica; Davis et al., 2021).
 
 **Tabla 1**
 *Instrumentos reales usados, su cantidad nativa de categorías de respuesta y parámetros psicométricos*
@@ -79,13 +79,25 @@ El código completo (extracción de datos reales, calibración y simulación del
 
 Los datos crudos de los seis instrumentos reales provienen de dos fuentes abiertas distintas:
 
-- **RSE, MACH-IV, HEXACO (faceta Expresividad) y RWAS**: catálogo de datos abiertos de openpsychometrics.org.
-- **SPS-10**: COVIDiSTRESS Global Survey (Open Science Framework, código `z39us`; Lieberoth et al.), archivo `COVIDiSTRESS global survey May 30 2020 (final cleaned file).csv`.
-- **Adult Hope Scale**: estudio longitudinal sobre enfermedad crónica (Open Science Framework, código `2anvx`), solo la ola T1 (línea base).
+- **RSE, MACH-IV, HEXACO (faceta Expresividad) y RWAS**: catálogo de datos abiertos de openpsychometrics.org (Open-Source Psychometrics Project, s.f.).
+- **SPS-10**: COVIDiSTRESS Global Survey (Open Science Framework, código `z39us`; Yamada, Ćepulić, COVIDiSTRESS Global Survey Consortium y Lieberoth, 2021), archivo `COVIDiSTRESS global survey May 30 2020 (final cleaned file).csv`.
+- **Adult Hope Scale**: estudio longitudinal sobre enfermedad crónica (Open Science Framework, código `2anvx`; Davis et al., 2021), solo la ola T1 (línea base).
 
 Los datos de calibración, simulación y submuestreo generados por este estudio (no los datos crudos de terceros, que se redistribuyen según los términos de cada fuente) se archivan como parte del historial del repositorio, junto con los *artifacts* de cada corrida de GitHub Actions.
 
 ---
+
+## Referencias de datasets (formato APA 7ma, para la lista de referencias final)
+
+- Open-Source Psychometrics Project. (s.f.). *Open psychology data: Raw data from online personality tests* [Data set]. Recuperado el 26 de septiembre de 2026, de https://openpsychometrics.org/_rawdata/
+- Yamada, Y., Ćepulić, D.-B., COVIDiSTRESS Global Survey Consortium, & Lieberoth, A. (2021). COVIDiSTRESS Global Survey dataset on psychological and behavioural consequences of the COVID-19 outbreak. *Scientific Data, 8*, Article 3. https://doi.org/10.1038/s41597-020-00784-9
+- Davis, E. B., Cowden, R. G., VanderWeele, T. J., Worthington, E. L., Jr., McElroy, S. E., Hook, J. N., Davis, D. E., Van Tongeren, D. R., & Rueger, S. Y. (2021). *Psychological and spiritual health and resilience among U.S. adults with chronic disease* [Data set]. Open Science Framework. https://doi.org/10.17605/OSF.IO/2ANVX
+
+Notas sobre estas tres referencias:
+
+- **openpsychometrics.org** no tiene autor individual ni fecha de publicación fija (catálogo vivo, actualizado continuamente) — se cita como autor-grupo con "s.f." y fecha de recuperación, siguiendo la convención APA 7 para obras en línea sin fecha. El repositorio hermano (SSTN-Normality-Study) menciona esta misma fuente solo como URL suelta en prosa, sin cita formal — no hay precedente que replicar, esta es la primera vez que se formaliza.
+- **COVIDiSTRESS**: se usa el descriptor de datos publicado en *Scientific Data* (Yamada et al., 2021) en vez de citar el nodo OSF `z39us` directamente, siguiendo la guía APA de citar la publicación del dataset cuando existe una, en vez del repositorio crudo. El autor-grupo intermedio ("COVIDiSTRESS Global Survey Consortium") es el que usa el propio artículo publicado (más de 40 colaboradores individuales), evitando tener que reconstruir esa lista completa.
+- **Adult Hope Scale / OSF `2anvx`**: no se encontró un descriptor de datos publicado equivalente al de COVIDiSTRESS, así que se cita el dataset de OSF directamente. Autores y orden confirmados vía la API pública de OSF (`api.osf.io/v2/nodes/2anvx/bibliographic_contributors/`); año confirmado por `date_created` del nodo (2021-01-27). Pendiente de verificación final antes de someter: algunos nombres completos (p. ej. "Stacey Elizabeth McElroy", "Joshua Hook") se abreviaron a iniciales siguiendo el formato APA, pero no se confirmó cada segundo nombre/inicial contra una publicación firmada por esa persona — revisar contra un artículo de estos mismos autores antes de la versión final.
 
 ## Notas para revisión
 
