@@ -71,7 +71,19 @@ Se evaluó la siguiente batería de once pruebas de normalidad: Shapiro-Wilk (Sh
 
 ## 2.6. Implementación y reproducibilidad
 
-Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1), sobre la infraestructura de GitHub Actions (*runners* ubuntu-latest, paralelización por celda mediante `strategy: matrix`), con `r-lib/actions/setup-r-dependencies` para el cacheo de dependencias. Ninguna corrida real (extracción de datos, calibración, simulación, submuestreo) se ejecutó en una máquina local: los resultados reportados provienen exclusivamente de corridas archivadas en el repositorio de desarrollo, con historial de commits verificable. El código completo, incluida la configuración exacta de la infraestructura de simulación, está disponible en el repositorio citado en la sección de disponibilidad de datos y código.
+Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1), sobre la infraestructura de GitHub Actions (*runners* ubuntu-latest, paralelización por celda mediante `strategy: matrix`), con `r-lib/actions/setup-r-dependencies` para el cacheo de dependencias. Ninguna corrida real (extracción de datos, calibración, simulación, submuestreo) se ejecutó en una máquina local: los resultados reportados provienen exclusivamente de corridas archivadas en el repositorio de desarrollo, con historial de commits verificable. El código completo, incluida la configuración exacta de la infraestructura de simulación, está disponible en el repositorio citado en §2.7.
+
+## 2.7. Disponibilidad de datos y código
+
+El código completo (extracción de datos reales, calibración y simulación del bloque de niveles, submuestreo del bloque real, agregación de resultados, y la configuración de GitHub Actions que ejecuta cada paso) está disponible en el repositorio de desarrollo del estudio.
+
+Los datos crudos de los seis instrumentos reales provienen de dos fuentes abiertas distintas:
+
+- **RSE, MACH-IV, HEXACO (faceta Expresividad) y RWAS**: catálogo de datos abiertos de openpsychometrics.org.
+- **SPS-10**: COVIDiSTRESS Global Survey (Open Science Framework, código `z39us`; Lieberoth et al.), archivo `COVIDiSTRESS global survey May 30 2020 (final cleaned file).csv`.
+- **Adult Hope Scale**: estudio longitudinal sobre enfermedad crónica (Open Science Framework, código `2anvx`), solo la ola T1 (línea base).
+
+Los datos de calibración, simulación y submuestreo generados por este estudio (no los datos crudos de terceros, que se redistribuyen según los términos de cada fuente) se archivan como parte del historial del repositorio, junto con los *artifacts* de cada corrida de GitHub Actions.
 
 ---
 
@@ -82,3 +94,4 @@ Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1), sobre la in
 - Pendiente: decidir si se incluye el detalle completo de las fórmulas (momentos, parametrización de umbrales `primer_umbral + cumsum(exp(log_gaps))`, transformación `plogis`/`qlogis` de λ) en el cuerpo del Método o se relega a un apéndice/material suplementario.
 - Confirmado: se eliminaron todas las referencias a "estudio hermano"/trabajo comparado en el texto del Método (instrumentos reales, calibración de λ, submuestreo m-out-of-N, batería de pruebas) — el paper ahora se sostiene sin depender de mencionar trabajo propio no publicado.
 - Confirmado: "remuestreo" reemplazado por "submuestreo aleatorio" en todo el documento.
+- Pendiente: §2.7 dice "el repositorio de desarrollo del estudio" sin nombrarlo ni enlazarlo — falta decidir si el repositorio (`github.com/ArchieJamDev/ResponseCategories-Normality-Study`) se hace público o se anonimiza antes de someter, según la política de revisión por pares de la revista de destino, y completar la URL/enlace definitivo recién en ese momento.
