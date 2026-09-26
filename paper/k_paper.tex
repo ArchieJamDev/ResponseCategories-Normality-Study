@@ -265,7 +265,11 @@ $n$ & bajo & bajo-moderado & moderado & alto & muy alto \\
 \subsection{Bloque de datos reales: potencia por instrumento}
 \label{sec:res-real}
 
-Sobre los seis instrumentos reales, la potencia media (11 pruebas) crece con $n$ en los seis casos, como es esperable (Tabla~\ref{tab:potencia-instrumento}). El patrón entre instrumentos no reproduce directamente el orden de $k$: SPS-10 ($k=6$) y RWAS ($k=9$) alcanzan la potencia más alta en $n$ chicos ---.158 y .364 en $n=10$, .390 y .749 en $n=25$ respectivamente---, seguidos de AHS ($k=8$, .099 en $n=10$, .217 en $n=25$), mientras que RSE ($k=4$), MACH-IV ($k=5$) y HEXACO ($k=7$) se mantienen agrupados entre sí y muy por debajo de los tres anteriores hasta $n \approx 250$.
+\begin{enumerate}
+\item La potencia media crece con $n$ en los seis instrumentos (Tabla~\ref{tab:potencia-instrumento}).
+\item El orden no sigue el de $k$: SPS-10 ($k=6$) y RWAS ($k=9$) tienen la mayor potencia con $n$ pequeño (.158 y .364 en $n=10$; .390 y .749 en $n=25$), seguidos de AHS ($k=8$; .099 y .217), mientras RSE, MACH-IV y HEXACO quedan agrupados muy por debajo hasta $n \approx 250$.
+\item Al asignar cada instrumento a su nivel simulado más cercano (distancia euclidiana en asimetría/curtosis, con $|\text{asimetría}|$), RSE, MACH-IV y HEXACO caen en bajo-moderado, AHS en moderado y SPS-10 y RWAS en alto: el orden de potencia sigue la severidad real y no $k$.
+\end{enumerate}
 
 \begin{table}[htbp]
 \caption{Potencia media (11 pruebas) por instrumento real y tamaño de muestra}
@@ -285,12 +289,16 @@ RWAS (9) & .364 & .749 & .928 & .954 & .984 & .998 & 1.000 & 1.000 \\
 \tablenote{AHS no tiene celda en $n=1500$ porque su $N$ nativo (1\,036) no alcanza ese tamaño de submuestra sin reemplazo (ver Método).}
 \end{table}
 
-Este patrón ---potencia mayor en los instrumentos de severidad real más extrema (RWAS, SPS-10, AHS), no en un orden simple de $k$--- tiene una explicación cuantificada, no solo cualitativa: los seis instrumentos reales difieren simultáneamente en $k$ y en la asimetría/curtosis real del constructo medido, dos factores que el bloque de niveles mantiene deliberadamente separados. Asignando a cada instrumento su nivel de severidad simulado más cercano (distancia euclidiana en el espacio asimetría/curtosis, usando $|\text{asimetría}|$ para no penalizar el signo, sobre los niveles anclados a percentiles de \cite{cain2017} ---ver Tabla~\ref{tab:brecha-k}), RSE, MACH-IV y HEXACO caen en bajo-moderado; SPS-10 y RWAS caen en alto; AHS cae en moderado ---el orden de potencia de la Tabla~\ref{tab:potencia-instrumento} sigue de cerca el orden de severidad real, no el de $k$. El desarrollo completo de este análisis está en las subsecciones siguientes (Validación de la Calibración de Niveles a Comparación de las 11 Pruebas).
-
 \subsection{Validación de la calibración de niveles contra los 6 instrumentos reales}
 \label{sec:res-validacion}
 
-Para cada instrumento real se comparó la potencia observada (Tabla~\ref{tab:potencia-instrumento}) contra la potencia que predice la celda simulada correspondiente (mismo $k$, nivel de severidad más cercano por distancia euclidiana), $n$ por $n$ (Tabla~\ref{tab:validacion}).
+Se comparó la potencia observada de cada instrumento con la de su celda simulada (mismo $k$, nivel más cercano), $n$ por $n$ (Tabla~\ref{tab:validacion}).
+
+\begin{enumerate}
+\item Sobre las 47 celdas combinadas, $r=.981$; por instrumento, $r \geq .957$.
+\item Los niveles están anclados a una fuente externa \parencite{cain2017} y no a instrumentos del estudio, de modo que la validación no es circular.
+\item La distancia de ajuste (0.066--0.450) se asocia de forma moderada con el error de predicción (Spearman $\rho=.37$): la calibración generaliza incluso sin un ajuste casi perfecto.
+\end{enumerate}
 
 \begin{table}[htbp]
 \small
@@ -310,26 +318,18 @@ RWAS (9) & alto & 0.450 & .995 & .027 \\
 \end{tabular}
 \end{table}
 
-Sobre las 47 celdas combinadas, la correlación global entre potencia real y simulada es $r=.981$ (mediana de diferencia absoluta muy baja). Un punto notable: estos niveles ya no están anclados a instrumentos propios del estudio (a diferencia de una versión anterior del diseño, donde los niveles se calibraban cerca de RSE y RWAS) ---son niveles genuinamente independientes, anclados a percentiles de una fuente externa \parencite{cain2017}. Que la validación se sostenga igual de fuerte ($r=.981$, incluso mejor que en la versión anterior) bajo esta condición más exigente es una confirmación más sólida de la calibración por niveles que la que ofrecía el diseño original.
-
-La relación entre distancia de ajuste y error de predicción es positiva pero moderada (Spearman $\rho=.37$) ---más débil que en versiones anteriores del diseño, donde la distancia predecía casi perfectamente el error. Con niveles independientes, la predicción se mantiene fuerte ($r \geq .957$ en los seis instrumentos) sin importar tanto la distancia exacta dentro del rango observado (0.066--0.450) ---sugiere que, dentro de ese rango, la calibración por niveles generaliza razonablemente bien incluso sin un ajuste casi perfecto.
-
-Esto valida la calibración por niveles ($\lambda$ libre, Bloque de Niveles del Método) como una herramienta predictiva confiable, ahora demostrada de forma no circular. La discusión de las hipótesis específicas puestas a prueba con estos seis instrumentos (efecto de $k$, modulación por $n$, paridad, comparación de las 11 pruebas) se desarrolla en Hipótesis Puestas a Prueba en Datos Reales y en Comparación de las 11 Pruebas, más abajo.
-
 \subsection{Hipótesis puestas a prueba en datos reales (6 instrumentos, \texorpdfstring{$k=4$ a $9$}{k=4 a 9})}
 \label{sec:res-hipotesis}
 
-Las hipótesis que siguen no se formularon a partir de literatura previa, que no cubre este cruce de factores, ni fueron preregistradas: surgen de los patrones del bloque de niveles (subsección anterior), cuya solidez descansa en el diseño de la simulación, y aquí se contrastan con los seis instrumentos reales (RSE $k=4$, MACH-IV $k=5$, SPS-10 $k=6$, HEXACO $k=7$, AHS $k=8$, RWAS $k=9$). Ver el registro de decisiones metodológicas del repositorio para el detalle estadístico completo de cada punto, incluido el proceso de selección del instrumento de $k=6$.
+Las hipótesis no provienen de literatura previa, que no cubre este cruce de factores, ni fueron preregistradas: surgen de los patrones del bloque de niveles, cuya solidez descansa en el diseño de la simulación, y aquí se contrastan con los seis instrumentos reales.
 
-\textbf{H1 --- Menos categorías de respuesta ($k$) $\to$ más potencia.} Confirmada direccionalmente, pero solo donde fue evaluable. Con los niveles recalibrados (Tabla~\ref{tab:brecha-k}), la asignación de severidad agrupa tres instrumentos en bajo-moderado (RSE $k=4$, MACH-IV $k=5$, HEXACO $k=7$) y dos en alto (SPS-10 $k=6$, RWAS $k=9$) ---una estructura más rica que un solo par. Dentro de bajo-moderado, la regresión de potencia sobre $k$ (11 pruebas como pseudo-réplicas) da coeficiente \textbf{negativo} (dirección de H1) en cinco de ocho tamaños de muestra ($n=50, 100, 250, 500, 1000$), sin alcanzar significancia individual (tres instrumentos, un grado de libertad para $k$, poca potencia estadística). Dentro de alto (SPS-10 vs.\ RWAS), la dirección se invierte y es significativa en $n=10, 25, 50$ ($p<.001$) ---pero SPS-10 es, de los seis instrumentos, el segundo peor ajustado a su nivel de severidad (distancia$=0.387$, ver Validación de la Calibración de Niveles, arriba), así que esta comparación no es limpia y no se interpreta como una refutación genuina de H1. \textbf{Conclusión}: H1 se sostiene direccionalmente en el grupo mejor emparejado (bajo-moderado) y se contradice en el grupo que incluye al instrumento peor ajustado (alto) ---mismo patrón cualitativo bajo dos calibraciones distintas de los niveles, lo que fortalece la atribución del problema a SPS-10 específicamente, no a un artefacto de la calibración.
-
-\textbf{H2 --- El efecto de $k$ se modula por $n$ (negligible en extremos, pico en $n \approx 50$--$250$).} Confirmada de forma limpia. El grupo bajo-moderado (RSE, MACH-IV, HEXACO) reproduce la misma forma de U invertida que predice la simulación: coeficiente de $k$ cercano a cero y no significativo en $n=10, 25$ ($p=.99, .92$), más negativo en $n=100$--$500$ ($p$ mínimo$=.068$ en $n=500$), diluyéndose de nuevo hacia $n=1000$--$1500$.
-
-\textbf{H3 --- La brecha de potencia entre $k$ extremos se achica con la severidad real (Tabla~\ref{tab:brecha-k}).} No evaluable como tendencia con los datos reales disponibles: aunque ahora hay tres niveles de severidad ocupados por al menos un instrumento (bajo-moderado, moderado, alto), moderado solo tiene un instrumento (AHS), insuficiente para trazar una curva de brecha vs.\ severidad con múltiples $k$ por nivel salvo en bajo-moderado. Ni confirmada ni refutada ---sigue siendo evidencia mayormente simulada.
-
-\textbf{H4 --- La paridad de $k$ (par/impar) afecta la potencia, independiente de su magnitud, controlando severidad.} Con la calibración final, tanto bajo-moderado (dos impares: MACH-IV, HEXACO; uno par: RSE) como alto (uno par: SPS-10; uno impar: RWAS) mezclan ambas paridades ---el modelo potencia $\sim$ nivel $+$ paridad es estimable de forma genuina, no por un solo contraste disfrazado. Da coeficiente negativo (par$<$impar) significativo en $n=10, 25, 50$ ($p \leq .01$), se diluye desde $n=100$. Pero un análisis de sensibilidad (excluir cada instrumento, uno a la vez, en $n=25$) muestra que excluir \emph{cualquiera} de los dos miembros del par alto (SPS-10 o RWAS) elimina la significancia por completo (coef$\approx-0.009$, $p>.75$), mientras excluir cualquiera de los tres de bajo-moderado la mantiene o incluso la fortalece (excluir RSE la duplica: coef$=-0.359$, $p<.0001$). \textbf{Conclusión}: el efecto sigue dependiendo críticamente del par alto (con SPS-10, el instrumento peor ajustado, de por medio) ---no es una evidencia robusta de paridad general, aunque ya no es un artefacto matemático puro como con la calibración anterior. La evidencia más confiable de paridad sigue siendo la simulación, donde el diseño garantiza ortogonalidad entre paridad y severidad.
-
-\textbf{H5 --- Un instrumento con severidad mal calibrada distorsiona cualquier análisis agregado que lo incluya.} Confirmada, con evidencia acumulada en varios momentos del estudio: un candidato de $k=6$ se descartó por razones de confiabilidad (no de severidad); SPS-10, el instrumento finalmente usado, tiene la segunda peor distancia de ajuste de los seis (0.387) bajo la calibración final, y es sistemáticamente el que produce direcciones contrarias a H1 en cualquier nivel donde caiga (antes en muy alto con la calibración intermedia, ahora en alto con la calibración final) ---refuerza que la severidad de ajuste de cada instrumento debe reportarse y considerarse al interpretar cualquier análisis agregado con datos reales, no solo como nota al pie.
+\begin{description}
+\item[H1: menos categorías ($k$), más potencia.] Confirmada direccionalmente. En bajo-moderado (RSE, MACH-IV, HEXACO) el coeficiente de $k$ es negativo en cinco de ocho tamaños de muestra ($n=50$ a $1000$), sin significancia individual (tres instrumentos). En alto (SPS-10 y RWAS) se invierte, con $p<.001$ en $n=10, 25, 50$, pero SPS-10 es el segundo instrumento peor ajustado (distancia $=0.387$), por lo que no se interpreta como refutación.
+\item[H2: el efecto de $k$ depende de $n$.] Confirmada. En bajo-moderado el coeficiente es cercano a cero en $n=10, 25$ ($p=.99, .92$), más negativo en $n=100$ a $500$ ($p$ mínimo $=.068$ en $n=500$) y se diluye hacia $n=1000$--$1500$, como predice la simulación.
+\item[H3: la brecha entre $k$ extremos se achica con la severidad.] No evaluable: solo bajo-moderado tiene varios valores de $k$ por nivel (moderado solo tiene a AHS).
+\item[H4: la paridad de $k$ afecta la potencia.] No concluyente. El coeficiente par$<$impar es significativo en $n=10, 25, 50$ ($p \leq .01$), pero excluir SPS-10 o RWAS en $n=25$ elimina la significancia (coef $\approx -0.009$, $p>.75$). La evidencia confiable de paridad es la simulación, donde el diseño la hace ortogonal a la severidad.
+\item[H5: un instrumento mal ajustado a su nivel distorsiona el análisis agregado.] Confirmada. SPS-10 (distancia $=0.387$) produce direcciones contrarias a H1 en el nivel donde cae, por lo que el ajuste de cada instrumento debe reportarse al interpretar análisis agregados con datos reales.
+\end{description}
 
 \subsection{Comparación de las 11 pruebas: potencia bruta y estabilidad frente a \texorpdfstring{$k$}{k}}
 \label{sec:res-comparacion}
