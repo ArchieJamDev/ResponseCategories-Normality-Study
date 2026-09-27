@@ -356,4 +356,6 @@ jobs:
           name: consolidado-pais
           path: |
             data/results/consolidado_pais.csv
-            data/results/brecha_pais.csv
+            data/results/comparacion_n250.csv
+            data/results/brecha_n250_detalle.csv
+            data/results/brecha_n250.csv
