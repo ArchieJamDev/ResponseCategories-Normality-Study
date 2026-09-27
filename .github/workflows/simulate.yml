@@ -49,6 +49,18 @@ on:
         description: "Agrega los 10 CSV del chequeo por pais en un consolidado (data/results/consolidado_pais.csv) y calcula la brecha EE.UU. vs. resto"
         type: boolean
         default: false
+      correr_extraccion_sexo:
+        description: "Chequeo de robustez: extrae y separa hombres vs. mujeres para 5 de los 6 datasets reales (RSE, MACH-IV, SPS-10, RWAS, AHS; excluye HEXACO por no tener columna de sexo) -- ver R/01c_extract_real_subscales_sexo.R"
+        type: boolean
+        default: false
+      correr_bloque_real_sexo:
+        description: "Submuestreo m-out-of-N sobre los 10 archivos hombres/mujeres (grilla reducida n=10,25,50,100,250) -- requiere que correr_extraccion_sexo ya se haya corrido en el mismo dispatch"
+        type: boolean
+        default: false
+      correr_agregacion_sexo:
+        description: "Agrega los 10 CSV del chequeo por sexo en un consolidado (data/results/consolidado_sexo.csv) y calcula la brecha hombres vs. mujeres"
+        type: boolean
+        default: false
 
 jobs:
   extract-real-data:
@@ -361,3 +373,105 @@ jobs:
             data/results/brecha_n250.csv
             data/results/pruebas_estadisticas_n250.csv
             data/results/anova_grupos_n250.csv
+
+  extract-real-data-sexo:
+    if: ${{ inputs.correr_extraccion_sexo }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+            any::haven
+      - name: Extraer y separar hombres vs. mujeres (5 instrumentos, sin HEXACO)
+        run: Rscript R/01c_extract_real_subscales_sexo.R
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-data-processed-sexo
+          path: |
+            data/processed/*_hombres.csv
+            data/processed/*_mujeres.csv
+
+  bloque-real-categorias-sexo:
+    if: ${{ inputs.correr_bloque_real_sexo }}
+    needs: extract-real-data-sexo
+    strategy:
+      matrix:
+        dataset:
+          - rse_k4_hombres.csv
+          - rse_k4_mujeres.csv
+          - mach_k5_hombres.csv
+          - mach_k5_mujeres.csv
+          - sps_k6_hombres.csv
+          - sps_k6_mujeres.csv
+          - rwas_k9_hombres.csv
+          - rwas_k9_mujeres.csv
+          - ahs_k8_hombres.csv
+          - ahs_k8_mujeres.csv
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - uses: actions/download-artifact@v4
+        with:
+          name: real-data-processed-sexo
+          path: data/processed
+      - name: Bloque real por sexo -- submuestreo m-out-of-N (R=10000, grilla reducida n=10,25,50,100,250)
+        run: Rscript R/02_bloque_real_categorias.R ${{ matrix.dataset }} 10000 10,25,50,100,250
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bloque-real-sexo-${{ matrix.dataset }}
+          path: data/results/bloque_real_*.csv
+
+  aggregate-results-sexo:
+    if: ${{ inputs.correr_agregacion_sexo }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::readr
+            any::dplyr
+            any::tidyr
+      # Mismo criterio que aggregate-results-pais: los 10 CSV de
+      # bloque-real-categorias-sexo se descargan manualmente y se commitean a
+      # data/results/ antes de correr este job.
+      - name: Agregar los 10 archivos del chequeo por sexo
+        run: Rscript R/99c_aggregate_results_sexo.R
+      - uses: actions/upload-artifact@v4
+        with:
+          name: consolidado-sexo
+          path: |
+            data/results/consolidado_sexo.csv
+            data/results/comparacion_sexo_n250.csv
+            data/results/brecha_sexo_n250_detalle.csv
+            data/results/brecha_sexo_n250.csv
+            data/results/pruebas_estadisticas_sexo_n250.csv
+            data/results/anova_grupos_sexo_n250.csv
