@@ -46,8 +46,22 @@ if (!file.exists(ruta_calib)) {
 calib <- readr::read_csv(ruta_calib, show_col_types = FALSE)
 fila_calib <- calib[calib$nivel == nivel_elegido & calib$k == k_elegido, ]
 if (nrow(fila_calib) != 1) {
-  stop(sprintf("No se encontro (o hay mas de una) calibracion para nivel='%s', k=%d en %s",
-               nivel_elegido, k_elegido, ruta_calib))
+  # Nivel fuera de los 5 principales (ej. "normal", el chequeo de error Tipo
+  # I -- ver R/03_calibrar_niveles.R) -- no vive en el consolidado de 35
+  # celdas, se lee de su propio archivo por nivel.
+  ruta_calib_nivel <- sprintf("data/results/calibracion_nivel_%s.csv", nivel_elegido)
+  if (!file.exists(ruta_calib_nivel)) {
+    stop(sprintf(
+      "No se encontro calibracion para nivel='%s', k=%d ni en %s ni en %s",
+      nivel_elegido, k_elegido, ruta_calib, ruta_calib_nivel
+    ))
+  }
+  calib_nivel <- readr::read_csv(ruta_calib_nivel, show_col_types = FALSE)
+  fila_calib <- calib_nivel[calib_nivel$nivel == nivel_elegido & calib_nivel$k == k_elegido, ]
+  if (nrow(fila_calib) != 1) {
+    stop(sprintf("No se encontro (o hay mas de una) calibracion para nivel='%s', k=%d en %s",
+                 nivel_elegido, k_elegido, ruta_calib_nivel))
+  }
 }
 lambda_nivel <- fila_calib$lambda[1]
 cols_umbral <- grep("^umbral_", names(fila_calib), value = TRUE)

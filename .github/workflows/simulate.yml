@@ -37,6 +37,14 @@ on:
         description: "Simulacion completa (R=10000) de los 5 niveles x k=3..9 = 35 shards -- requiere que calibracion_niveles.csv ya este commiteado en el repo"
         type: boolean
         default: false
+      correr_calibracion_normal:
+        description: "Chequeo de error Tipo I: calibra el nivel de referencia 'normal' (asimetria=0, curtosis=0) x k=3..9 -- NO es uno de los 5 niveles de severidad, sirve para verificar si las 11 pruebas rechazan ~5% bajo el mecanismo generativo sin severidad real (ver notes/prompt_revision_julius.md, punto #2)"
+        type: boolean
+        default: false
+      correr_simulacion_normal:
+        description: "Simulacion completa (R=10000) del nivel 'normal' x k=3..9 = 7 shards -- requiere que calibracion_nivel_normal.csv ya este commiteado en el repo"
+        type: boolean
+        default: false
       correr_extraccion_pais:
         description: "Chequeo de robustez: extrae y separa EE.UU. vs. resto del mundo para 5 de los 6 datasets reales (RSE, MACH-IV, HEXACO, SPS-10, RWAS; excluye AHS por ser 100% EE.UU.) -- ver R/01b_extract_real_subscales_pais.R"
         type: boolean
@@ -271,6 +279,58 @@ jobs:
         with:
           name: nivel-final-${{ matrix.nivel }}-k${{ matrix.k }}
           path: data/results/nivel_${{ matrix.nivel }}_k${{ matrix.k }}.csv
+
+  calibrate-nivel-normal:
+    if: ${{ inputs.correr_calibracion_normal }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::readr
+            any::dplyr
+      - name: Calibrar nivel de referencia 'normal' (asimetria=0, curtosis=0)
+        run: Rscript R/03_calibrar_niveles.R normal "" 16
+      - uses: actions/upload-artifact@v4
+        with:
+          name: calibracion-nivel-normal
+          path: data/results/calibracion_nivel_normal.csv
+
+  simulate-nivel-normal:
+    if: ${{ inputs.correr_simulacion_normal }}
+    strategy:
+      matrix:
+        k: [3, 4, 5, 6, 7, 8, 9]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - name: Simulacion del nivel de referencia 'normal' (R=10000)
+        # requiere data/results/calibracion_nivel_normal.csv ya commiteado
+        # (ver job calibrate-nivel-normal) -- R/04_simulacion_niveles.R cae
+        # a este archivo por nivel cuando el nivel no esta en el consolidado
+        # de 35 celdas (ver el fallback agregado a ese script).
+        run: Rscript R/04_simulacion_niveles.R normal ${{ matrix.k }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nivel-final-normal-k${{ matrix.k }}
+          path: data/results/nivel_normal_k${{ matrix.k }}.csv
 
   extract-real-data-pais:
     if: ${{ inputs.correr_extraccion_pais }}

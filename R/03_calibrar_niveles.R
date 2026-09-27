@@ -77,7 +77,16 @@ objetivos_niveles <- list(
   bajo_moderado = c(skew = 0.276, kurt_exc = -0.57),
   moderado      = c(skew = 0.688, kurt_exc =  0.07),
   alto          = c(skew = 1.332, kurt_exc =  1.62),
-  muy_alto      = c(skew = 2.401, kurt_exc =  7.52)
+  muy_alto      = c(skew = 2.401, kurt_exc =  7.52),
+  # Nivel de referencia (NO es uno de los 5 niveles de severidad de Cain et
+  # al.): objetivo asimetria=0, curtosis exceso=0 -- el mecanismo generativo
+  # "lo mas normal posible" dentro de su propia discretizacion. Sirve para
+  # chequear el error Tipo I empirico de las 11 pruebas sobre este tipo de
+  # datos discretos (compuesto de m items categorizados), no para representar
+  # ningun dato psicologico real -- ver notes/prompt_revision_julius.md,
+  # punto #2, y notes/DESIGN.md para la discusion completa de por que este
+  # chequeo es necesario pese a que ningun dato real alcanza (0,0).
+  normal        = c(skew = 0.000, kurt_exc =  0.00)
 )
 if (!nivel_elegido %in% names(objetivos_niveles)) {
   stop(sprintf("Nivel desconocido: '%s'. Debe ser uno de: %s",
