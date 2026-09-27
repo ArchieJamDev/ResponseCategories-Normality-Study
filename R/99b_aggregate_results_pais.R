@@ -235,4 +235,49 @@ cat("\nNotables por par de grupos:\n")
 print(table(pruebas_estadisticas$par, pruebas_estadisticas$notable))
 
 cat("\nGuardado data/results/pruebas_estadisticas_n250.csv\n")
+
+# --- Prueba omnibus (equivalente a un ANOVA de un factor, 4 grupos) -------
+#
+# La comparacion pareada de arriba responde "cuales PARES difieren"; esta
+# responde primero la pregunta omnibus -- "¿difieren los 4 grupos entre si
+# en absoluto?" -- el mismo rol que cumple un ANOVA de un factor (o su
+# version no parametrica, Kruskal-Wallis) antes de las comparaciones
+# post-hoc. Como el resultado por replica es binario (rechaza/no rechaza a
+# p<.05), el analogo correcto no es Kruskal-Wallis sobre rangos (pensado
+# para variables continuas) sino la prueba chi-cuadrado de homogeneidad de
+# k proporciones -- prop.test acepta directamente un vector de k grupos y
+# hace exactamente esto: la generalizacion natural del test de dos
+# proporciones de arriba a mas de 2 grupos, equivalente en espiritu a un
+# ANOVA de un factor sobre una variable 0/1 (via un modelo lineal/logistico
+# con k niveles). El tamaño de efecto es w de Cohen (1988) -- el analogo de
+# h para k>2 grupos (0.1 pequeño, 0.3 mediano, 0.5 grande).
+
+anova_grupos <- do.call(rbind, lapply(seq_len(nrow(anchos_n250)), function(i) {
+  fila <- anchos_n250[i, ]
+  x <- round(c(fila$eeuu, fila$resto_mundo, fila$todos, fila$simulado) * R_REPLICAS)
+  chi <- suppressWarnings(stats::prop.test(x, rep(R_REPLICAS, 4)))
+  chi2 <- unname(chi$statistic)
+  w <- sqrt(chi2 / (4 * R_REPLICAS))
+  data.frame(
+    instrumento = fila$instrumento, prueba = fila$prueba,
+    eeuu = fila$eeuu, resto_mundo = fila$resto_mundo, todos = fila$todos, simulado = fila$simulado,
+    chi2 = chi2, df = unname(chi$parameter), p_valor = chi$p.value, cohens_w = w,
+    stringsAsFactors = FALSE
+  )
+}))
+
+n_celdas <- nrow(anova_grupos)  # 55 = 5 instrumentos x 11 pruebas
+anova_grupos$p_bonferroni <- pmin(anova_grupos$p_valor * n_celdas, 1)
+anova_grupos$notable <- anova_grupos$p_bonferroni < 0.05 & anova_grupos$cohens_w >= 0.1
+anova_grupos <- anova_grupos[order(-anova_grupos$cohens_w), ]
+
+readr::write_csv(anova_grupos, "data/results/anova_grupos_n250.csv")
+
+cat(sprintf(
+  "\nPrueba omnibus (chi-cuadrado de homogeneidad, 4 grupos, equivalente a ANOVA de un factor): %d de %d celdas (instrumento x prueba) son notables (p_bonferroni<.05 Y w de Cohen>=.1):\n",
+  sum(anova_grupos$notable), n_celdas
+))
+print(anova_grupos[anova_grupos$notable, c("instrumento", "prueba", "chi2", "cohens_w", "p_bonferroni")])
+
+cat("\nGuardado data/results/anova_grupos_n250.csv\n")
 cat("Listo.\n")
