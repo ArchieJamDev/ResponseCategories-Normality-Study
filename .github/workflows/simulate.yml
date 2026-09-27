@@ -37,6 +37,18 @@ on:
         description: "Simulacion completa (R=10000) de los 5 niveles x k=3..9 = 35 shards -- requiere que calibracion_niveles.csv ya este commiteado en el repo"
         type: boolean
         default: false
+      correr_extraccion_pais:
+        description: "Chequeo de robustez: extrae y separa EE.UU. vs. resto del mundo para 5 de los 6 datasets reales (RSE, MACH-IV, HEXACO, SPS-10, RWAS; excluye AHS por ser 100% EE.UU.) -- ver R/01b_extract_real_subscales_pais.R"
+        type: boolean
+        default: false
+      correr_bloque_real_pais:
+        description: "Submuestreo m-out-of-N sobre los 10 archivos EE.UU./resto (grilla reducida n=10,25,50,100,250) -- requiere que correr_extraccion_pais ya se haya corrido en el mismo dispatch"
+        type: boolean
+        default: false
+      correr_agregacion_pais:
+        description: "Agrega los 10 CSV del chequeo por pais en un consolidado (data/results/consolidado_pais.csv) y calcula la brecha EE.UU. vs. resto"
+        type: boolean
+        default: false
 
 jobs:
   extract-real-data:
@@ -247,3 +259,101 @@ jobs:
         with:
           name: nivel-final-${{ matrix.nivel }}-k${{ matrix.k }}
           path: data/results/nivel_${{ matrix.nivel }}_k${{ matrix.k }}.csv
+
+  extract-real-data-pais:
+    if: ${{ inputs.correr_extraccion_pais }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - name: Extraer y separar EE.UU. vs. resto (5 instrumentos, sin AHS)
+        run: Rscript R/01b_extract_real_subscales_pais.R
+      - uses: actions/upload-artifact@v4
+        with:
+          name: real-data-processed-pais
+          path: |
+            data/processed/*_us.csv
+            data/processed/*_nous.csv
+
+  bloque-real-categorias-pais:
+    if: ${{ inputs.correr_bloque_real_pais }}
+    needs: extract-real-data-pais
+    strategy:
+      matrix:
+        dataset:
+          - rse_k4_us.csv
+          - rse_k4_nous.csv
+          - mach_k5_us.csv
+          - mach_k5_nous.csv
+          - hexaco_k7_us.csv
+          - hexaco_k7_nous.csv
+          - sps_k6_us.csv
+          - sps_k6_nous.csv
+          - rwas_k9_us.csv
+          - rwas_k9_nous.csv
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - uses: actions/download-artifact@v4
+        with:
+          name: real-data-processed-pais
+          path: data/processed
+      - name: Bloque real por pais -- submuestreo m-out-of-N (R=10000, grilla reducida n=10,25,50,100,250)
+        run: Rscript R/02_bloque_real_categorias.R ${{ matrix.dataset }} 10000 10,25,50,100,250
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bloque-real-pais-${{ matrix.dataset }}
+          path: data/results/bloque_real_*.csv
+
+  aggregate-results-pais:
+    if: ${{ inputs.correr_agregacion_pais }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::readr
+            any::dplyr
+            any::tidyr
+      # Mismo criterio que aggregate-results: los 10 CSV de
+      # bloque-real-categorias-pais se descargan manualmente y se commitean a
+      # data/results/ antes de correr este job (no via download-artifact) --
+      # ver los bloque_real_*.csv ya trackeados en el repo como precedente.
+      - name: Agregar los 10 archivos del chequeo por pais
+        run: Rscript R/99b_aggregate_results_pais.R
+      - uses: actions/upload-artifact@v4
+        with:
+          name: consolidado-pais
+          path: |
+            data/results/consolidado_pais.csv
+            data/results/brecha_pais.csv
