@@ -1,0 +1,6 @@
+dataset,k,N,n,R,shapiro_wilk,anderson_darling,lilliefors,jarque_bera,dagostino_pearson,cramer_von_mises,shapiro_francia,pearson_chi2,curtosis,epps_pulley,sstn,shapiro_wilk_na,anderson_darling_na,lilliefors_na,jarque_bera_na,dagostino_pearson_na,cramer_von_mises_na,shapiro_francia_na,pearson_chi2_na,curtosis_na,epps_pulley_na,sstn_na,segundos
+sps_k6_mujeres.csv,6,66414,10,10000,0.1897,0.1745,0.1332,0.0577,NA,0.1586,0.1959,0.1689,0.1221,0.1429,0.1727,0,0,0,0,10000,0,0,0,0,0,0,81.74627947807312
+sps_k6_mujeres.csv,6,66414,25,10000,0.5787,0.4635,0.3222,0.3331,0.4309,0.3903,0.5343,0.3452,0.2629,0.1794,0.4741,0,0,0,0,0,0,0,0,0,0,0,83.6327314376831
+sps_k6_mujeres.csv,6,66414,50,10000,0.9303,0.8152,0.6397,0.6742,0.7172,0.7015,0.8915,0.6429,0.4095,0.3318,0.8,0,0,0,0,0,0,0,0,0,0,0,79.121906042099
+sps_k6_mujeres.csv,6,66414,100,10000,1,0.9936,0.9571,0.9599,0.9654,0.9636,0.9993,0.9663,0.6191,0.665,0.9829,0,0,0,0,0,0,0,0,0,0,0,76.01423454284668
+sps_k6_mujeres.csv,6,66414,250,10000,1,1,1,1,1,1,1,1,0.9059,0.9788,1,0,0,0,0,0,0,0,0,0,0,0,84.17695260047913

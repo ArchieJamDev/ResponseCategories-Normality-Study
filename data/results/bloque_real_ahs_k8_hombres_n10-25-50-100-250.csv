@@ -1,0 +1,6 @@
+dataset,k,N,n,R,shapiro_wilk,anderson_darling,lilliefors,jarque_bera,dagostino_pearson,cramer_von_mises,shapiro_francia,pearson_chi2,curtosis,epps_pulley,sstn,shapiro_wilk_na,anderson_darling_na,lilliefors_na,jarque_bera_na,dagostino_pearson_na,cramer_von_mises_na,shapiro_francia_na,pearson_chi2_na,curtosis_na,epps_pulley_na,sstn_na,segundos
+ahs_k8_hombres.csv,8,498,10,10000,0.1187,0.1163,0.1024,0.0279,NA,0.1131,0.1237,0.1135,0.0732,0.1235,0.1143,0,0,0,0,10000,0,0,0,0,0,0,66.79872369766235
+ahs_k8_hombres.csv,8,498,25,10000,0.315,0.2857,0.2428,0.1486,0.2301,0.273,0.2972,0.1714,0.1067,0.2202,0.2978,0,0,0,0,0,0,0,0,0,0,0,69.18911862373352
+ahs_k8_hombres.csv,8,498,50,10000,0.6937,0.5802,0.522,0.3812,0.4446,0.546,0.6242,0.282,0.138,0.4513,0.6111,0,0,0,0,0,0,0,0,0,0,0,69.853928565979
+ahs_k8_hombres.csv,8,498,100,10000,0.9876,0.9321,0.8989,0.8106,0.8358,0.8979,0.968,0.5977,0.1476,0.7803,0.9364,0,0,0,0,0,0,0,0,0,0,0,65.62187480926514
+ahs_k8_hombres.csv,8,498,250,10000,1,1,1,1,1,1,1,0.9991,0.1998,0.9998,1,0,0,0,0,0,0,0,0,0,0,0,71.56454372406006
