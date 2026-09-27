@@ -40,6 +40,7 @@
 \usepackage{amsmath}
 \usepackage[spanish]{babel}
 \spanishdecimal{.}% punto decimal en modo matematico (babel-spanish lo cambia a coma)
+\addto\captionsspanish{\renewcommand{\tablename}{Tabla}}% babel-spanish usa "Cuadro" por defecto; se prefiere "Tabla" para ser consistente con las referencias en el texto
 \usepackage{csquotes}
 \usepackage{float}
 \usepackage{graphicx}
@@ -170,7 +171,7 @@ Con los parámetros calibrados, cada celda (nivel $\times$ $k$) se simuló de fo
 
 Sobre cada uno de los seis instrumentos se aplicó submuestreo aleatorio sin reemplazo tipo \emph{m-out-of-N} \parencite{politisromanowolf1999}: para cada tamaño de muestra $n$ de la grilla, se extrajeron $R=10\,000$ submuestras aleatorias del puntaje compuesto completo del instrumento, y se calculó la tasa de rechazo empírica de cada prueba de normalidad frente al $N$ completo del instrumento como población de referencia. El $N$ mínimo entre cinco de los seis instrumentos (RWAS, 9\,680) es muy superior al $n$ máximo de la grilla (1\,500), por lo que el submuestreo sin reemplazo es válido para esos cinco sin necesidad de ajuste. La excepción es la Adult Hope Scale ($N=1\,036$): al no alcanzar el $n$ máximo de 1\,500, se usó una grilla reducida $\{10, 25, 50, 100, 250, 500, 1000\}$ solo para este instrumento.
 
-En este componente $k$ no se manipula: lo fija cada instrumento, y por eso viene confundido con su cantidad de ítems y con la asimetría/curtosis real del constructo medido ---tal como ocurre en la práctica psicométrica aplicada---. La cantidad de ítems no se varía en ningún componente del estudio: en el bloque de niveles es constante ($m=10$), y en el bloque real es la que tiene cada instrumento. El bloque de niveles existe precisamente para aislar $k$ de la severidad, algo que los datos reales no permiten.
+En este componente $k$ no se manipula: es inherente al diseño de cada instrumento, y queda entrelazado con su cantidad de ítems y con la asimetría/curtosis real del constructo medido, que es inherente a los datos obtenidos con ese instrumento ---tal como ocurre en la práctica psicométrica aplicada---. La cantidad de ítems no se varía en ningún componente del estudio: en el bloque de niveles es constante ($m=10$), y en el bloque real es la que tiene cada instrumento. El bloque de niveles existe precisamente para aislar $k$ de la severidad, algo que los datos reales no permiten.
 
 \subsection{Pruebas de normalidad evaluadas}
 \label{sec:tests}
@@ -296,23 +297,23 @@ RWAS (9) & alto & 0.450 & .995 & .027 \\
 \end{tabular}
 \end{table}
 
-\subsection{Hipótesis puestas a prueba en datos reales (6 instrumentos, \texorpdfstring{$k=4$ a $9$}{k=4 a 9})}
-\label{sec:res-hipotesis}
+\subsection{Reproducción en datos reales de los patrones del bloque simulado (6 instrumentos, \texorpdfstring{$k=4$ a $9$}{k=4 a 9})}
+\label{sec:res-patrones}
 
-Las hipótesis no provienen de literatura previa, que no cubre este cruce de factores, ni fueron preregistradas: surgen de los patrones del bloque de niveles, cuya solidez descansa en el diseño de la simulación, y aquí se contrastan con los seis instrumentos reales.
+Los patrones puestos a prueba no provienen de literatura previa, que no cubre este cruce de factores, ni fueron preregistrados: surgen del bloque de niveles simulado, cuya solidez descansa en el diseño de la simulación, y aquí se examina si se reproducen en los seis instrumentos reales.
 
 \begin{description}
-\item[H1: menos categorías ($k$), más potencia.] Confirmada direccionalmente. En bajo-moderado (RSE, MACH-IV, HEXACO) el coeficiente de $k$ es negativo en cinco de ocho tamaños de muestra ($n=50$ a $1000$), sin significancia individual (tres instrumentos). En alto (SPS-10 y RWAS) se invierte, con $p<.001$ en $n=10, 25, 50$, pero SPS-10 es el segundo instrumento peor ajustado (distancia $=0.387$), por lo que no se interpreta como refutación.
-\item[H2: el efecto de $k$ depende de $n$.] Confirmada. En bajo-moderado el coeficiente es cercano a cero en $n=10, 25$ ($p=.99, .92$), más negativo en $n=100$ a $500$ ($p$ mínimo $=.068$ en $n=500$) y se diluye hacia $n=1000$--$1500$, como predice la simulación.
-\item[H3: la brecha entre $k$ extremos se achica con la severidad.] No evaluable: solo bajo-moderado tiene varios valores de $k$ por nivel (moderado solo tiene a AHS).
-\item[H4: la paridad de $k$ afecta la potencia.] No concluyente. El coeficiente par$<$impar es significativo en $n=10, 25, 50$ ($p \leq .01$), pero excluir SPS-10 o RWAS en $n=25$ elimina la significancia (coef $\approx -0.009$, $p>.75$). La evidencia confiable de paridad es la simulación, donde el diseño la hace ortogonal a la severidad.
-\item[H5: un instrumento mal ajustado a su nivel distorsiona el análisis agregado.] Confirmada. SPS-10 (distancia $=0.387$) produce direcciones contrarias a H1 en el nivel donde cae, por lo que el ajuste de cada instrumento debe reportarse al interpretar análisis agregados con datos reales.
+\item[Menos categorías ($k$), más potencia.] Se reproduce direccionalmente. En bajo-moderado (RSE, MACH-IV, HEXACO) el coeficiente de $k$ es negativo en cinco de ocho tamaños de muestra ($n=50$ a $1000$), sin significancia individual (tres instrumentos). En alto (SPS-10 y RWAS) se invierte, con $p<.001$ en $n=10, 25, 50$, pero SPS-10 es el segundo instrumento peor ajustado (distancia $=0.387$), por lo que no se interpreta como refutación.
+\item[El efecto de $k$ depende de $n$.] Se reproduce. En bajo-moderado el coeficiente es cercano a cero en $n=10, 25$ ($p=.99, .92$), más negativo en $n=100$ a $500$ ($p$ mínimo $=.068$ en $n=500$) y se diluye hacia $n=1000$--$1500$, como en la simulación.
+\item[La brecha entre $k$ extremos se achica con la severidad.] No evaluable: solo bajo-moderado tiene varios valores de $k$ por nivel (moderado solo tiene a AHS).
+\item[La paridad de $k$ afecta la potencia.] No concluyente. El coeficiente par$<$impar es significativo en $n=10, 25, 50$ ($p \leq .01$), pero excluir SPS-10 o RWAS en $n=25$ elimina la significancia (coef $\approx -0.009$, $p>.75$). La evidencia confiable de paridad es la simulación, donde el diseño la hace ortogonal a la severidad.
+\item[Un instrumento mal ajustado a su nivel distorsiona el análisis agregado.] Se reproduce. SPS-10 (distancia $=0.387$) produce direcciones contrarias al patrón de menos categorías, más potencia en el nivel donde cae, por lo que el ajuste de cada instrumento debe reportarse al interpretar análisis agregados con datos reales.
 \end{description}
 
 \subsection{Comparación de las 11 pruebas: potencia bruta y estabilidad frente a \texorpdfstring{$k$}{k}}
 \label{sec:res-comparacion}
 
-Se compararon las 11 pruebas con un puntaje combinado (rango de potencia media $+$ rango del coeficiente de variación de la potencia a través de $k$; menor es mejor) en tres escenarios (Tabla~\ref{tab:ranking}): simulado limpio (280 celdas, severidad aislada de $k$), real (seis instrumentos, $k$ y severidad confundidos) y simulado confundido (las mismas seis combinaciones nivel-$k$ de los instrumentos reales, para compararlos en igualdad de condiciones).
+Se compararon las 11 pruebas con un puntaje combinado (rango de potencia media $+$ rango del coeficiente de variación de la potencia a través de $k$; menor es mejor) en tres escenarios (Tabla~\ref{tab:ranking}): simulado limpio (280 celdas, severidad aislada de $k$), real (seis instrumentos, $k$ y severidad entrelazados) y simulado entrelazado (las mismas seis combinaciones nivel-$k$ de los instrumentos reales, para compararlos en igualdad de condiciones).
 
 \begin{table}[H]
 \small
@@ -320,7 +321,7 @@ Se compararon las 11 pruebas con un puntaje combinado (rango de potencia media $
 \label{tab:ranking}
 \begin{tabular}{l c c c c}
 \toprule
-Prueba & Sim.\ limpia & Real & Sim.\ confundida & Desplazamiento \\
+Prueba & Sim.\ limpia & Real & Sim.\ entrelazada & Desplazamiento \\
 \midrule
 D'Agostino-Pearson & 3 & 3 & 3 & \textbf{0} \\
 Epps-Pulley & 9 & 4 & 4 & \textbf{0} \\
@@ -335,12 +336,12 @@ SSTN & 10 & 15 & 17 & 2 \\
 Pearson $\chi^2$ & 19 & 15 & 12 & 3 \\
 \bottomrule
 \end{tabular}
-\tablenote{Desplazamiento = diferencia de posición en el ranking entre el escenario simulado confundido y el real.}
+\tablenote{Desplazamiento = diferencia de posición en el ranking entre el escenario simulado entrelazado y el real.}
 \end{table}
 
 \begin{itemize}
 \item \textbf{D'Agostino-Pearson} tiene el mejor puntaje combinado en los tres escenarios, el hallazgo más robusto de la comparación.
-\item Seis de las 11 pruebas tienen desplazamiento cero entre el escenario simulado confundido y el real (D'Agostino-Pearson, Epps-Pulley, Shapiro-Wilk, Anderson-Darling, Jarque-Bera y curtosis), lo que respalda usar la simulación limpia como referencia primaria.
+\item Seis de las 11 pruebas tienen desplazamiento cero entre el escenario simulado entrelazado y el real (D'Agostino-Pearson, Epps-Pulley, Shapiro-Wilk, Anderson-Darling, Jarque-Bera y curtosis), lo que respalda usar la simulación limpia como referencia primaria.
 \item \textbf{SSTN} nunca es la más potente; su puntaje en la simulación limpia (10) queda a medio camino y su desplazamiento (2) es intermedio.
 \item La prueba de \textbf{curtosis} (Anscombe-Glynn) es la peor en los tres escenarios pese a su desplazamiento cero, y solo conviene si se sabe que la desviación es de curtosis.
 \end{itemize}
@@ -348,9 +349,9 @@ Pearson $\chi^2$ & 19 & 15 & 12 & 3 \\
 \section{Discusión}
 \label{sec:discussion}
 
-El efecto de la cantidad de categorías de respuesta sobre la potencia de las pruebas de normalidad existe, pero es pequeño y acotado. En simulación, la brecha entre $k=3$ y $k=9$ no supera .045 en promedio y solo alcanza magnitudes apreciables (hasta .149) con tamaños de muestra intermedios, que se desplazan hacia $n$ menores al aumentar la severidad; con $n \geq 500$ prácticamente desaparece. Esto no justifica reducir categorías, pues la confiabilidad y la validez factorial se deterioran por debajo de cuatro \parencite{lozano2008,preston2000}; indica que, al elegir la prueba de normalidad, $k$ pesa menos que $n$ y que la asimetría y curtosis esperadas.
+El efecto de la cantidad de categorías de respuesta sobre la potencia de las pruebas de normalidad existe, pero es pequeño y acotado. En simulación, la brecha de potencia entre $k=3$ y $k=9$ no supera .045 en promedio; su magnitud máxima (hasta .149) ocurre en tamaños de muestra intermedios, y el tamaño de muestra donde la brecha es máxima se desplaza hacia valores más pequeños a medida que aumenta la severidad de la no-normalidad. Con $n \geq 500$ la brecha prácticamente desaparece. Este efecto pequeño no justifica reducir la cantidad de categorías, porque la confiabilidad y la validez factorial se deterioran por debajo de cuatro \parencite{lozano2008,preston2000}. Sí indica, en cambio, que al elegir qué prueba de normalidad usar, $k$ pesa menos que el tamaño de muestra y que la asimetría y curtosis esperadas del constructo.
 
-Los datos reales no permiten aislar $k$: el orden de potencia entre instrumentos siguió la severidad de cada constructo y no su $k$, porque ambos van confundidos. Aun así, la simulación predijo la potencia real con alta concordancia ($r=.981$), lo que respalda la calibración como herramienta de planificación. La modulación por $n$ (H2) fue la única hipótesis confirmada sin reservas.
+Los datos reales no permiten aislar $k$: el orden de potencia entre instrumentos siguió la severidad de cada constructo y no su $k$, porque $k$ es inherente al diseño del instrumento y la severidad es inherente a los datos que produce, y ambas quedan entrelazadas dentro de cada instrumento. Aun así, la simulación predijo la potencia real con alta concordancia ($r=.981$), lo que respalda la calibración como herramienta de planificación. La modulación de $k$ por $n$ fue el único patrón que se reprodujo sin reservas en los datos reales.
 
 Una fuente adicional de confusión en los datos reales es la heterogeneidad de país: el N completo de cada instrumento mezcla decenas de poblaciones nacionales sin verificar invarianza de medición entre ellas. Una comprobación post-hoc (submuestras de EE. UU. frente a resto del mundo, $n=250$) confirma que esta mezcla aporta una diferencia de potencia detectable en 3 de los 5 instrumentos con país registrado (prueba de homogeneidad de proporciones, $w=0.11$–$0.43$); en SPS-10 y RWAS la potencia ya está saturada y no queda margen para observar diferencia. EE.\,UU. —una submuestra de un único país— se acerca más al nivel simulado calibrado que la mezcla completa en dos de esos tres casos, mientras que el resto del mundo —una mezcla de docenas de países— es sistemáticamente el más alejado; esto sugiere que el hallazgo refleja heterogeneidad composicional de agrupar poblaciones dispares, más que una diferencia cultural sustantiva en el constructo medido. El orden de potencia entre instrumentos (Tabla 6) no se altera por esta partición.
 
