@@ -42,6 +42,7 @@
 \spanishdecimal{.}% punto decimal en modo matematico (babel-spanish lo cambia a coma)
 \usepackage{csquotes}
 \usepackage{float}
+\usepackage{graphicx}
 \usepackage[backend=biber,style=apa,sortcites=true,sorting=nyt]{biblatex}
 \DeclareLanguageMapping{spanish}{spanish-apa}
 \addbibresource{k_paper.bib}
@@ -115,7 +116,7 @@ Se usaron seis instrumentos de acceso abierto, seleccionados por su cantidad nat
 
 Los ítems invertidos se trataron según lo reportado para cada instrumento. El puntaje compuesto se calculó como la suma de sus ítems (con reversión donde correspondía), exigiendo caso completo. Todos los instrumentos, multidimensionales o no, se analizaron como puntaje compuesto único y no por subescala, porque el objeto de estudio es la potencia de las pruebas sobre el puntaje que efectivamente se somete a análisis paramétrico ---el total--- y porque así los seis instrumentos son comparables entre sí (una distribución univariada por instrumento). En los dos instrumentos multidimensionales (SPS-10 y Adult Hope Scale), esto se apoya además en evidencia de un factor general que domina sobre sus dimensiones \parencite{sischka2025,gomez2014}, no solo en la conveniencia del diseño. Tratar la suma de ítems ordinales como un puntaje único es, en general, una práctica extendida en psicología, aunque el debate sobre si esa suma debe analizarse como continua sigue sin resolverse \parencite{viljoen2015}; este estudio sigue esa convención, no la evalúa. Sumar en vez de promediar los ítems, y el rango numérico resultante (que difiere entre instrumentos según su cantidad de ítems y de categorías), tampoco afectan la normalidad del puntaje: ambas son transformaciones lineales que no alteran su asimetría ni su curtosis, por lo que los seis instrumentos siguen siendo comparables pese a tener máximos muy distintos.
 
-Los instrumentos de $k=6$ y $k=8$, ausentes del catálogo de openpsychometrics.org, se localizaron en Open Science Framework; la búsqueda, que incluyó un candidato inicial de $k=6$ descartado porque su fuente desaconseja combinar sus ítems en un puntaje compuesto, se documenta en el registro de decisiones del repositorio.
+Los instrumentos de $k=6$ y $k=8$ se localizaron en Open Science Framework (búsqueda documentada en el repositorio).
 
 \subsection{Bloque de niveles: simulación de la severidad de no-normalidad}
 \label{sec:niveles}
@@ -220,10 +221,10 @@ $n$ & bajo & bajo-moderado & moderado & alto & muy alto \\
 \tablenote{En negrita, el $n$ donde la brecha alcanza su máximo dentro de cada nivel.}
 \end{table}
 
-% TODO: insertar Figura 1 (notes/figuras/brecha\_k3\_k9\_por\_n\_y\_nivel.svg,
-% convertida a PDF/PNG de alta resolución) con \label{fig:brecha}.
-\begin{figure}[htbp]
-\caption{[Figura pendiente: brecha de potencia entre $k=3$ y $k=9$ por $n$ y nivel de severidad -- fuente: notes/figuras/brecha\_k3\_k9\_por\_n\_y\_nivel.svg]}
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{figuras/brecha_k3_k9_por_n_y_nivel.pdf}
+\caption{Brecha de potencia entre $k=3$ y $k=9$, por tamaño de muestra y nivel de severidad}
 \label{fig:brecha}
 \end{figure}
 
