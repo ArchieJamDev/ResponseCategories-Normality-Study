@@ -167,4 +167,72 @@ readr::write_csv(anchos_n250, "data/results/brecha_n250_detalle.csv")
 readr::write_csv(brecha_n250, "data/results/brecha_n250.csv")
 
 cat("\nGuardado data/results/comparacion_n250.csv, brecha_n250_detalle.csv y brecha_n250.csv\n")
+
+# --- Prueba estadistica: cuales brechas son notables, no solo grandes -----
+#
+# Con R=10000 replicas por grupo, un test de diferencia de proporciones por
+# si solo declara "significativas" hasta brechas triviales (el error
+# estandar de cada tasa es ~0.5pp cerca de p=.5) -- no es informativo dada
+# la potencia estadistica tan alta de comparar 10000 vs 10000 replicas. Se
+# exige un segundo criterio, tamaño de efecto (h de Cohen, 1988 -- la
+# metrica estandar para diferencia de proporciones, estable cerca de 0/1 a
+# diferencia de la diferencia cruda), y solo se llama "notable" a una
+# brecha que cumple AMBOS: significativa tras correccion de Bonferroni
+# (220 comparaciones = 5 instrumentos x 11 pruebas x 4 pares) Y tamaño de
+# efecto al menos pequeño (|h|>=0.2).
+
+R_REPLICAS <- 10000L
+n_comparaciones_totales <- nrow(anchos_n250) * 4L
+
+test_dos_proporciones <- function(pA, pB, R = R_REPLICAS) {
+  xA <- round(pA * R)
+  xB <- round(pB * R)
+  if (xA == xB && (xA == 0 || xA == R)) {
+    return(c(p_valor = 1, cohens_h = 0))
+  }
+  pt <- suppressWarnings(stats::prop.test(c(xA, xB), c(R, R), correct = TRUE))
+  h <- 2 * asin(sqrt(pA)) - 2 * asin(sqrt(pB))
+  c(p_valor = unname(pt$p.value), cohens_h = unname(h))
+}
+
+pares <- list(
+  eeuu_resto = c("eeuu", "resto_mundo"),
+  eeuu_todos = c("eeuu", "todos"),
+  resto_todos = c("resto_mundo", "todos"),
+  todos_simulado = c("todos", "simulado")
+)
+
+pruebas_estadisticas <- do.call(rbind, lapply(names(pares), function(nombre_par) {
+  cols <- pares[[nombre_par]]
+  resultados <- mapply(test_dos_proporciones, anchos_n250[[cols[1]]], anchos_n250[[cols[2]]])
+  data.frame(
+    instrumento = anchos_n250$instrumento,
+    prueba = anchos_n250$prueba,
+    par = nombre_par,
+    tasa_a = anchos_n250[[cols[1]]],
+    tasa_b = anchos_n250[[cols[2]]],
+    brecha = abs(anchos_n250[[cols[1]]] - anchos_n250[[cols[2]]]),
+    p_valor = resultados["p_valor", ],
+    cohens_h = resultados["cohens_h", ],
+    stringsAsFactors = FALSE
+  )
+}))
+
+pruebas_estadisticas$p_bonferroni <- pmin(pruebas_estadisticas$p_valor * n_comparaciones_totales, 1)
+pruebas_estadisticas$notable <- pruebas_estadisticas$p_bonferroni < 0.05 & abs(pruebas_estadisticas$cohens_h) >= 0.2
+pruebas_estadisticas <- pruebas_estadisticas[order(-abs(pruebas_estadisticas$cohens_h)), ]
+
+readr::write_csv(pruebas_estadisticas, "data/results/pruebas_estadisticas_n250.csv")
+
+cat(sprintf(
+  "\n%d de %d comparaciones (instrumento x prueba x par) son 'notables' (p_bonferroni<.05 Y |h de Cohen|>=.2):\n",
+  sum(pruebas_estadisticas$notable), nrow(pruebas_estadisticas)
+))
+print(pruebas_estadisticas[pruebas_estadisticas$notable,
+  c("instrumento", "prueba", "par", "tasa_a", "tasa_b", "brecha", "cohens_h", "p_bonferroni")])
+
+cat("\nNotables por par de grupos:\n")
+print(table(pruebas_estadisticas$par, pruebas_estadisticas$notable))
+
+cat("\nGuardado data/results/pruebas_estadisticas_n250.csv\n")
 cat("Listo.\n")
