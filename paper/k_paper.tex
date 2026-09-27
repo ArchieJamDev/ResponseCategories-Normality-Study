@@ -43,6 +43,7 @@
 \usepackage{csquotes}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{array}
 \usepackage[backend=biber,style=apa,sortcites=true,sorting=nyt]{biblatex}
 \DeclareLanguageMapping{spanish}{spanish-apa}
 \addbibresource{k_paper.bib}
@@ -137,9 +138,10 @@ La carga factorial $\lambda$ se trata aquí como un parámetro libre de la calib
 Se definieron cinco niveles ordenados de severidad de no-normalidad, con objetivos de asimetría y curtosis en exceso anclados a los percentiles 5, 25, 50, 75 y 90 de las 1.567 distribuciones univariadas reportadas por \textcite{cain2017} (Tabla~\ref{tab:niveles}). Se usó el percentil 90 y no el 95 porque este último resultó inalcanzable de forma no degenerada con el mecanismo de $m=10$ ítems. La curtosis usa el percentil con signo, pues su dirección (leptocúrtica o platicúrtica) implica formas distintas de no-normalidad; la asimetría usa el percentil de $|\text{asimetría}|$, porque la potencia de las 11 pruebas es simétrica respecto de la dirección del sesgo. Como \citeauthor{cain2017} no publican percentiles de asimetría en valor absoluto ni el percentil 90, estos se derivaron por interpolación lineal de la función de distribución acumulada implícita en su tabla, resolviendo $P(|\text{asimetría}| \leq m) = F(m) - F(-m) = p$; es una aproximación sobre datos agregados, no un cálculo sobre las distribuciones individuales.
 
 \begin{table}[H]
+\small
 \caption{Niveles de severidad de no-normalidad y sus objetivos de calibración, anclados a percentiles de Cain et al. (2017)}
 \label{tab:niveles}
-\begin{tabular}{lcccc}
+\begin{tabular}{l c >{\centering\arraybackslash}p{3.1cm} >{\centering\arraybackslash}p{3.3cm}}
 \toprule
 Nivel & Percentil & \multicolumn{2}{c}{Objetivo} \\
 & & Asimetría ($|\text{valor}|$, interpolado) & Curtosis en exceso (con signo, directo) \\
@@ -195,9 +197,10 @@ Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1) mediante Git
 \end{enumerate}
 
 \begin{table}[H]
+\small
 \caption{Brecha de potencia media entre $k=3$ y $k=9$, por nivel de severidad (promediada sobre los 8 tamaños de muestra)}
 \label{tab:brecha-k}
-\begin{tabular}{lccc}
+\begin{tabular}{l >{\centering\arraybackslash}p{2.6cm} >{\centering\arraybackslash}p{2.6cm} c}
 \toprule
 Nivel & Percentil (asimetría / curtosis) & Asimetría / curtosis objetivo & Brecha $k=3-k=9$ \\
 \midrule
@@ -279,7 +282,7 @@ Se comparó la potencia observada de cada instrumento con la de su celda simulad
 \small
 \caption{Correlación y error absoluto entre potencia real y potencia simulada, por instrumento}
 \label{tab:validacion}
-\begin{tabular}{lcccc}
+\begin{tabular}{l l >{\centering\arraybackslash}p{2.1cm} >{\centering\arraybackslash}p{2.1cm} >{\centering\arraybackslash}p{2.1cm}}
 \toprule
 Instrumento ($k$) & Nivel asignado & Distancia de ajuste & $r$ (real vs.\ simulado) & Error absoluto medio \\
 \midrule
@@ -315,9 +318,9 @@ Se compararon las 11 pruebas con un puntaje combinado (rango de potencia media $
 \small
 \caption{Puntaje combinado (rango de potencia $+$ rango de estabilidad a $k$) de las 11 pruebas en los tres escenarios}
 \label{tab:ranking}
-\begin{tabular}{lcccc}
+\begin{tabular}{l c c c c}
 \toprule
-Prueba & Sim.\ limpia & Real & Sim.\ confundida & Desplazamiento confundida$\leftrightarrow$real \\
+Prueba & Sim.\ limpia & Real & Sim.\ confundida & Desplazamiento \\
 \midrule
 D'Agostino-Pearson & 3 & 3 & 3 & \textbf{0} \\
 Epps-Pulley & 9 & 4 & 4 & \textbf{0} \\
@@ -332,6 +335,7 @@ SSTN & 10 & 15 & 17 & 2 \\
 Pearson $\chi^2$ & 19 & 15 & 12 & 3 \\
 \bottomrule
 \end{tabular}
+\tablenote{Desplazamiento = diferencia de posición en el ranking entre el escenario simulado confundido y el real.}
 \end{table}
 
 \begin{itemize}
