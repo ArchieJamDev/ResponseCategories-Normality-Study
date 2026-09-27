@@ -169,6 +169,11 @@ sps_raw <- readr::read_csv(
   "data/raw/covidistress_global_survey_2020-05-30.csv.gz",
   col_select = all_of(c(sps_items, "Country")),
   col_types = readr::cols(.default = readr::col_double(), Country = readr::col_character()),
+  # locale=latin1: la columna Country trae bytes que no son UTF-8 valido
+  # (nombres de pais con acentos/ñ en encoding original) -- sin esto,
+  # trimws()/sub() truenan con "input string is invalid UTF-8" (mismo
+  # problema ya visto antes al leer este archivo con Python/pandas).
+  locale = readr::locale(encoding = "ISO-8859-1"),
   show_col_types = FALSE
 )
 puntuar_y_guardar_por_pais(
