@@ -1,0 +1,6 @@
+dataset,k,N,n,R,shapiro_wilk,anderson_darling,lilliefors,jarque_bera,dagostino_pearson,cramer_von_mises,shapiro_francia,pearson_chi2,curtosis,epps_pulley,sstn,shapiro_wilk_na,anderson_darling_na,lilliefors_na,jarque_bera_na,dagostino_pearson_na,cramer_von_mises_na,shapiro_francia_na,pearson_chi2_na,curtosis_na,epps_pulley_na,sstn_na,segundos
+mach_k5_nous.csv,5,39527,10,10000,0.0493,0.0514,0.0532,0.0045,NA,0.0511,0.0435,0.0682,0.0366,0.1494,0.0378,0,0,0,0,10000,0,0,0,0,0,0,89.56925225257874
+mach_k5_nous.csv,5,39527,25,10000,0.0773,0.0819,0.0712,0.0053,0.0514,0.0819,0.0423,0.0834,0.0908,0.26,0.0592,0,0,0,0,0,0,0,0,0,0,0,90.03537774085999
+mach_k5_nous.csv,5,39527,50,10000,0.146,0.1437,0.1258,0.0071,0.1229,0.135,0.0756,0.0997,0.2006,0.3421,0.1253,0,0,0,0,0,0,0,0,0,0,0,85.46567249298096
+mach_k5_nous.csv,5,39527,100,10000,0.3648,0.3152,0.2741,0.0233,0.3215,0.2807,0.2104,0.1674,0.395,0.5277,0.2805,0,0,0,0,0,0,0,0,0,0,0,82.72054362297058
+mach_k5_nous.csv,5,39527,250,10000,0.9248,0.7917,0.7161,0.6517,0.8779,0.7084,0.81,0.5067,0.7737,0.8681,0.7814,0,0,0,0,0,0,0,0,0,0,0,92.5595428943634
