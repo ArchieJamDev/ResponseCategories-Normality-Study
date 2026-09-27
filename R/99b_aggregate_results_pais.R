@@ -79,7 +79,10 @@ if (length(faltantes) > 0) {
 consolidado_todos <- do.call(rbind, lapply(archivos_todos, readr::read_csv, show_col_types = FALSE))
 consolidado_todos <- consolidado_todos[consolidado_todos$n %in% n_grid_pais, ]
 consolidado_todos$pais <- "todos"
-consolidado_todos$instrumento <- consolidado_todos$dataset
+# dataset trae el nombre con extension (ej. "rse_k4.csv", tal como se paso a
+# 02_bloque_real_categorias.R como argumento) -- quitarla para que calce con
+# el nombre de instrumento usado en los otros 3 grupos (sin extension).
+consolidado_todos$instrumento <- sub("\\.csv$", "", consolidado_todos$dataset)
 consolidado_todos <- consolidado_todos[, cols_comunes]
 
 if (nrow(consolidado_todos) != 25) {
