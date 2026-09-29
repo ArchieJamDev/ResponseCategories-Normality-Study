@@ -72,7 +72,7 @@
 
 \leftheader{Chac\'on}
 
-\abstract{La cantidad de categorías de respuesta ($k$) de una escala Likert es una decisión de diseño cuyo efecto sobre las pruebas de normalidad aplicadas al puntaje compuesto no se ha cuantificado. Se estudió cómo $k$ (3 a 9), el tamaño de muestra ($n$) y la severidad de la no-normalidad afectan la potencia de 11 pruebas de normalidad, mediante simulación Monte Carlo (10.000 réplicas por celda) y submuestreo de seis instrumentos reales. Bajo el criterio nominal ($p<.05$), la potencia decae levemente al aumentar $k$. Pero 8 de las 11 pruebas rechazan hasta el 100\% de las veces bajo una celda de referencia sin severidad (igual de discreta, no una normal continua) cuando $k$ es chico y $n$ es grande, por la discreción del compuesto, no por severidad real; corrigiendo el umbral de decisión por esta descalibración, el patrón se invierte: la potencia con tamaño ajustado es mayor en $k$ grande que en $k$ chico (brecha corregida entre $-.15$ y $-.37$ en los 5 niveles simulados), con una tasa de rechazo ajustada descriptivamente consistente en los seis instrumentos reales. Solo D'Agostino-Pearson, Jarque-Bera y la prueba de curtosis tienen la menor desviación respecto del 5\% nominal en todo el rango estudiado.}
+\abstract{La cantidad de categorías de respuesta ($k$) de una escala Likert es una decisión de diseño cuyo efecto sobre las pruebas de normalidad del puntaje compuesto no se ha cuantificado. Se estudió cómo $k$ (3 a 9), el tamaño de muestra ($n$) y la severidad de la no-normalidad afectan la potencia de 11 pruebas de normalidad, mediante simulación Monte Carlo (10.000 réplicas) y submuestreo de seis instrumentos reales. Bajo el criterio nominal ($p<.05$), la potencia decae levemente al aumentar $k$. Pero 8 de las 11 pruebas rechazan hasta 100\% de las veces bajo una celda de referencia sin severidad, por discreción del compuesto, no por severidad real; corrigiendo el umbral por esa descalibración, el patrón se invierte: la potencia ajustada es mayor en $k$ grande que en $k$ chico (brecha entre $-.15$ y $-.37$), consistente con la tasa ajustada en seis instrumentos reales. Solo D'Agostino-Pearson, Jarque-Bera y curtosis tienen la menor desviación del 5\% nominal.}
 
 \keywords{escala Likert, categorías de respuesta, pruebas de normalidad, simulación Monte Carlo, severidad de no-normalidad, puntaje compuesto}
 
@@ -180,7 +180,7 @@ Se evaluó la siguiente batería de 11 pruebas de normalidad: Shapiro-Wilk \pare
 \subsection{Implementación y reproducibilidad}
 \label{sec:implementation}
 
-Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1) mediante GitHub Actions (\emph{runners} ubuntu-latest, un trabajo por celda); el código está disponible según se indica en Disponibilidad de datos y código. Con $R=10\,000$, el error Monte Carlo de una tasa cercana a $.5$ es $\approx.005$; diferencias menores a ese margen no son sistemáticas. La implementación exacta de cada prueba y la ocupación de categorías por celda están documentadas en el repositorio (16 de 42 celdas tienen alguna categoría con probabilidad $<1\%$).
+Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1) mediante GitHub Actions (\emph{runners} ubuntu-latest, un trabajo por celda); el código está disponible según se indica en Disponibilidad de datos y código. Con $R=10\,000$, el error Monte Carlo de una tasa cercana a $.5$ es $\approx.005$; diferencias menores a ese margen no son sistemáticas. La implementación exacta de cada prueba y la ocupación de categorías por celda están documentadas en el repositorio (16 de 42 celdas --35 del diseño más 7 de referencia, una por $k$, Resultados-- tienen alguna categoría con probabilidad $<1\%$).
 
 \subsection{Corrección por descalibración del umbral de decisión}
 \label{sec:correccion}
@@ -194,7 +194,7 @@ El criterio nominal ($p<.05$) no garantiza 5\% de rechazo bajo H0 con datos disc
 \label{sec:res-niveles}
 
 \begin{enumerate}
-\item \textbf{Efecto de $k$, criterio nominal.} Con $p<.05$, la potencia decae levemente al aumentar $k$: la brecha entre $k=3$ y $k=9$ va de .012 a .045 (Tabla~\ref{tab:brecha-k}).
+\item \textbf{Efecto de $k$, criterio nominal.} Con $p<.05$, la potencia decae levemente al aumentar $k$: la brecha (potencia en $k=3$ menos $k=9$) va de .012 a .045 (Tabla~\ref{tab:brecha-k}).
 \item \textbf{El criterio nominal está descalibrado.} Bajo la celda de referencia sin severidad, 8 de las 11 pruebas rechazan hasta 100\% de las veces con $k$ chico y $n$ grande (ver más abajo, Sección de calibración): detectan la discreción del compuesto, no severidad. Corrigiendo el umbral de decisión por esa descalibración (Método), la brecha $k=3-k=9$ se \textbf{invierte}: de $-.15$ a $-.37$ en los 5 niveles (Tabla~\ref{tab:brecha-k}) --la potencia con tamaño ajustado es mayor en $k=9$ que en $k=3$, no menor--.
 \item \textbf{Interacción con $n$.} La brecha corregida tiende a crecer en magnitud con $n$, sin estabilizarse en cero como la nominal (Tabla~\ref{tab:brecha-n-nivel} y Figura~\ref{fig:brecha}); la tendencia no es monótona (hay retrocesos puntuales por nivel, además del mínimo local en $k=7$ dentro del rango $k=3$ a $9$), pero los extremos favorecen a $k=9$ de forma consistente en los 5 niveles.
 \end{enumerate}
@@ -322,7 +322,7 @@ Los patrones puestos a prueba no provienen de literatura previa, que no cubre es
 \item[Más categorías ($k$), más tasa corregida.] En alto (SPS-10, RWAS), el coeficiente descriptivo de $k$ fue positivo en $n=10,25,50$. En bajo-moderado (RSE, MACH-IV, HEXACO) fue negativo en los 8 tamaños, porque HEXACO ($k=7$) tiene tasa corregida tan baja ($\approx.27$) como RSE ($k=4$) pese a más categorías: coincide con el mínimo local en $k=7$ del bloque simulado (Discusión).
 \item[El efecto depende de $n$.] La asociación con $n$ es descriptivamente consistente con la simulación: la brecha corregida entre instrumentos con distinto $k$ tiende a aumentar con $n$ en lugar de diluirse.
 \item[La brecha entre $k$ extremos se achica con la severidad.] No puede evaluarse en los datos reales: solo bajo-moderado incluye varios valores de $k$; moderado está representado únicamente por AHS.
-\item[La paridad de $k$ afecta la potencia.] Sin apoyo descriptivo, igual que con la nominal: coeficiente cercano a cero en $n=10,25,50$.
+\item[La paridad de $k$ afecta la potencia.] Sin apoyo descriptivo: coeficiente cercano a cero en $n=10,25,50$.
 \end{description}
 
 \subsection{Comparación de las 11 pruebas bajo el umbral ajustado}
