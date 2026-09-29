@@ -721,11 +721,15 @@ jobs:
 
   bloque-real-categorias-corregido-m-instrumento:
     # Repite el bloque real corregido de MACH-IV/AHS/RWAS con su umbral
-    # m-especifico (job de arriba) en vez del umbral generico m=10, como
-    # chequeo de robustez -- no reemplaza bloque-real-categorias-corregido,
-    # se guarda aparte (sufijo _m<m>) para comparar ambos.
+    # m-especifico (job calibrate-umbral-nulo-m-instrumento, arriba) en vez
+    # del umbral generico m=10, como chequeo de robustez -- no reemplaza
+    # bloque-real-categorias-corregido, se guarda aparte (sufijo _m<m>) para
+    # comparar ambos. Los umbral_nulo_k<k>_m<m>.csv ya estan commiteados en
+    # el repo (no se descargan como artifact), asi que este job NO depende
+    # de calibrate-umbral-nulo-m-instrumento en el mismo despacho -- solo de
+    # extract-real-data, para tener los datasets reales frescos.
     if: ${{ inputs.correr_bloque_real_corregido_m_instrumento }}
-    needs: [extract-real-data, calibrate-umbral-nulo-m-instrumento]
+    needs: extract-real-data
     strategy:
       matrix:
         include:
@@ -757,11 +761,6 @@ jobs:
         with:
           name: real-data-processed
           path: data/processed
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: umbral-nulo-m-*
-          path: data/results
-          merge-multiple: true
       - name: Bloque real corregido con umbral m-especifico (R=10000)
         run: |
           if [ "${{ matrix.dataset }}" = "ahs_k8.csv" ]; then
