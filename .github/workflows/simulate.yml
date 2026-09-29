@@ -81,6 +81,14 @@ on:
         description: "Agrega los 10 CSV del chequeo por sexo en un consolidado (data/results/consolidado_sexo.csv) y calcula la brecha hombres vs. mujeres"
         type: boolean
         default: false
+      correr_calibracion_umbral_nulo_m_instrumento:
+        description: "Chequeo de robustez pedido en revision externa (notes/prompt_revision_julius_v3.md/v4.md): recalibra el umbral de referencia con el m nativo de MACH-IV (m=20,k=5), AHS (m=8,k=8) y RWAS (m=22,k=9) en vez del m=10 generico del bloque de niveles"
+        type: boolean
+        default: false
+      correr_bloque_real_corregido_m_instrumento:
+        description: "Repite el submuestreo corregido de MACH-IV/AHS/RWAS con su umbral m-especifico -- requiere correr_calibracion_umbral_nulo_m_instrumento en el mismo despacho (usa el artifact real-data-processed ya publicado de correr_extraccion)"
+        type: boolean
+        default: false
 
 jobs:
   extract-real-data:
@@ -659,3 +667,109 @@ jobs:
             data/results/brecha_sexo_n250.csv
             data/results/pruebas_estadisticas_sexo_n250.csv
             data/results/anova_grupos_sexo_n250.csv
+
+  calibrate-umbral-nulo-m-instrumento:
+    # Chequeo de robustez: el umbral de referencia usado para corregir el
+    # bloque real (bloque-real-categorias-corregido arriba) se calibra con
+    # m=10 fijo (mismo m que el bloque de niveles), pero MACH-IV (20 items),
+    # AHS (8) y RWAS (22) no tienen m=10 -- ver R/07_calibrar_umbral_nulo.R
+    # y notes/prompt_revision_julius_v3.md / v4.md. Este job recalibra la
+    # celda de referencia 'normal' y el umbral empirico p05 con el m nativo
+    # de cada uno de esos tres instrumentos, para comparar contra el umbral
+    # generico ya usado.
+    if: ${{ inputs.correr_calibracion_umbral_nulo_m_instrumento }}
+    strategy:
+      matrix:
+        include:
+          - instrumento: mach
+            k: 5
+            m: 20
+          - instrumento: ahs
+            k: 8
+            m: 8
+          - instrumento: rwas
+            k: 9
+            m: 22
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - name: Calibrar celda de referencia 'normal' con el m nativo del instrumento
+        run: Rscript R/03_calibrar_niveles.R normal ${{ matrix.k }} 16 ${{ matrix.m }}
+      - name: Calibrar umbral empirico p05 con ese m (R=10000)
+        run: Rscript R/07_calibrar_umbral_nulo.R ${{ matrix.k }} "" "" ${{ matrix.m }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: umbral-nulo-m-${{ matrix.instrumento }}
+          path: |
+            data/results/calibracion_nivel_normal_m${{ matrix.m }}.csv
+            data/results/umbral_nulo_k${{ matrix.k }}_m${{ matrix.m }}.csv
+
+  bloque-real-categorias-corregido-m-instrumento:
+    # Repite el bloque real corregido de MACH-IV/AHS/RWAS con su umbral
+    # m-especifico (job de arriba) en vez del umbral generico m=10, como
+    # chequeo de robustez -- no reemplaza bloque-real-categorias-corregido,
+    # se guarda aparte (sufijo _m<m>) para comparar ambos.
+    if: ${{ inputs.correr_bloque_real_corregido_m_instrumento }}
+    needs: [extract-real-data, calibrate-umbral-nulo-m-instrumento]
+    strategy:
+      matrix:
+        include:
+          - dataset: mach_k5.csv
+            m: 20
+          - dataset: ahs_k8.csv
+            m: 8
+          - dataset: rwas_k9.csv
+            m: 22
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - uses: actions/download-artifact@v4
+        with:
+          name: real-data-processed
+          path: data/processed
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: umbral-nulo-m-*
+          path: data/results
+          merge-multiple: true
+      - name: Bloque real corregido con umbral m-especifico (R=10000)
+        run: |
+          if [ "${{ matrix.dataset }}" = "ahs_k8.csv" ]; then
+            Rscript R/02b_bloque_real_categorias_corregida.R ${{ matrix.dataset }} 10000 10,25,50,100,250,500,1000 ${{ matrix.m }}
+          else
+            Rscript R/02b_bloque_real_categorias_corregida.R ${{ matrix.dataset }} 10000 "" ${{ matrix.m }}
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bloque-real-corregido-m-${{ matrix.dataset }}
+          path: data/results/bloque_real_*_corregido_m*.csv

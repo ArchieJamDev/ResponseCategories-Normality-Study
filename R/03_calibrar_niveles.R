@@ -68,7 +68,7 @@
 
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 1) {
-  stop("Uso: Rscript R/03_calibrar_niveles.R <nivel> [k_list] [n_starts]")
+  stop("Uso: Rscript R/03_calibrar_niveles.R <nivel> [k_list] [n_starts] [m_items]")
 }
 nivel_elegido <- args[1]
 
@@ -102,7 +102,13 @@ k_list <- if (length(args) >= 2 && nzchar(args[2])) {
 }
 n_starts <- if (length(args) >= 3) as.integer(args[3]) else 8L
 
-m_items <- 10L
+# m_items: cantidad de items del compuesto simulado. Por defecto 10 (bloque
+# de niveles principal). Se parametriza para poder recalibrar la celda de
+# referencia "normal" al m nativo de un instrumento real especifico (MACH-IV
+# m=20, AHS m=8, RWAS m=22) -- ver R/07_calibrar_umbral_nulo.R y
+# notes/prompt_revision_julius_v3.md / v4.md, punto sobre el umbral de
+# referencia calibrado con m=10 fijo aplicado a instrumentos con otro m.
+m_items <- if (length(args) >= 4 && nzchar(args[4])) as.integer(args[4]) else 10L
 N_calib <- 150000L
 semilla_calib <- 20260922L
 
@@ -204,7 +210,8 @@ for (k in k_list) {
 tabla <- dplyr::bind_rows(filas)
 
 dir.create("data/results", showWarnings = FALSE, recursive = TRUE)
-out_path <- sprintf("data/results/calibracion_nivel_%s.csv", nivel_elegido)
+sufijo_m <- if (m_items == 10L) "" else sprintf("_m%d", m_items)
+out_path <- sprintf("data/results/calibracion_nivel_%s%s.csv", nivel_elegido, sufijo_m)
 readr::write_csv(tabla, out_path)
 cat(sprintf("\nGuardado %s\n", out_path))
 cat("Listo.\n")

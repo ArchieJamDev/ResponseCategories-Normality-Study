@@ -23,14 +23,22 @@
 # requiere volver a correr las 35 celdas desde cero, porque los datos ya
 # guardados de esos 5 niveles tampoco tienen los p-valores individuales.
 #
-# Uso: Rscript R/07_calibrar_umbral_nulo.R <k> [R] [n_list]
+# Uso: Rscript R/07_calibrar_umbral_nulo.R <k> [R] [n_list] [m_items]
+#
+# m_items (opcional, default 10): permite calibrar el umbral de referencia
+# con el m nativo de un instrumento real en vez del m=10 del bloque de
+# niveles -- ver R/03_calibrar_niveles.R (mismo parametro) y
+# notes/prompt_revision_julius_v3.md / v4.md: el umbral de referencia con
+# m=10 fijo se aplicaba a instrumentos con 8-22 items sin recalibrar por esa
+# diferencia. Requiere haber corrido antes
+# R/03_calibrar_niveles.R normal <k> <n_starts> <m_items> para ese mismo m.
 
 source("R/00_setup.R")
 source("R/08_run_battery.R")
 
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 1) {
-  stop("Uso: Rscript R/07_calibrar_umbral_nulo.R <k> [R] [n_list]")
+  stop("Uso: Rscript R/07_calibrar_umbral_nulo.R <k> [R] [n_list] [m_items]")
 }
 k_elegido <- as.integer(args[1])
 R_replicas <- if (length(args) >= 2 && nzchar(args[2])) as.integer(args[2]) else 10000L
@@ -42,9 +50,12 @@ n_grid <- if (length(args) >= 3 && nzchar(args[3])) {
   n_grid_default
 }
 
-ruta_calib <- "data/results/calibracion_nivel_normal.csv"
+m_items <- if (length(args) >= 4 && nzchar(args[4])) as.integer(args[4]) else 10L
+sufijo_m <- if (m_items == 10L) "" else sprintf("_m%d", m_items)
+
+ruta_calib <- sprintf("data/results/calibracion_nivel_normal%s.csv", sufijo_m)
 if (!file.exists(ruta_calib)) {
-  stop(sprintf("No se encontro '%s' -- correr R/03_calibrar_niveles.R normal primero.", ruta_calib))
+  stop(sprintf("No se encontro '%s' -- correr R/03_calibrar_niveles.R normal <k> <n_starts> %d primero.", ruta_calib, m_items))
 }
 calib <- readr::read_csv(ruta_calib, show_col_types = FALSE)
 fila_calib <- calib[calib$nivel == "normal" & calib$k == k_elegido, ]
@@ -55,8 +66,6 @@ cols_umbral <- cols_umbral[order(as.integer(sub("umbral_", "", cols_umbral)))]
 umbrales_nivel <- as.numeric(fila_calib[1, cols_umbral])
 umbrales_nivel <- umbrales_nivel[!is.na(umbrales_nivel)]
 stopifnot(length(umbrales_nivel) == k_elegido - 1)
-
-m_items <- 10L
 
 generar_nivel <- function(n) {
   theta <- rnorm(n)
@@ -112,7 +121,7 @@ for (n in n_grid) {
 tabla <- do.call(rbind, filas)
 
 dir.create("data/results", showWarnings = FALSE, recursive = TRUE)
-out_path <- sprintf("data/results/umbral_nulo_k%d.csv", k_elegido)
+out_path <- sprintf("data/results/umbral_nulo_k%d%s.csv", k_elegido, sufijo_m)
 readr::write_csv(tabla, out_path)
 cat(sprintf("\nGuardado %s\n", out_path))
 cat("Listo.\n")
