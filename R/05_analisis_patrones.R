@@ -11,6 +11,16 @@
 # corre sobre datos ya commiteados en data/results/ (no requiere GitHub
 # Actions, no es una "corrida real" nueva -- ver notes/DESIGN.md).
 #
+# Actualizado para usar la potencia CORREGIDA (tasa_corregida de los
+# archivos bloque_real_*_corregido.csv) en vez de la nominal, para que
+# coincida con lo que describe el manuscrito ("Reproduccion en datos reales
+# ... usando tambien la potencia corregida"). Los p-valores que produce este
+# script no deben citarse como inferencia formal independiente: las 11
+# pruebas dentro de cada n comparten la misma muestra (son pseudo-replicas,
+# no observaciones independientes), asi que el manuscrito los reporta solo
+# como evidencia descriptiva de direccion y magnitud (revision externa,
+# notes/prompt_revision_julius_v2.md, punto #4).
+#
 # Modelo (reconstruido a partir de la descripcion en prosa del manuscrito,
 # no hay codigo original que reproducir exactamente):
 #
@@ -41,19 +51,13 @@
 #
 # Uso: Rscript R/05_analisis_patrones.R
 
-cols_pruebas <- c(
-  "shapiro_wilk", "anderson_darling", "lilliefors", "jarque_bera",
-  "dagostino_pearson", "cramer_von_mises", "shapiro_francia",
-  "pearson_chi2", "curtosis", "epps_pulley", "sstn"
-)
-
 archivos <- list(
-  rse_k4 = list(archivo = "data/results/bloque_real_rse_k4.csv", k = 4),
-  mach_k5 = list(archivo = "data/results/bloque_real_mach_k5.csv", k = 5),
-  sps_k6 = list(archivo = "data/results/bloque_real_sps_k6.csv", k = 6),
-  hexaco_k7 = list(archivo = "data/results/bloque_real_hexaco_k7.csv", k = 7),
-  ahs_k8 = list(archivo = "data/results/bloque_real_ahs_k8_n10-25-50-100-250-500-1000.csv", k = 8),
-  rwas_k9 = list(archivo = "data/results/bloque_real_rwas_k9.csv", k = 9)
+  rse_k4 = list(archivo = "data/results/bloque_real_rse_k4_corregido.csv", k = 4),
+  mach_k5 = list(archivo = "data/results/bloque_real_mach_k5_corregido.csv", k = 5),
+  sps_k6 = list(archivo = "data/results/bloque_real_sps_k6_corregido.csv", k = 6),
+  hexaco_k7 = list(archivo = "data/results/bloque_real_hexaco_k7_corregido.csv", k = 7),
+  ahs_k8 = list(archivo = "data/results/bloque_real_ahs_k8_corregido.csv", k = 8),
+  rwas_k9 = list(archivo = "data/results/bloque_real_rwas_k9_corregido.csv", k = 9)
 )
 
 niveles <- list(
@@ -62,15 +66,18 @@ niveles <- list(
   moderado = c("ahs_k8")
 )
 
-# --- Cargar y poner en formato largo: una fila por instrumento x n x prueba
+# --- Cargar: los archivos _corregido ya vienen en formato largo (una fila
+# por instrumento x n x prueba), con la tasa de rechazo bajo el umbral
+# empirico calibrado (Paso 1-3 de la correccion por tamano, ver
+# R/07_calibrar_umbral_nulo.R) en la columna tasa_corregida.
 
 largo <- do.call(rbind, lapply(names(archivos), function(instr) {
   info <- archivos[[instr]]
   df <- readr::read_csv(info$archivo, show_col_types = FALSE)
-  out <- tidyr::pivot_longer(df, all_of(cols_pruebas), names_to = "prueba", values_to = "potencia")
-  out$instrumento <- instr
-  out$k <- info$k
-  out[, c("instrumento", "k", "n", "prueba", "potencia")]
+  df$instrumento <- instr
+  df$k <- info$k
+  df$potencia <- df$tasa_corregida
+  df[, c("instrumento", "k", "n", "prueba", "potencia")]
 }))
 largo <- largo[!is.na(largo$potencia), ]
 
