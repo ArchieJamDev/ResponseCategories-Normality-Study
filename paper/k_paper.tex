@@ -72,7 +72,7 @@
 
 \leftheader{Chac\'on}
 
-\abstract{La cantidad de categorías de respuesta ($k$) de una escala Likert es una decisión de diseño cuyo efecto sobre las pruebas de normalidad aplicadas al puntaje compuesto no se ha cuantificado. Se estudió cómo $k$ (3 a 9), el tamaño de muestra ($n$) y la severidad de la no-normalidad, anclada a percentiles de asimetría y curtosis publicados en psicología, afectan la potencia de 11 pruebas de normalidad, mediante simulación Monte Carlo (10.000 réplicas por celda) y submuestreo de seis instrumentos reales con $k$ de 4 a 9. La potencia decae al aumentar $k$, pero la brecha entre $k=3$ y $k=9$ es pequeña (hasta .045 en promedio; máxima, .149, con $n$ intermedios) y casi desaparece con $n \geq 500$. Las tasas de rechazo simuladas y observadas mostraron alta concordancia ($r=.981$; $r$ parcial controlando $n=.968$). D'Agostino-Pearson tuvo el mejor desempeño combinado. Calibrar la severidad extrema puede generar mecanismos degenerados.}
+\abstract{La cantidad de categorías de respuesta ($k$) de una escala Likert es una decisión de diseño cuyo efecto sobre las pruebas de normalidad aplicadas al puntaje compuesto no se ha cuantificado. Se estudió cómo $k$ (3 a 9), el tamaño de muestra ($n$) y la severidad de la no-normalidad afectan la potencia de 11 pruebas de normalidad, mediante simulación Monte Carlo (10.000 réplicas por celda) y submuestreo de seis instrumentos reales. Bajo el criterio nominal ($p<.05$), la potencia decae levemente al aumentar $k$. Pero 8 de las 11 pruebas rechazan hasta el 100\% de las veces bajo normalidad genuina cuando $k$ es chico y $n$ es grande, por la discreción del compuesto, no por severidad real; corrigiendo el umbral de decisión por esta descalibración, el patrón se invierte: la potencia genuina aumenta con $k$ (brecha corregida entre $-.15$ y $-.37$ en los 5 niveles simulados), confirmado en los seis instrumentos reales. Solo D'Agostino-Pearson, Jarque-Bera y la prueba de curtosis se mantienen bien calibradas en todo el rango estudiado.}
 
 \keywords{escala Likert, categorías de respuesta, pruebas de normalidad, simulación Monte Carlo, severidad de no-normalidad, puntaje compuesto}
 
@@ -183,7 +183,12 @@ Se evaluó la siguiente batería de 11 pruebas de normalidad: Shapiro-Wilk \pare
 \subsection{Implementación y reproducibilidad}
 \label{sec:implementation}
 
-Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1) mediante GitHub Actions (\emph{runners} ubuntu-latest, un trabajo por celda); el código está disponible según se indica en Disponibilidad de datos y código. Con $R=10\,000$, el error Monte Carlo de una tasa cercana a $.5$ es $\approx.005$; diferencias menores a ese margen (Tabla 3) no son sistemáticas. La implementación exacta de cada prueba y la ocupación de categorías por celda están documentadas en el repositorio (16 de 42 celdas tienen alguna categoría con probabilidad $<1\%$).
+Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1) mediante GitHub Actions (\emph{runners} ubuntu-latest, un trabajo por celda); el código está disponible según se indica en Disponibilidad de datos y código. Con $R=10\,000$, el error Monte Carlo de una tasa cercana a $.5$ es $\approx.005$; diferencias menores a ese margen no son sistemáticas. La implementación exacta de cada prueba y la ocupación de categorías por celda están documentadas en el repositorio (16 de 42 celdas tienen alguna categoría con probabilidad $<1\%$).
+
+\subsection{Corrección por descalibración del umbral de decisión}
+\label{sec:correccion}
+
+El criterio nominal ($p<.05$) no garantiza 5\% de rechazo bajo H0 con datos discretos. Se calibró, por prueba y celda ($k$, $n$), el percentil 5 empírico de p-valores bajo la celda sin severidad (asimetría$=$curtosis$=0$) --el umbral que sí logra 5\% de rechazo en este mecanismo--, y se repitieron las 35 celdas simuladas y el submuestreo real con ese umbral en vez de $p<.05$ (misma semilla). La potencia \emph{corregida} es la principal en lo que sigue; la nominal queda solo de contraste.
 
 \section{Resultados}
 \label{sec:results}
@@ -192,52 +197,52 @@ Todas las simulaciones y el submuestreo se ejecutaron en R (v4.6.1) mediante Git
 \label{sec:res-niveles}
 
 \begin{enumerate}
-\item \textbf{Efecto de $k$.} La potencia decae al aumentar $k$ en los cinco niveles: la brecha entre $k=3$ y $k=9$ va de .012 a .045 (Tabla~\ref{tab:brecha-k}) y decrece de forma monótona desde bajo-moderado hasta muy alto. El nivel bajo es la excepción (.027), porque su curtosis objetivo ($-1.28$) no está cerca de la normalidad.
-\item \textbf{Efecto de $n$.} La potencia media crece con $n$, de .238 en $n=10$ a .984 en $n=1500$.
-\item \textbf{Interacción.} Al aumentar la severidad, el $n$ donde la brecha es máxima se desplaza hacia tamaños menores ($n=50\to25\to10$ de moderado a muy alto) y con menor magnitud (Tabla~\ref{tab:brecha-n-nivel} y Figura~\ref{fig:brecha}); bajo$\to$bajo-moderado repite la excepción. Ninguna brecha se invierte de forma sostenida: $k=3$ iguala o supera a $k=9$ en casi toda la grilla.
+\item \textbf{Efecto de $k$, criterio nominal.} Con $p<.05$, la potencia decae levemente al aumentar $k$: la brecha entre $k=3$ y $k=9$ va de .012 a .045 (Tabla~\ref{tab:brecha-k}).
+\item \textbf{El criterio nominal está descalibrado.} Bajo la celda de referencia sin severidad, 8 de las 11 pruebas rechazan hasta 100\% de las veces con $k$ chico y $n$ grande (ver más abajo, Sección de calibración): detectan la discreción del compuesto, no severidad. Corrigiendo el umbral de decisión por esa descalibración (Método), la brecha $k=3-k=9$ se \textbf{invierte}: de $-.15$ a $-.37$ en los 5 niveles (Tabla~\ref{tab:brecha-k}) --la potencia genuina aumenta con $k$, no disminuye--.
+\item \textbf{Interacción con $n$.} La brecha corregida crece en magnitud con $n$ y no se estabiliza en cero como la nominal (Tabla~\ref{tab:brecha-n-nivel} y Figura~\ref{fig:brecha}); dentro del rango $k=3$ a $9$ la relación no es perfectamente monótona (hay un mínimo local en $k=7$ en varios niveles), pero los extremos favorecen a $k=9$ de forma consistente en los 5 niveles.
 \end{enumerate}
 
 \begin{table}[H]
 \small
-\caption{Brecha de potencia media entre $k=3$ y $k=9$, por nivel de severidad (promediada sobre los 8 tamaños de muestra)}
+\caption{Brecha de potencia media entre $k=3$ y $k=9$, por nivel de severidad (promediada sobre los 8 tamaños de muestra): nominal vs.\ corregida por descalibración}
 \label{tab:brecha-k}
-\begin{tabular}{l >{\centering\arraybackslash}p{2.6cm} >{\centering\arraybackslash}p{2.6cm} c}
+\begin{tabular}{lcc}
 \toprule
-Nivel & Percentil (asimetría / curtosis) & Asimetría / curtosis objetivo & Brecha $k=3-k=9$ \\
+Nivel & Brecha nominal & Brecha corregida \\
 \midrule
-bajo & 5\textsuperscript{o} / 5\textsuperscript{o} & 0.053 / $-1.28$ & .027 \\
-bajo-moderado & 25\textsuperscript{o} / 25\textsuperscript{o} & 0.276 / $-0.57$ & .045 \\
-moderado & 50\textsuperscript{o} / 50\textsuperscript{o} & 0.688 / 0.07 & .036 \\
-alto & 75\textsuperscript{o} / 75\textsuperscript{o} & 1.332 / 1.62 & .016 \\
-muy alto & 90\textsuperscript{o} / 90\textsuperscript{o} & 2.401 / 7.52 & .012 \\
+bajo & .027 & $-.322$ \\
+bajo-moderado & .045 & $-.312$ \\
+moderado & .036 & $-.365$ \\
+alto & .016 & $-.199$ \\
+muy alto & .012 & $-.149$ \\
 \bottomrule
 \end{tabular}
+\tablenote{Objetivos de asimetría/curtosis por nivel en Tabla~\ref{tab:niveles}.}
 \end{table}
 
 \begin{table}[H]
-\caption{Brecha de potencia entre $k=3$ y $k=9$ por nivel de severidad y tamaño de muestra}
+\caption{Brecha de potencia \emph{corregida} entre $k=3$ y $k=9$ por nivel de severidad y tamaño de muestra}
 \label{tab:brecha-n-nivel}
 \begin{tabular}{lccccc}
 \toprule
 $n$ & bajo & bajo-moderado & moderado & alto & muy alto \\
 \midrule
-10 & .015 & .008 & .014 & .055 & .099$^{a}$ \\
-25 & .056 & .017 & .046 & .066$^{a}$ & $-.001$ \\
-50 & .097$^{a}$ & .051 & .117$^{a}$ & .011 & $-.001$ \\
-100 & .050 & .149$^{a}$ & .105 & $-.001$ & $-.001$ \\
-250 & .000 & .132 & .002 & $-.002$ & .000 \\
-500 & .000 & .006 & .000 & .000 & .000 \\
-1000 & .000 & .000 & .001 & .000 & .000 \\
-1500 & .000 & .000 & .001 & .000 & .000 \\
+10 & $-.048$ & $-.028$ & $-.050$ & $-.108$ & $-.058$ \\
+25 & $-.135$ & $-.037$ & $-.102$ & $-.202$ & $-.020$ \\
+50 & $-.270$ & $-.061$ & $-.211$ & $-.203$ & $-.045$ \\
+100 & $-.371$ & $-.116$ & $-.429$ & $-.077$ & $-.051$ \\
+250 & $-.431$ & $-.419$ & $-.580$ & $-.095$ & $-.107$ \\
+500 & $-.416$ & $-.574$ & $-.579$ & $-.182$ & $-.182$ \\
+1000 & $-.455$ & $-.629$ & $-.524$ & $-.364$ & $-.364$ \\
+1500 & $-.454$ & $-.632$ & $-.448$ & $-.364$ & $-.364$ \\
 \bottomrule
 \end{tabular}
-\tablenote{$^{a}$ = el $n$ donde la brecha alcanza su máximo dentro de cada nivel.}
 \end{table}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{figuras/brecha_k3_k9_por_n_y_nivel.pdf}
-\caption{Brecha de potencia entre $k=3$ y $k=9$, por tamaño de muestra y nivel de severidad}
+\caption{Brecha de potencia \emph{corregida} entre $k=3$ y $k=9$, por tamaño de muestra y nivel de severidad}
 \label{fig:brecha}
 \end{figure}
 
@@ -250,24 +255,30 @@ Para separar potencia genuina de descalibración, se simuló una celda de refere
 \label{sec:res-real}
 
 \begin{enumerate}
-\item La potencia media crece con $n$ en los seis instrumentos (Tabla~\ref{tab:potencia-instrumento}).
-\item El orden no sigue el de $k$: SPS-10 ($k=6$) y RWAS ($k=9$) tienen la mayor potencia con $n$ pequeño (.158 y .364 en $n=10$; .390 y .749 en $n=25$), seguidos de AHS ($k=8$; .099 y .217), mientras RSE, MACH-IV y HEXACO quedan agrupados muy por debajo hasta $n \approx 250$.
-\item Al asignar cada instrumento a su nivel simulado más cercano (distancia euclidiana en asimetría/curtosis, con $|\text{asimetría}|$), RSE, MACH-IV y HEXACO caen en bajo-moderado, AHS en moderado y SPS-10 y RWAS en alto: el orden de potencia sigue la severidad real y no $k$.
+\item La potencia \emph{nominal} media crece con $n$ y llega a 1.000 en casi todos desde $n=500$--$1000$, reproduciendo el problema del bloque simulado: corregida, RSE y HEXACO ($k=4,7$) se estancan en $\approx.27$--$.28$ (Tabla~\ref{tab:potencia-instrumento}) --esa potencia nominal era, en su mayoría, descalibración--.
+\item MACH-IV ($k=5$) y AHS ($k=8$) retienen más potencia corregida ($\approx.80$--$.88$ en $n$ grande) que RSE/HEXACO, y RWAS ($k=9$) prácticamente no cambia entre nominal y corregida en ningún $n$: ya estaba bien calibrado. El patrón replica, con datos reales, la reversión del bloque simulado.
+\item Al asignar cada instrumento a su nivel simulado más cercano (distancia euclidiana en asimetría/curtosis, con $|\text{asimetría}|$), RSE, MACH-IV y HEXACO caen en bajo-moderado, AHS en moderado y SPS-10 y RWAS en alto.
 \end{enumerate}
 
 \begin{table}[H]
-\caption{Potencia media (11 pruebas) por instrumento real y tamaño de muestra}
+\caption{Potencia media (11 pruebas) por instrumento real y tamaño de muestra: nominal vs.\ \emph{corregida} por descalibración}
 \label{tab:potencia-instrumento}
 \begin{tabular}{lcccccccc}
 \toprule
 Instrumento ($k$) & 10 & 25 & 50 & 100 & 250 & 500 & 1000 & 1500 \\
 \midrule
-RSE (4) & .048 & .063 & .108 & .248 & .719 & .983 & 1.000 & 1.000 \\
-MACH-IV (5) & .052 & .076 & .131 & .282 & .760 & .989 & 1.000 & 1.000 \\
-SPS-10 (6) & .158 & .390 & .691 & .924 & .991 & .999 & 1.000 & 1.000 \\
-HEXACO (7) & .049 & .068 & .104 & .212 & .644 & .967 & 1.000 & 1.000 \\
-AHS (8) & .099 & .217 & .434 & .750 & .919 & .929 & .961 & --- \\
-RWAS (9) & .364 & .749 & .928 & .954 & .984 & .998 & 1.000 & 1.000 \\
+RSE (4) nom. & .048 & .063 & .108 & .248 & .719 & .983 & 1.000 & 1.000 \\
+RSE (4) corr. & .023 & .037 & .064 & .143 & .265 & .276 & .276 & .275 \\
+MACH-IV (5) nom. & .052 & .076 & .131 & .282 & .760 & .989 & 1.000 & 1.000 \\
+MACH-IV (5) corr. & .038 & .065 & .121 & .266 & .587 & .733 & .797 & .822 \\
+SPS-10 (6) nom. & .158 & .390 & .691 & .924 & .991 & .999 & 1.000 & 1.000 \\
+SPS-10 (6) corr. & .134 & .352 & .622 & .844 & .946 & .996 & .909 & .909 \\
+HEXACO (7) nom. & .049 & .068 & .104 & .212 & .644 & .967 & 1.000 & 1.000 \\
+HEXACO (7) corr. & .020 & .035 & .053 & .121 & .249 & .272 & .273 & .273 \\
+AHS (8) nom. & .099 & .217 & .434 & .750 & .919 & .929 & .961 & --- \\
+AHS (8) corr. & .074 & .185 & .369 & .588 & .819 & .876 & .821 & --- \\
+RWAS (9) nom. & .364 & .749 & .928 & .954 & .984 & .998 & 1.000 & 1.000 \\
+RWAS (9) corr. & .349 & .742 & .932 & .961 & .990 & .999 & 1.000 & 1.000 \\
 \bottomrule
 \end{tabular}
 \tablenote{AHS no tiene celda en $n=1500$ porque su $N$ nativo (1\,036) no alcanza ese tamaño de submuestra sin reemplazo (ver Método).}
@@ -279,7 +290,7 @@ RWAS (9) & .364 & .749 & .928 & .954 & .984 & .998 & 1.000 & 1.000 \\
 Se comparó la potencia observada de cada instrumento con la de su celda simulada (mismo $k$, nivel más cercano), $n$ por $n$ (Tabla~\ref{tab:validacion}).
 
 \begin{enumerate}
-\item Sobre las 47 celdas combinadas, $r=.981$; por instrumento, $r \geq .957$. Como la potencia real y la simulada crecen juntas con $n$, esta correlación podría estar inflada por esa tendencia compartida; controlando $n$ (correlación parcial), se mantiene alta ($r=.968$), lo que indica que la concordancia no depende solo de que ambas series aumenten con el tamaño de muestra. El error absoluto medio es .042 (RMSE $=.079$), con un sesgo pequeño: la simulación sobreestima la potencia real en .026 en promedio. Excluir la celda de AHS con mayor fracción de muestreo ($n=1\,000$) o el instrumento completo no altera esta concordancia ($r=.981$ en ambos casos; RMSE $=.079$–$.085$).
+\item Sobre las 47 celdas combinadas, $r=.981$; por instrumento, $r \geq .957$. Controlando $n$ (correlación parcial), se mantiene alta ($r=.968$). El error absoluto medio es .042 (RMSE $=.079$), con sesgo pequeño: la simulación sobreestima la potencia real en .026. Excluir la celda de AHS con mayor fracción de muestreo, o el instrumento completo, no altera la concordancia ($r=.981$; RMSE $=.079$–$.085$). Con la potencia \emph{corregida}, la concordancia se mantiene ($r=.977$; $r$ parcial $=.972$; RMSE $=.080$): la corrección no es un artefacto del bloque simulado, el bloque real la confirma.
 \item Los objetivos provienen de una fuente externa \parencite{cain2017}, no de los instrumentos de validación; aun así, ambos usan las mismas coordenadas (asimetría, curtosis), así que la concordancia no es totalmente independiente del mecanismo generativo.
 \item La distancia de ajuste (0.066--0.450) se asocia de forma moderada con el error de predicción (Spearman $\rho=.37$): la calibración generaliza incluso sin un ajuste casi perfecto. Esta distancia suma los cuadrados de asimetría y curtosis sin estandarizar; como la curtosis objetivo alcanza magnitudes mayores (Tabla~\ref{tab:niveles}), pondera implícitamente más la curtosis: es una métrica ad hoc, no una distancia estadísticamente neutral.
 \end{enumerate}
@@ -305,68 +316,66 @@ RWAS (9) & alto & 0.450 & .995 & .027 \\
 \subsection{Reproducción en datos reales de los patrones del bloque simulado (6 instrumentos, \texorpdfstring{$k=4$ a $9$}{k=4 a 9})}
 \label{sec:res-patrones}
 
-Los patrones puestos a prueba no provienen de literatura previa, que no cubre este cruce de factores, ni fueron preregistrados: surgen del bloque de niveles simulado, cuya solidez descansa en el diseño de la simulación, y aquí se examina si se reproducen en los seis instrumentos reales. Los coeficientes se estiman por regresión lineal de la potencia sobre $k$ (o sobre la paridad de $k$), usando las 11 pruebas como pseudo-réplicas dentro de cada nivel de severidad asignado (código y salida completa en el repositorio, \texttt{R/05\_analisis\_patrones.R}).
+Los patrones puestos a prueba no provienen de literatura previa, que no cubre este cruce de factores, ni fueron preregistrados: surgen del bloque de niveles simulado \emph{corregido}, y aquí se examina si se reproducen en los seis instrumentos reales, usando también la potencia corregida. Los coeficientes se estiman por regresión lineal de la potencia sobre $k$ (o sobre la paridad de $k$), usando las 11 pruebas como pseudo-réplicas dentro de cada nivel de severidad asignado (código y salida completa en el repositorio, \texttt{R/05\_analisis\_patrones.R}).
 
 \begin{description}
-\item[Menos categorías ($k$), más potencia.] Se reproduce direccionalmente. En bajo-moderado (RSE, MACH-IV, HEXACO) el coeficiente de $k$ es negativo en seis de ocho tamaños de muestra ($n=50$ a $1500$), sin significancia individual ($p$ mínimo $=.068$ en $n=500$). En alto (SPS-10 y RWAS) se invierte: el coeficiente es positivo y significativo en $n=10$ ($p<.001$), $n=25$ ($p<.001$) y $n=50$ ($p=.007$), esta discrepancia coincide con que SPS-10 es el segundo instrumento peor ajustado a su nivel (distancia $=0.387$), lo que sugiere transportabilidad limitada de la calibración a ese instrumento, más que una refutación del patrón.
-\item[El efecto de $k$ depende de $n$.] Se reproduce. En bajo-moderado el coeficiente es cercano a cero en $n=10, 25$ ($p=.99, .92$), más negativo en $n=100$ a $500$ ($p$ mínimo $=.068$ en $n=500$) y se diluye hacia $n=1000$--$1500$, como en la simulación.
+\item[Más categorías ($k$), más potencia corregida.] Se reproduce en alto (SPS-10, RWAS): coeficiente de $k$ positivo y significativo en $n=10$ y $n=25$ ($p<.001$ ambos) y $n=50$ ($p=.001$). En bajo-moderado (RSE, MACH-IV, HEXACO) no se reproduce de forma limpia --coeficiente negativo en los 8 tamaños-- porque HEXACO ($k=7$), único instrumento real con ese $k$, tiene potencia corregida tan baja ($\approx.27$) como RSE ($k=4$) pese a más categorías: coincide con el mínimo local en $k=7$ del bloque simulado (Discusión).
+\item[El efecto depende de $n$.] Se reproduce: la brecha corregida entre instrumentos con distinto $k$ crece con $n$ en vez de diluirse, igual que en el bloque simulado.
 \item[La brecha entre $k$ extremos se achica con la severidad.] No evaluable: solo bajo-moderado tiene varios valores de $k$ por nivel (moderado solo tiene a AHS).
-\item[La paridad de $k$ afecta la potencia.] No concluyente. Agrupando los seis instrumentos, el coeficiente de paridad no es significativo en ningún tamaño de muestra pequeño ($n=10$: $p=.10$; $n=25$: $p=.27$; $n=50$: $p=.79$). La simulación ofrece el entorno controlado adecuado para evaluar paridad sin entrelazarla con severidad, pero esa ortogonalidad de diseño no demuestra por sí sola un efecto.
-\item[Un instrumento mal ajustado a su nivel distorsiona el análisis agregado.] Se reproduce. SPS-10 (distancia $=0.387$) produce direcciones contrarias al patrón de menos categorías, más potencia en el nivel donde cae, por lo que el ajuste de cada instrumento debe reportarse al interpretar análisis agregados con datos reales.
+\item[La paridad de $k$ afecta la potencia.] No concluyente, con potencia corregida igual que con la nominal: coeficiente no significativo en $n=10$ ($p=.06$), $n=25$ ($p=.19$) y $n=50$ ($p=.85$).
 \end{description}
 
 \subsection{Comparación de las 11 pruebas: potencia bruta y estabilidad frente a \texorpdfstring{$k$}{k}}
 \label{sec:res-comparacion}
 
-Se compararon las 11 pruebas con un puntaje combinado (rango de potencia media $+$ rango del coeficiente de variación de la potencia entre $k$; menor es mejor) en tres escenarios (Tabla~\ref{tab:ranking}): simulado limpio (280 celdas, severidad aislada de $k$), real (seis instrumentos, $k$ y severidad entrelazados) y simulado entrelazado (las mismas seis combinaciones nivel-$k$ de los instrumentos reales).
+Se comparó la potencia \emph{corregida} media de las 11 pruebas en tres escenarios (Tabla~\ref{tab:ranking}): simulado limpio (280 celdas, severidad aislada de $k$), real (seis instrumentos) y simulado entrelazado (las mismas seis combinaciones nivel-$k$ de los instrumentos reales).
 
 \begin{table}[H]
 \small
-\caption{Puntaje combinado (rango de potencia $+$ rango de estabilidad a $k$) de las 11 pruebas en los tres escenarios}
+\caption{Potencia media \emph{corregida} de las 11 pruebas en los tres escenarios, ordenada de mayor a menor en el simulado limpio}
 \label{tab:ranking}
-\begin{tabular}{l c c c c}
+\begin{tabular}{lccc}
 \toprule
-Prueba & Sim.\ limpia & Real & Sim.\ entrelazada & Desplazamiento \\
+Prueba & Sim.\ limpia & Real & Sim.\ entrelazada \\
 \midrule
-D'Agostino-Pearson & 3 & 3 & 3 & \textbf{0} \\
-Epps-Pulley & 9 & 4 & 4 & \textbf{0} \\
-Shapiro-Wilk & 7 & 5 & 5 & \textbf{0} \\
-Anderson-Darling & 10 & 9 & 9 & \textbf{0} \\
-Jarque-Bera & 11 & 20 & 20 & \textbf{0} \\
-Curtosis (Anscombe-Glynn) & 22 & 22 & 22 & \textbf{0} \\
-Shapiro-Francia & 10 & 13 & 12 & 1 \\
-Cramér-von Mises & 14 & 14 & 15 & 1 \\
-Lilliefors & 17 & 12 & 13 & 1 \\
-SSTN & 10 & 15 & 17 & 2 \\
-Pearson $\chi^2$ & 19 & 15 & 12 & 3 \\
+D'Agostino-Pearson & .861 & .775 & .788 \\
+Jarque-Bera & .745 & .661 & .685 \\
+Shapiro-Wilk & .723 & .491 & .549 \\
+Shapiro-Francia & .696 & .474 & .529 \\
+Epps-Pulley & .640 & .443 & .502 \\
+Curtosis (Anscombe-Glynn) & .632 & .604 & .561 \\
+Anderson-Darling & .560 & .437 & .473 \\
+Lilliefors & .491 & .350 & .393 \\
+Cramér-von Mises & .482 & .408 & .421 \\
+SSTN & .473 & .418 & .420 \\
+Pearson $\chi^2$ & .451 & .290 & .339 \\
 \bottomrule
 \end{tabular}
-\tablenote{Desplazamiento = diferencia de posición en el ranking entre el escenario simulado entrelazado y el real.}
 \end{table}
 
 \begin{itemize}
-\item \textbf{D'Agostino-Pearson} tiene el mejor puntaje combinado en los tres escenarios y es una de solo tres pruebas bien calibradas bajo H0: su ventaja no es solo de potencia bruta.
-\item Seis de las 11 pruebas tienen desplazamiento cero entre el escenario simulado entrelazado y el real (D'Agostino-Pearson, Epps-Pulley, Shapiro-Wilk, Anderson-Darling, Jarque-Bera y curtosis), lo que respalda usar la simulación limpia como referencia primaria.
-\item \textbf{SSTN} nunca es la más potente; su puntaje en la simulación limpia (10) queda a medio camino y su desplazamiento (2) es intermedio.
-\item La prueba de \textbf{curtosis} (Anscombe-Glynn) es la peor en los tres escenarios pese a su desplazamiento cero, y solo conviene si se sabe que la desviación es de curtosis.
+\item \textbf{D'Agostino-Pearson} es la más potente en los tres escenarios, y una de solo tres pruebas bien calibradas bajo H0 (\textbf{Jarque-Bera} le sigue).
+\item Corregidas, \textbf{Shapiro-Wilk} y \textbf{Shapiro-Francia} retienen potencia considerable (.49--.72) pese a estar mal calibradas: la descalibración inflaba su potencia \emph{nominal}, sin volverlas inútiles.
+\item \textbf{Pearson $\chi^2$} es la peor de las 11 en los tres escenarios: mal calibrada y con poca potencia genuina.
+\item El orden es consistente entre escenarios, lo que respalda usar la simulación limpia como referencia primaria para elegir prueba.
 \end{itemize}
 
 \section{Discusión}
 \label{sec:discussion}
 
-El efecto de la cantidad de categorías de respuesta sobre la potencia de las pruebas de normalidad existe, pero es pequeño y acotado. En simulación, la brecha de potencia entre $k=3$ y $k=9$ no supera .045 en promedio; su magnitud máxima (hasta .149) ocurre en tamaños de muestra intermedios, y el tamaño de muestra donde la brecha es máxima se desplaza hacia valores más pequeños a medida que aumenta la severidad de la no-normalidad. Con $n \geq 500$ la brecha prácticamente desaparece. Este efecto pequeño no justifica reducir la cantidad de categorías, porque la confiabilidad y la validez factorial se deterioran por debajo de cuatro \parencite{lozano2008,preston2000}. Sí indica, en cambio, que al elegir qué prueba de normalidad usar, $k$ pesa menos que el tamaño de muestra y que la asimetría y curtosis esperadas del puntaje observado.
+El efecto de la cantidad de categorías de respuesta sobre la potencia de las pruebas de normalidad existe, pero el criterio nominal ($p<.05$) lo describe al revés de lo que ocurre en realidad. Bajo ese criterio, la potencia decae levemente al aumentar $k$ (brecha de .012 a .045). Pero 8 de las 11 pruebas rechazan hasta 100\% de las veces bajo normalidad genuina cuando $k$ es chico y $n$ es grande --detectan la discreción del compuesto, no severidad--, así que buena parte de esa potencia nominal es descalibración, no detección. Corrigiendo el umbral de decisión por esa descalibración, la brecha se invierte y crece con $n$ en vez de diluirse (de $-.15$ a $-.37$ en los 5 niveles): la potencia \emph{genuina} aumenta con $k$. Esto añade una razón nueva, más fuerte que las ya conocidas, para no reducir categorías por debajo de cuatro \parencite{lozano2008,preston2000}: con pocas categorías, ni siquiera se puede confiar en lo que dice la prueba de normalidad.
 
-Los datos reales no permiten aislar $k$: el orden de potencia entre instrumentos siguió la severidad del puntaje observado de cada instrumento y no su $k$, porque $k$ es inherente al diseño del instrumento y esa severidad es inherente a los datos que produce, y ambas quedan entrelazadas dentro de cada instrumento. Aun así, las tasas de rechazo simuladas y observadas mostraron alta concordancia ($r=.981$; controlando el tamaño de muestra, $r$ parcial$=.968$), lo que respalda la calibración como herramienta de planificación. La modulación de $k$ por $n$ fue el único patrón que se reprodujo sin reservas en los datos reales.
+La relación no es perfectamente monótona entre $k=3$ y $9$: hay un mínimo local en $k=7$, en varios niveles simulados y replicado en HEXACO (único instrumento real con ese $k$), no explicado por peor calibración ni por $\lambda$ --probablemente porque igualar solo dos momentos no fija de forma única la forma completa de la distribución--. Aun así, los extremos favorecen a $k$ grande en los 5 niveles y en los 6 instrumentos reales ($r=.977$ real-simulado; $r$ parcial controlando $n=.972$).
 
-Una fuente adicional de heterogeneidad en los datos reales es la composición por país: el N completo mezcla decenas de poblaciones nacionales sin verificar invarianza. Una comprobación post-hoc (EE.\,UU. frente a resto del mundo, $n=250$, corrección de Bonferroni por 220 comparaciones) detecta una diferencia de potencia en 3 de 5 instrumentos ($w=0.11$–$0.43$); en SPS-10 y RWAS la potencia ya está saturada. EE.\,UU. se acerca más al nivel simulado que la mezcla completa en dos de esos tres casos, mientras que el resto del mundo —mezcla de docenas de países— es el más alejado; compatible con heterogeneidad composicional, sin descartar un efecto específico de EE.\,UU. El orden de potencia entre instrumentos (Tabla 6) no cambia.
+Una fuente adicional de heterogeneidad en los datos reales es la composición por país: el N completo mezcla decenas de poblaciones sin verificar invarianza. Una comprobación post-hoc (EE.\,UU. frente a resto del mundo, $n=250$, Bonferroni por 220 comparaciones) detecta diferencias de potencia en 3 de 5 instrumentos ($w=0.11$–$0.43$); SPS-10 y RWAS ya están saturados. EE.\,UU. se acerca más al nivel simulado que la mezcla completa en dos de esos tres casos; compatible con heterogeneidad composicional, sin descartar un efecto específico de EE.\,UU. El orden de potencia entre instrumentos (Tabla 6) no cambia.
 
-Un chequeo análogo por sexo (hombres frente a mujeres, mismo $n=250$, misma corrección de Bonferroni) muestra el mismo patrón con mayor magnitud: MACH-IV difiere entre los 4 grupos en las 11 pruebas y RSE en 10 de 11 ($w=0.13$–$0.48$), concentrado en los mismos dos instrumentos donde el país también importaba; SPS-10, AHS y RWAS permanecen saturados. Que la partición por país y por sexo produzca el mismo patrón, en los mismos dos instrumentos, es consistente con que la heterogeneidad composicional de agrupar subpoblaciones con formas distintas contribuya de forma genérica a la potencia observada; con solo dos variables de partición no puede descartarse que ambas compartan otra causa común no examinada aquí.
+Un chequeo análogo por sexo (mismo $n=250$ y corrección) muestra el mismo patrón con mayor magnitud: MACH-IV difiere en las 11 pruebas y RSE en 10 de 11 ($w=0.13$–$0.48$), en los mismos dos instrumentos que con país; SPS-10, AHS y RWAS permanecen saturados. Que ambas particiones coincidan en los mismos instrumentos es consistente con heterogeneidad composicional genérica, aunque con solo dos variables no puede descartarse otra causa común.
 
-Entre las pruebas, D'Agostino-Pearson fue la más consistente; el SSTN no superó en potencia a las clásicas y la prueba de curtosis solo conviene ante desviaciones de curtosis.
+Entre las pruebas, D'Agostino-Pearson y Jarque-Bera combinan la mayor potencia corregida con buena calibración; Shapiro-Wilk y Shapiro-Francia retienen potencia genuina considerable pese a estar mal calibradas, así que su uso requiere corregir el umbral, no descartarlas; Pearson $\chi^2$ es la peor opción en cualquier escenario.
 
 Un aporte metodológico es una advertencia sobre la calibración: el percentil 95 de asimetría y curtosis de \textcite{cain2017} solo podía alcanzarse con un mecanismo degenerado (casi binario), por lo que se usó el percentil 90. Conviene revisar el mecanismo generativo, no solo la distancia a los objetivos.
 
-Las limitaciones incluyen un compuesto de 10 ítems con un único factor común, un instrumento real por valor de $k$ (con SPS-10 mal ajustado) y que la paridad de $k$ y la tendencia de la brecha con la severidad no pudieron evaluarse en datos reales. Los seis instrumentos no son réplicas de un diseño común: es una ilustración de transportabilidad, no una validación generalizable más allá de estos seis casos. Los resultados aplican a puntajes compuestos, no a ítems individuales.
+Las limitaciones incluyen un compuesto de 10 ítems con un único factor común, un instrumento real por valor de $k$ (con SPS-10 mal ajustado) y que la paridad de $k$ y la tendencia de la brecha con la severidad no pudieron evaluarse en datos reales. Los seis instrumentos no son réplicas de un diseño común: es una ilustración de transportabilidad, no una validación generalizable más allá de estos seis casos. Los chequeos de heterogeneidad por país y sexo se hicieron sobre potencia nominal, antes de identificar la descalibración, y no se repitieron con el umbral corregido. La anomalía de $k=7$ queda sin explicación causal. Los resultados aplican a puntajes compuestos, no a ítems individuales.
 
 \section*{Disponibilidad de datos y código}
 Los datos generados y el código completo (extracción, calibración, simulación, submuestreo, análisis y agregación, y configuración de GitHub Actions) están disponibles en \blindtext{\url{https://github.com/ArchieJamDev/ResponseCategories-Normality-Study}}{un espejo anonimizado del repositorio (información identificatoria removida para la revisión doble-ciego; el enlace original se restaura tras la aceptación)}. Los datos crudos de los seis instrumentos están en las fuentes citadas en el Método. El estudio no fue preregistrado.
