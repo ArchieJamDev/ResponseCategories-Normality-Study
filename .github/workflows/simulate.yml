@@ -49,6 +49,14 @@ on:
         description: "Paso 1 de la correccion por tamano (size-corrected power, punto #2 de la segunda revision externa): calcula el umbral empirico p05 por prueba/k/n bajo el nivel 'normal' x k=3..9 = 7 shards -- requiere que calibracion_nivel_normal.csv ya este commiteado"
         type: boolean
         default: false
+      correr_simulacion_niveles_corregida:
+        description: "Paso 2 de la correccion por tamano: repite los 5 niveles x k=3..9 = 35 shards con el umbral empirico en vez de p<.05 -- requiere que los 7 umbral_nulo_k*.csv ya esten commiteados"
+        type: boolean
+        default: false
+      correr_bloque_real_corregido:
+        description: "Paso 3 de la correccion por tamano: repite el submuestreo de los 6 instrumentos reales con el umbral empirico -- corre su propia extraccion fresca en el mismo despacho (needs: extract-real-data-corregido)"
+        type: boolean
+        default: false
       correr_extraccion_pais:
         description: "Chequeo de robustez: extrae y separa EE.UU. vs. resto del mundo para 5 de los 6 datasets reales (RSE, MACH-IV, HEXACO, SPS-10, RWAS; excluye AHS por ser 100% EE.UU.) -- ver R/01b_extract_real_subscales_pais.R"
         type: boolean
@@ -365,6 +373,88 @@ jobs:
         with:
           name: umbral-nulo-k${{ matrix.k }}
           path: data/results/umbral_nulo_k${{ matrix.k }}.csv
+
+  simulate-niveles-corregido:
+    if: ${{ inputs.correr_simulacion_niveles_corregida }}
+    strategy:
+      matrix:
+        nivel:
+          - bajo
+          - bajo_moderado
+          - moderado
+          - alto
+          - muy_alto
+        k: [3, 4, 5, 6, 7, 8, 9]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - name: Simulacion corregida de niveles (R=10000, umbral empirico)
+        run: Rscript R/04b_simulacion_niveles_corregida.R ${{ matrix.nivel }} ${{ matrix.k }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nivel-corregido-${{ matrix.nivel }}-k${{ matrix.k }}
+          path: data/results/nivel_${{ matrix.nivel }}_k${{ matrix.k }}_corregido.csv
+
+  bloque-real-categorias-corregido:
+    if: ${{ inputs.correr_bloque_real_corregido }}
+    needs: extract-real-data
+    strategy:
+      matrix:
+        dataset:
+          - rse_k4.csv
+          - mach_k5.csv
+          - sps_k6.csv
+          - hexaco_k7.csv
+          - ahs_k8.csv
+          - rwas_k9.csv
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - uses: actions/download-artifact@v4
+        with:
+          name: real-data-processed
+          path: data/processed
+      - name: Bloque real corregido -- submuestreo m-out-of-N (R=10000, umbral empirico)
+        run: |
+          if [ "${{ matrix.dataset }}" = "ahs_k8.csv" ]; then
+            Rscript R/02b_bloque_real_categorias_corregida.R ${{ matrix.dataset }} 10000 10,25,50,100,250,500,1000
+          else
+            Rscript R/02b_bloque_real_categorias_corregida.R ${{ matrix.dataset }}
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bloque-real-corregido-${{ matrix.dataset }}
+          path: data/results/bloque_real_*_corregido.csv
 
   extract-real-data-pais:
     if: ${{ inputs.correr_extraccion_pais }}
