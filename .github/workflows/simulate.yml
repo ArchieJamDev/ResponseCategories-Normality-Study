@@ -89,6 +89,14 @@ on:
         description: "Repite el submuestreo corregido de MACH-IV/AHS/RWAS con su umbral m-especifico -- requiere correr_calibracion_umbral_nulo_m_instrumento en el mismo despacho (usa el artifact real-data-processed ya publicado de correr_extraccion)"
         type: boolean
         default: false
+      correr_bloque_real_pais_corregido:
+        description: "Exploratorio (no implica cambios al paper todavia): repite el chequeo de pais (EE.UU. vs. resto, grilla reducida n=10..250) con el umbral corregido (umbral_nulo_k<k>[_m<m>].csv, ya commiteados) en vez de potencia nominal -- requiere correr_extraccion_pais en el mismo despacho"
+        type: boolean
+        default: false
+      correr_bloque_real_sexo_corregido:
+        description: "Exploratorio (no implica cambios al paper todavia): repite el chequeo de sexo (hombres vs. mujeres, grilla reducida n=10..250) con el umbral corregido en vez de potencia nominal -- requiere correr_extraccion_sexo en el mismo despacho"
+        type: boolean
+        default: false
 
 jobs:
   extract-real-data:
@@ -772,3 +780,120 @@ jobs:
         with:
           name: bloque-real-corregido-m-${{ matrix.dataset }}
           path: data/results/bloque_real_*_corregido_m*.csv
+
+  bloque-real-categorias-pais-corregido:
+    # Exploratorio: aplica el umbral corregido (m generico o m-especifico
+    # segun el instrumento) al chequeo de heterogeneidad por pais, que hasta
+    # ahora solo se habia reportado con potencia nominal (ver Discusion del
+    # manuscrito). No implica todavia ningun cambio al texto -- solo
+    # generar los datos para decidir si vale la pena reportarlo.
+    if: ${{ inputs.correr_bloque_real_pais_corregido }}
+    needs: extract-real-data-pais
+    strategy:
+      matrix:
+        include:
+          - dataset: rse_k4_us.csv
+            m: 10
+          - dataset: rse_k4_nous.csv
+            m: 10
+          - dataset: mach_k5_us.csv
+            m: 20
+          - dataset: mach_k5_nous.csv
+            m: 20
+          - dataset: hexaco_k7_us.csv
+            m: 10
+          - dataset: hexaco_k7_nous.csv
+            m: 10
+          - dataset: sps_k6_us.csv
+            m: 10
+          - dataset: sps_k6_nous.csv
+            m: 10
+          - dataset: rwas_k9_us.csv
+            m: 22
+          - dataset: rwas_k9_nous.csv
+            m: 22
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - uses: actions/download-artifact@v4
+        with:
+          name: real-data-processed-pais
+          path: data/processed
+      - name: Bloque real por pais corregido (R=10000, grilla reducida n=10..250)
+        run: Rscript R/02b_bloque_real_categorias_corregida.R ${{ matrix.dataset }} 10000 10,25,50,100,250 ${{ matrix.m }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bloque-real-pais-corregido-${{ matrix.dataset }}
+          path: data/results/bloque_real_*_corregido*.csv
+
+  bloque-real-categorias-sexo-corregido:
+    # Mismo criterio que bloque-real-categorias-pais-corregido, para el
+    # chequeo de heterogeneidad por sexo.
+    if: ${{ inputs.correr_bloque_real_sexo_corregido }}
+    needs: extract-real-data-sexo
+    strategy:
+      matrix:
+        include:
+          - dataset: rse_k4_hombres.csv
+            m: 10
+          - dataset: rse_k4_mujeres.csv
+            m: 10
+          - dataset: mach_k5_hombres.csv
+            m: 20
+          - dataset: mach_k5_mujeres.csv
+            m: 20
+          - dataset: sps_k6_hombres.csv
+            m: 10
+          - dataset: sps_k6_mujeres.csv
+            m: 10
+          - dataset: rwas_k9_hombres.csv
+            m: 22
+          - dataset: rwas_k9_mujeres.csv
+            m: 22
+          - dataset: ahs_k8_hombres.csv
+            m: 8
+          - dataset: ahs_k8_mujeres.csv
+            m: 8
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - uses: actions/download-artifact@v4
+        with:
+          name: real-data-processed-sexo
+          path: data/processed
+      - name: Bloque real por sexo corregido (R=10000, grilla reducida n=10..250)
+        run: Rscript R/02b_bloque_real_categorias_corregida.R ${{ matrix.dataset }} 10000 10,25,50,100,250 ${{ matrix.m }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bloque-real-sexo-corregido-${{ matrix.dataset }}
+          path: data/results/bloque_real_*_corregido*.csv
