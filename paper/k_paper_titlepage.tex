@@ -1,0 +1,43 @@
+% k_paper_titlepage.tex -- separate, identified title page required by
+% Methodology at first submission, in addition to the masked main-text
+% file (k_paper_en.tex). This file is NOT anonymized: it carries the
+% author's identity, affiliation, and contact details, exactly as they
+% will appear after acceptance. It is uploaded as a separate file
+% alongside the blinded manuscript, never merged with it, so that the
+% double-blind reviewers never see this file.
+%
+% Content follows APA 7 title-page conventions (apa7.cls, [jou] mode --
+% the normal, non-blinded title page, as opposed to k_paper_en.tex's
+% [man,mask] mode): title, author name(s) and affiliation(s), author
+% note with ORCID/correspondence, and the abstract + keywords repeated
+% here as most journals also want them on the title page submission
+% form. No body text, no bibliography.
+\documentclass[jou,floatsintext]{apa7}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[american]{babel}
+\usepackage{csquotes}
+
+\title{Response Categories and the Power of 11 Normality Tests: A Monte Carlo and Real-Data Study}
+\shorttitle{RESPONSE CATEGORIES AND NORMALITY TEST POWER}
+
+\authorsnames{Arqu\'imedes Chac\'on}
+\authorsaffiliations{Universidad Cat\'olica Andr\'es Bello, Caracas, Venezuela}
+\authornote{Arqu\'imedes Chac\'on \quad https://orcid.org/0000-0000-0000-0000 (add ORCID iD before submission if available)
+
+The author has no known conflict of interest to disclose.
+
+Correspondence concerning this article should be addressed to
+  Arqu\'imedes Chac\'on, Universidad Cat\'olica Andr\'es Bello, Caracas,
+  Venezuela. Email: arquimedeschacon@gmail.com}
+
+\leftheader{Chac\'on}
+
+\abstract{The number of response categories ($k$) of a Likert scale is a design decision whose effect on normality tests applied to the composite score has not been quantified. We studied how $k$ (3 to 9), sample size ($n$), and the severity of non-normality affect the power of 11 normality tests, through Monte Carlo simulation (10,000 replications) and subsampling of six real instruments. Under the nominal criterion ($p<.05$), power declines slightly as $k$ increases. But 8 of the 11 tests reject up to 100\% of the time under a reference cell with no severity, owing to the discreteness of the composite, not to real severity; correcting the threshold for this miscalibration, the pattern reverses: size-adjusted power is higher at large $k$ than at small $k$ (gap between $-.15$ and $-.37$), consistent with the adjusted rejection rate in six real instruments. Only D'Agostino-Pearson, Jarque-Bera, and the kurtosis test show the smallest deviation from the nominal 5\%.}
+
+\keywords{Likert scale, response categories, normality tests, Monte Carlo simulation, severity of non-normality, composite score}
+
+\begin{document}
+\maketitle
+\end{document}
