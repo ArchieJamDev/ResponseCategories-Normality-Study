@@ -79,7 +79,7 @@
   <text x="20" y="448" font-size="16" font-weight="bold" fill="#000">B. Por qué &#955; libre importa: espacio de (asimetría, curtosis) alcanzable</text>
 
   <!-- left: lambda fixed -->
-  <text x="230" y="472" font-size="13" text-anchor="middle" fill="#000">&#955; fija (p.ej. 0.8) + umbrales calibrados</text>
+  <text x="230" y="472" font-size="13" text-anchor="middle" fill="#000">&#955; fija (p.ej. .8) + umbrales calibrados</text>
   <g transform="translate(120,485)">
     <line x1="0" y1="100" x2="220" y2="100" stroke="#000" stroke-width="1"/>
     <line x1="0" y1="100" x2="0" y2="0" stroke="#000" stroke-width="1"/>
