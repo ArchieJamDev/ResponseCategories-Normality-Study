@@ -2,6 +2,7 @@
 # Figura 2 del manuscrito: brecha de potencia corregida (k=3 - k=9) por n y
 # nivel de severidad. Valores = Tabla 3 del manuscrito (promedio sobre las
 # 11 pruebas). Ejes sin cero inicial (APA 7: el valor esta acotado a [-1, 1]).
+# Genera la version en espanol y la inglesa (la inglesa se usa en k_paper_en.tex).
 # Uso: Rscript R/10_figura_brecha.R
 library(ggplot2)
 
@@ -30,17 +31,35 @@ sin_cero <- function(x) {
   s
 }
 
-p <- ggplot(d, aes(x = n, y = brecha, color = nivel)) +
-  geom_hline(yintercept = 0, color = "grey60", linewidth = 0.4) +
-  geom_line(linewidth = 1) +
-  geom_point(size = 2.2) +
-  scale_x_log10(breaks = n_grid) +
-  scale_y_continuous(labels = sin_cero) +
-  scale_color_manual(values = colores, name = "Nivel de severidad") +
-  labs(x = "Tamaño de muestra (n, escala log)",
-       y = "Brecha de potencia corregida (k=3 - k=9)") +
-  theme_minimal(base_size = 13) +
-  theme(panel.grid.minor = element_blank(), legend.position = "right")
-
-ggsave("paper/figuras/brecha_k3_k9_por_n_y_nivel.pdf", p,
-       width = 7.2, height = 4.4, device = cairo_pdf)
+hacer_figura <- function(idioma) {
+  if (idioma == "en") {
+    levels(d$nivel) <- c("Low", "Low-moderate", "Moderate", "High", "Very high")
+    nombres <- c("Low", "Low-moderate", "Moderate", "High", "Very high")
+    tit_leyenda <- "Severity level"
+    etq_x <- "Sample size (n, log scale)"
+    etq_y <- "Corrected power gap (k=3 - k=9)"
+    archivo <- "paper/figuras/brecha_k3_k9_por_n_y_nivel_en.pdf"
+  } else {
+    nombres <- niveles
+    tit_leyenda <- "Nivel de severidad"
+    etq_x <- "Tama\u00f1o de muestra (n, escala log)"
+    etq_y <- "Brecha de potencia corregida (k=3 - k=9)"
+    archivo <- "paper/figuras/brecha_k3_k9_por_n_y_nivel.pdf"
+  }
+  cols <- setNames(unname(colores), nombres)
+  p <- ggplot(d, aes(x = n, y = brecha, color = nivel)) +
+    geom_hline(yintercept = 0, color = "grey60", linewidth = 0.4) +
+    geom_line(linewidth = 1) +
+    geom_point(size = 2.2) +
+    scale_x_log10(breaks = n_grid) +
+    scale_y_continuous(labels = sin_cero) +
+    scale_color_manual(values = cols, name = tit_leyenda) +
+    labs(x = etq_x, y = etq_y) +
+    theme_minimal(base_size = 13) +
+    theme(panel.grid.minor = element_blank(), legend.position = "right")
+  ggsave(archivo, p, width = 7.2, height = 4.4, device = cairo_pdf)
+}
+d_es <- d
+hacer_figura("es")
+d <- d_es
+hacer_figura("en")
