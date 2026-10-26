@@ -221,27 +221,8 @@ muy alto & .012 & $-.149$ \\
 \end{table}
 
 \begin{enumerate}[resume]
-\item \textbf{Interacción con $n$.} La brecha corregida tiende a crecer en magnitud con $n$, sin estabilizarse en cero como la nominal (Tabla~\ref{tab:brecha-n-nivel}); la tendencia no es monótona (hay un mínimo local en $k=7$), pero los extremos favorecen a $k=9$ de forma consistente en los 5 niveles.
+\item \textbf{Interacción con $n$.} La brecha corregida tiende a crecer en magnitud con $n$, sin estabilizarse en cero como la nominal (Tabla S1, Material Suplementario); la tendencia no es monótona (hay un mínimo local en $k=7$), pero los extremos favorecen a $k=9$ de forma consistente en los 5 niveles.
 \end{enumerate}
-
-\begin{table}[H]
-\caption{Brecha de potencia \emph{corregida} entre $k=3$ y $k=9$ por nivel de severidad y tamaño de muestra}
-\label{tab:brecha-n-nivel}
-\begin{tabular}{lccccc}
-\toprule
-$n$ & bajo & bajo-moderado & moderado & alto & muy alto \\
-\midrule
-10 & $-.048$ & $-.028$ & $-.050$ & $-.108$ & $-.058$ \\
-25 & $-.135$ & $-.037$ & $-.102$ & $-.202$ & $-.020$ \\
-50 & $-.270$ & $-.061$ & $-.211$ & $-.203$ & $-.045$ \\
-100 & $-.371$ & $-.116$ & $-.429$ & $-.077$ & $-.051$ \\
-250 & $-.431$ & $-.419$ & $-.580$ & $-.095$ & $-.107$ \\
-500 & $-.416$ & $-.574$ & $-.579$ & $-.182$ & $-.182$ \\
-1000 & $-.455$ & $-.629$ & $-.524$ & $-.364$ & $-.364$ \\
-1500 & $-.454$ & $-.632$ & $-.448$ & $-.364$ & $-.364$ \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 La Figura~\ref{fig:brecha} ilustra la trayectoria: todas las curvas parten cerca de cero en $n=10$ y descienden hasta entre $-.36$ y $-.63$ en $n=1500$, sin pasar a valores positivos. Solo \emph{bajo-moderado} es estrictamente monótona; \emph{alto} (en $n=100$) y \emph{moderado} (tras $n=250$) retroceden más visiblemente.
 
@@ -384,7 +365,7 @@ Una fuente adicional de heterogeneidad en los datos reales es la composición po
 El alcance de los hallazgos está acotado por el diseño. El compuesto tiene 10 ítems y un único factor común (recalibrado al $m$ nativo en 3 de 6 instrumentos, Resultados), y la calibración iguala solo asimetría y curtosis, no la forma distribucional completa: el efecto atribuido a $k$ está definido bajo esta familia de DGP, no como propiedad general. En datos reales hay un instrumento por valor de $k$, presentados como ilustración de transportabilidad y no como réplicas de un diseño común, y no pudieron evaluarse la paridad de $k$ ni la tendencia de la brecha con la severidad. Los resultados aplican a puntajes compuestos, no a ítems individuales.
 
 \section*{Disponibilidad de datos y código}
-Los datos generados y el código completo (extracción, calibración, simulación, submuestreo, análisis y agregación, y configuración de GitHub Actions) están disponibles en \blindtext{\url{https://github.com/ArchieJamDev/ResponseCategories-Normality-Study}}{un espejo anonimizado del repositorio (información identificatoria removida para la revisión doble-ciego; el enlace original se restaura tras la aceptación)}. Los datos crudos de los seis instrumentos están en las fuentes citadas en el Método. El estudio no fue preregistrado.
+Los datos generados y el código completo (extracción, calibración, simulación, submuestreo, análisis y agregación, y configuración de GitHub Actions) están disponibles en \blindtext{\url{https://github.com/ArchieJamDev/ResponseCategories-Normality-Study}}{un espejo anonimizado del repositorio (\url{https://anonymous.4open.science/r/ResponseCategories-Normality-Study-CCFD/}; información identificatoria removida para la revisión doble-ciego, el enlace original se restaura tras la aceptación)}. Los datos crudos de los seis instrumentos están en las fuentes citadas en el Método. El estudio no fue preregistrado.
 
 \section*{Uso de Inteligencia Artificial Generativa}
 Se utilizó inteligencia artificial generativa (Claude, Anthropic) para implementar y ejecutar parte del código en R y como asistente de estilo de redacción, siempre bajo la revisión y dirección del autor, que desarrolló el texto y el procedimiento y tomó las decisiones conceptuales y metodológicas.

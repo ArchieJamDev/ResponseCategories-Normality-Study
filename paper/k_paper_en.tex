@@ -101,14 +101,12 @@ Six open-access instruments were used, selected for their native number of respo
 \item \textbf{Right-Wing Authoritarianism Scale} (RWAS; origin: \cite{altemeyer1981}; data: \cite{osp2016rwas}): $k=9$, 22 items, unidimensional, $N=9,680$, published $\alpha \approx .90$.
 \end{itemize}
 
-Reverse-coded items were handled as reported for each instrument. The composite score was computed as the sum of its ordinal item values (with reversal where applicable), requiring complete cases. All instruments, multidimensional or not, were analyzed as a single composite score rather than by subscale: the object of study is the power of the tests on the score that is actually submitted to parametric analysis. For SPS-10 and the Adult Hope Scale, both multidimensional, this is supported by evidence of a general factor that dominates over their dimensions \parencite{sischka2025,gomez2014}, not merely by design convenience. Treating the sum of ordinal items as a single score is a common practice in psychology, although the debate over whether that sum should be analyzed as continuous remains unresolved \parencite{viljoen2015}; this study follows said convention, it does not evaluate it. Summing rather than averaging, and the resulting numerical range, likewise do not affect normality: both are linear transformations that do not alter skewness or kurtosis.
-
-The $k=6$ and $k=8$ instruments were located on the Open Science Framework (search documented in the repository).
+Reverse-coded items were handled as reported for each instrument. The composite score was computed as the sum of its ordinal item values (with reversal where applicable), requiring complete cases. All instruments, multidimensional or not, were analyzed as a single composite score rather than by subscale: the object of study is the power of the tests on the score that is actually submitted to parametric analysis. For SPS-10 and the Adult Hope Scale, both multidimensional, this is supported by evidence of a general factor that dominates over their dimensions \parencite{sischka2025,gomez2014}, not merely by design convenience. Treating the sum of ordinal items as a single score is a common practice in psychology, although the debate over whether that sum should be analyzed as continuous remains unresolved \parencite{viljoen2015}; this study follows said convention, it does not evaluate it. Summing rather than averaging is a linear transformation that does not alter skewness or kurtosis.
 
 \subsection{Severity-Levels Block: Simulating the Severity of Non-Normality}
 \label{sec:niveles}
 
-Each level simulates a set of $m=10$ items generated from a common factor $\theta \sim N(0,1)$ with factor loading $\lambda$: each item $= \lambda\theta + \sqrt{1-\lambda^2}\,\varepsilon_j$, with $\varepsilon_j \sim N(0,1)$ iid, discretized into $k$ ordered categories by means of $k-1$ thresholds on the continuous latent variable; the composite score is the sum of the values of the $m$ already-discretized items. The common factor $\theta$ is normal by construction; the non-normality manipulated in this design is not in $\theta$, but emerges from discretization and aggregation, and is a property of the observed composite score, not of the latent factor.
+Each level simulates a set of $m=10$ items generated from a common factor $\theta \sim N(0,1)$ with factor loading $\lambda$: each item $= \lambda\theta + \sqrt{1-\lambda^2}\,\varepsilon_j$, with $\varepsilon_j \sim N(0,1)$ iid, discretized into $k$ ordered categories by means of $k-1$ thresholds on the continuous latent variable; the composite score is the sum of the values of the $m$ already-discretized items. The common factor $\theta$ is normal by construction; the non-normality manipulated in this design is not in $\theta$ but emerges from discretization and aggregation.
 
 The factor loading $\lambda$ is treated here as a free parameter of the calibration, together with the thresholds, rather than being fixed at a constant value. This decision follows from a prior feasibility check: fixing $\lambda$ at a constant value restricts the common-factor-plus-discretized-thresholds mechanism to platykurtic or near-normal skewness/kurtosis combinations; leaving $\lambda$ free substantially widens the reachable space and includes positive kurtosis, necessary to reproduce the most extreme level of the design (Figure~\ref{fig:mecanismo}). As a trade-off, $\lambda$ ranges from .45 to .88 across the 35 cells, with no monotonic relation to $k$ within a given level: the design equates target skewness and kurtosis across values of $k$, not a fixed inter-item correlation structure nor the complete distributional shape.
 
@@ -119,7 +117,7 @@ The factor loading $\lambda$ is treated here as a free parameter of the calibrat
 \label{fig:mecanismo}
 \end{figure}
 
-Five ordered levels of non-normality severity were defined, with target skewness and excess kurtosis anchored to the 5th, 25th, 50th, 75th, and 90th percentiles of the 1,567 univariate distributions reported by \textcite{cain2017} (Table~\ref{tab:niveles}). The 90th percentile was used instead of the 95th because the latter proved unreachable in a non-degenerate way with the $m=10$-item mechanism. Kurtosis uses the signed percentile (its direction implies distinct forms of non-normality); skewness uses the percentile of $|\text{skewness}|$, because the power of the 11 tests is symmetric with respect to its direction. Because \citeauthor{cain2017} do not publish absolute-value skewness percentiles nor the 90th percentile, these were derived by linear interpolation of the cumulative distribution function implicit in their table, solving $P(|\text{skewness}| \leq m) = F(m) - F(-m) = p$; this is an approximation over aggregated data, not a calculation over the individual distributions. The skewness and kurtosis percentiles used as targets are marginal, not joint: \citeauthor{cain2017} do not report which combinations of the two co-occur, so each level is a synthetic profile, not an empirical profile jointly observed in psychological practice.
+Five ordered levels of non-normality severity were defined, with target skewness and excess kurtosis anchored to the 5th, 25th, 50th, 75th, and 90th percentiles of the 1,567 univariate distributions reported by \textcite{cain2017} (Table~\ref{tab:niveles}). The 90th percentile was used instead of the 95th because the latter proved unreachable in a non-degenerate way with the $m=10$-item mechanism. Kurtosis uses the signed percentile; skewness uses the percentile of $|\text{skewness}|$, because the power of the 11 tests is symmetric with respect to its direction. Because \citeauthor{cain2017} do not publish absolute-value skewness percentiles nor the 90th percentile, these were derived by linear interpolation of the cumulative distribution function implicit in their table, solving $P(|\text{skewness}| \leq m) = F(m) - F(-m) = p$; this is an approximation over aggregated data, not a calculation over the individual distributions. The skewness and kurtosis percentiles used as targets are marginal, not joint: \citeauthor{cain2017} do not report which combinations of the two co-occur, so each level is a synthetic profile, not an empirical profile jointly observed in psychological practice.
 
 \begin{table}[H]
 \small
@@ -137,7 +135,6 @@ high & 75th & 1.332 & 1.62 \\
 very high & 90th & 2.401 & 7.52 \\
 \bottomrule
 \end{tabular}
-\tablenote{Level labels (low, low-moderate, moderate, high, very high) are used consistently throughout Results and Discussion.}
 \end{table}
 
 \textbf{Calibration.} For each level-by-$k$ combination (seven values, 3 to 9; 35 cells in total), $\lambda$ and the $k-1$ thresholds were calibrated simultaneously via numerical optimization, minimizing the squared distance between the empirical moments of the simulated composite and the targets in Table~\ref{tab:niveles}:
@@ -146,31 +143,31 @@ very high & 90th & 2.401 & 7.52 \\
 d^2 = (\text{skewness}_{\text{achieved}} - \text{skewness}_{\text{target}})^2 + (\text{kurtosis}_{\text{achieved}} - \text{kurtosis}_{\text{target}})^2
 \end{equation}
 
-Thresholds were parameterized as $u_1 = p$ and $u_j = p + \sum_{i=2}^{j} \exp(g_i)$, which guarantees increasing thresholds, and $\lambda = 1/(1+e^{-z})$, which keeps it in $(0,1)$. The vector $(z, p, g_1, \ldots, g_{k-2})$ was optimized with Nelder-Mead from 16 starting points per cell, keeping the one with the smallest $d^2$. Moments were computed over $N=150,000$ replications using common random numbers, reused across the 35 cells, so that Monte Carlo noise would not contaminate comparisons between cells.
+Thresholds were parameterized as $u_1 = p$ and $u_j = p + \sum_{i=2}^{j} \exp(g_i)$, which guarantees increasing thresholds, and $\lambda = 1/(1+e^{-z})$, which keeps it in $(0,1)$. The vector $(z, p, g_1, \ldots, g_{k-2})$ was optimized with Nelder-Mead from 16 starting points per cell, keeping the one with the smallest $d^2$. Moments were computed over $N=150,000$ replications using common random numbers, reused across the 35 cells.
 
 With the calibrated parameters, each cell (level $\times$ $k$) was simulated independently across the full $n$ grid, with $R=10,000$ replications per cell (280 cells: 5 levels $\times$ 7 values of $k$ $\times$ 8 sample sizes).
 
 \subsection{Real-Data Block: \emph{m-out-of-N} Random Subsampling}
 \label{sec:realdata}
 
-On each instrument, repeated random subsampling without replacement was applied, from the \emph{m-out-of-N} family \parencite{politisromanowolf1999} but used here as a Monte Carlo procedure, not with its original asymptotic apparatus: for each $n$ in the grid, $R=10,000$ subsamples were drawn from the instrument's full composite score, and the empirical rejection rate of each test was computed against the full $N$ as the reference population. The minimum $N$ among five of the six instruments (RWAS, 9,680) is far larger than the maximum $n$ in the grid (1,500), so subsampling without replacement is valid for those five without adjustment. The exception is the Adult Hope Scale ($N=1,036$): because it does not reach $n=1,500$, a reduced grid $\{10, 25, 50, 100, 250, 500, 1000\}$ was used only for this instrument. At $n=1,000$ its subsample covers $\sim$97\% of $N$ (vs.\ $\sim$3\% for RSE): there, AHS is not strictly comparable, owing to lower subsampling variability as it approaches a census.
+On each instrument, repeated random subsampling without replacement was applied, from the \emph{m-out-of-N} family \parencite{politisromanowolf1999} but used here as a Monte Carlo procedure, not with its original asymptotic apparatus: for each $n$ in the grid, $R=10,000$ subsamples were drawn from the instrument's full composite score, and the empirical rejection rate of each test was computed against the full $N$ as the reference population. The minimum $N$ among five of the six instruments (RWAS, 9,680) is far larger than the maximum $n$ in the grid (1,500), so subsampling without replacement is valid for those five without adjustment. The exception is the Adult Hope Scale ($N=1,036$): because it does not reach $n=1,500$, a reduced grid $\{10, 25, 50, 100, 250, 500, 1000\}$ was used only for this instrument. At $n=1,000$ its subsample covers $\sim$97\% of $N$, so AHS is not strictly comparable there.
 
-In this component $k$ is not manipulated: it is a characteristic of each instrument's design and varies together with its number of items, its content, and the real shape (skewness and kurtosis) of its score, as occurs in psychometric practice. Nor is the number of items varied in any component: it is constant ($m=10$) in the severity-levels block and specific to each instrument in the real-data block. Only the severity-levels block therefore allows examining the effect of $k$ separately from severity and from $m$, which the real data do not allow.
+In this component $k$ is not manipulated: it is a characteristic of each instrument's design and varies together with its number of items, its content, and the real shape of its score, as in psychometric practice. The number of items is not varied either: it is constant ($m=10$) in the severity-levels block and specific to each instrument in the real-data block. Only the severity-levels block therefore isolates the effect of $k$ from severity and from $m$.
 
 \subsection{Normality Tests Evaluated}
 \label{sec:tests}
 
-The following battery of 11 normality tests was evaluated: Shapiro-Wilk \parencite{shapirowilk1965}, Anderson-Darling \parencite{andersondarling1954}, Lilliefors \parencite{lilliefors1967}, Jarque-Bera \parencite{jarquebera1980}, D'Agostino-Pearson \parencite{dagostinopearson1973}, Cramér-von Mises \parencite{csorgofaraway1996}, Shapiro-Francia \parencite{shapirofrancia1972}, Pearson's $\chi^2$ \parencite{pearson1900}, the Anscombe-Glynn kurtosis test \parencite{anscombeglynn1983}, Epps-Pulley \parencite{eppspulley1983}, and the SSTN \parencite{anaratschwender2026} ---a recent normality test based on self-similarity under convolution---. None of the 11 plays a leading role in this study: the object of study is the effect of $k$, $n$, and the severity of non-normality on the comparative power of the full battery, not the relative performance of any single test.
+The following battery of 11 normality tests was evaluated: Shapiro-Wilk \parencite{shapirowilk1965}, Anderson-Darling \parencite{andersondarling1954}, Lilliefors \parencite{lilliefors1967}, Jarque-Bera \parencite{jarquebera1980}, D'Agostino-Pearson \parencite{dagostinopearson1973}, Cramér-von Mises \parencite{csorgofaraway1996}, Shapiro-Francia \parencite{shapirofrancia1972}, Pearson's $\chi^2$ \parencite{pearson1900}, the Anscombe-Glynn kurtosis test \parencite{anscombeglynn1983}, Epps-Pulley \parencite{eppspulley1983}, and the SSTN \parencite{anaratschwender2026} ---a recent normality test based on self-similarity under convolution---.
 
 \subsection{Implementation and Reproducibility}
 \label{sec:implementation}
 
-All simulations and subsampling were run in R (v4.6.1) via GitHub Actions (ubuntu-latest \emph{runners}, one job per cell); the code is available as indicated in Data and Code Availability. With $R=10,000$, the Monte Carlo error of a rate near $.5$ is $\approx.005$; differences smaller than that margin are not systematic. The exact implementation of each test and the category occupancy per cell are documented in the repository (16 of 42 cells --the 35 of the design plus 7 reference cells, one per $k$, Results-- have at least one category with probability $<1\%$).
+All simulations and subsampling were run in R (v4.6.1) via GitHub Actions (ubuntu-latest \emph{runners}, one job per cell); the code is available as indicated in Data and Code Availability. With $R=10,000$, the Monte Carlo error of a rate near $.5$ is $\approx.005$; differences smaller than that margin are not systematic. The exact implementation of each test and the category occupancy per cell are documented in the repository; 16 of 42 cells (35 of the design plus 7 reference cells) have a category with probability $<1\%$.
 
 \subsection{Correction for Decision-Threshold Miscalibration}
 \label{sec:correccion}
 
-With discrete data, the nominal criterion ($p<.05$) does not guarantee a 5\% rejection rate even without additional non-normality: discreteness alone makes many tests reject. To correct this, for each test and each ($k$, $n$) combination a reference cell was simulated with the same discrete mechanism but with skewness and kurtosis equal to zero (not a continuous normal), and the 5th percentile of its $p$-values was adopted as the decision threshold: the test thus rejects about 5\% of the time in that reference. This threshold replaced $p<.05$ in the 35 simulated cells and in the real subsampling (same seed). \emph{Corrected power} is the rejection rate under that threshold: power size-adjusted to that reference DGP, not against mathematical normality. Each threshold is specific to its (test, $k$, $n$) and to this mechanism; it is not a significance level applicable to other scales. It is the primary measure from here on; the nominal rate serves only as a contrast.
+With discrete data, the nominal criterion ($p<.05$) does not guarantee a 5\% rejection rate even without additional non-normality: discreteness alone makes many tests reject. To correct this, for each test and each ($k$, $n$) combination a reference cell was simulated with the same discrete mechanism but with skewness and kurtosis equal to zero (not a continuous normal), and the 5th percentile of its $p$-values was adopted as the decision threshold: the test thus rejects about 5\% of the time in that reference. This threshold replaced $p<.05$ in the 35 simulated cells and in the real subsampling (same seed). \emph{Corrected power} is the rejection rate under that threshold: power size-adjusted to that reference DGP, not against mathematical normality. Each threshold is specific to its (test, $k$, $n$) and to this mechanism; it is not a significance level applicable to other scales. The nominal rate serves as contrast.
 
 \section{Results}
 \label{sec:results}
@@ -202,27 +199,8 @@ very high & .012 & $-.149$ \\
 \end{table}
 
 \begin{enumerate}[resume]
-\item \textbf{Interaction with $n$.} The corrected gap tends to grow in magnitude with $n$, without stabilizing at zero as the nominal gap does (Table~\ref{tab:brecha-n-nivel}); the trend is not monotonic (there is a local minimum at $k=7$), but the extremes consistently favor $k=9$ across the 5 levels.
+\item \textbf{Interaction with $n$.} The corrected gap tends to grow in magnitude with $n$, without stabilizing at zero as the nominal gap does (Table S1, Supplementary Material); the trend is not monotonic (there is a local minimum at $k=7$), but the extremes consistently favor $k=9$ across the 5 levels.
 \end{enumerate}
-
-\begin{table}[H]
-\caption{Corrected power gap between $k=3$ and $k=9$ by severity level and sample size}
-\label{tab:brecha-n-nivel}
-\begin{tabular}{lccccc}
-\toprule
-$n$ & low & low-moderate & moderate & high & very high \\
-\midrule
-10 & $-.048$ & $-.028$ & $-.050$ & $-.108$ & $-.058$ \\
-25 & $-.135$ & $-.037$ & $-.102$ & $-.202$ & $-.020$ \\
-50 & $-.270$ & $-.061$ & $-.211$ & $-.203$ & $-.045$ \\
-100 & $-.371$ & $-.116$ & $-.429$ & $-.077$ & $-.051$ \\
-250 & $-.431$ & $-.419$ & $-.580$ & $-.095$ & $-.107$ \\
-500 & $-.416$ & $-.574$ & $-.579$ & $-.182$ & $-.182$ \\
-1000 & $-.455$ & $-.629$ & $-.524$ & $-.364$ & $-.364$ \\
-1500 & $-.454$ & $-.632$ & $-.448$ & $-.364$ & $-.364$ \\
-\bottomrule
-\end{tabular}
-\end{table}
 
 Figure~\ref{fig:brecha} illustrates the trajectory: all curves start near zero at $n=10$ and fall to between $-.36$ and $-.63$ at $n=1500$, never turning positive. Only \emph{low-moderate} is strictly monotonic; \emph{high} (at $n=100$) and \emph{moderate} (after $n=250$) show the most visible reversals.
 
@@ -236,7 +214,7 @@ Figure~\ref{fig:brecha} illustrates the trajectory: all curves start near zero a
 \subsection{Calibration of the 11 Tests With No Injected Severity}
 \label{sec:res-tipo1}
 
-To separate size-adjusted power from miscalibration, an additional reference cell was simulated (skewness$=$kurtosis$=0$, same discrete mechanism, same $k$ and $n$; not a sixth level, but a reference point) and the empirical rejection rate of each test was measured under that reference DGP. Eight of the 11 tests reject up to 100\% of the time at some point in the grid (Shapiro-Wilk, Anderson-Darling, Lilliefors, Cramér-von Mises, Shapiro-Francia, and Pearson $\chi^2$, at $k=3$, $n=250$; Epps-Pulley and SSTN, at $k=3$, $n=1000$): at small $k$ and large $n$ they detect the discreteness of the composite, not a real deviation in the two moments calibrated to zero here. Jarque-Bera (max $.028$), D'Agostino-Pearson ($.053$), and kurtosis ($.079$) are the three with the smallest maximum deviation from the nominal 5\% across the grid --the rest exceed it by an order of magnitude--. The power reported for the other six tests, especially at small $k$ and large $n$, is therefore entangled with this tendency to reject due to discreteness, not only with the simulated severity.
+To separate size-adjusted power from miscalibration, an additional reference cell was simulated (skewness$=$kurtosis$=0$, same discrete mechanism, same $k$ and $n$; not a sixth level, but a reference point) and the empirical rejection rate of each test was measured under that reference DGP. Eight of the 11 tests reject up to 100\% of the time at some point in the grid (Shapiro-Wilk, Anderson-Darling, Lilliefors, Cramér-von Mises, Shapiro-Francia, and Pearson $\chi^2$, at $k=3$, $n=250$; Epps-Pulley and SSTN, at $k=3$, $n=1000$): at small $k$ and large $n$ they detect the discreteness of the composite, not a real deviation in the two moments calibrated to zero here. Jarque-Bera (max $.028$), D'Agostino-Pearson ($.053$), and kurtosis ($.079$) are the three with the smallest maximum deviation from the nominal 5\% across the grid --the rest exceed it by an order of magnitude--. Power for the other six tests is therefore entangled with this tendency to reject due to discreteness.
 
 \subsection{Real-Data Block: Power by Instrument}
 \label{sec:res-real}
@@ -244,7 +222,7 @@ To separate size-adjusted power from miscalibration, an additional reference cel
 In this block the true H0 of each instrument is unknown: the \emph{corrected} figure is the rejection rate under the threshold calibrated in the simulated block (Method), not power in the strict sense, and not a size calibration specific to each instrument's number of items (Limitations).
 
 \begin{enumerate}
-\item The \emph{nominal} mean rate increases sharply with $n$ and reaches 1.000 for nearly all instruments by $n=500$--$1000$, reproducing the problem seen in the simulated block; but the rate under the calibrated threshold is not necessarily monotonic (next point): RSE and HEXACO ($k=4,7$) plateau at $\approx.27$--$.28$ (Table~\ref{tab:potencia-instrumento}).
+\item The \emph{nominal} mean rate increases sharply with $n$ and reaches 1.000 for nearly all instruments by $n=500$--$1000$, as in the simulated block; under the calibrated threshold RSE and HEXACO ($k=4,7$) plateau at $\approx.27$--$.28$ (Table~\ref{tab:potencia-instrumento}).
 \item MACH-IV ($k=5$) and AHS ($k=8$) retain more corrected rate ($\approx.80$--$.88$ at large $n$) than RSE/HEXACO, and RWAS ($k=9$) changes little between nominal and corrected at most $n$ (next point). The pattern is descriptively consistent, across these six instruments, with the reversal seen in the simulated block (not an independent replication of the effect of $k$, above).
 \item Recalibrating to the native $m$ of MACH-IV (20), AHS (8), and RWAS (22): MACH-IV's corrected rate drops .05--.10 at $n\geq250$, and RWAS's drops to .91 at $n=1500$; AHS ($m=8$) changes little. $m$ also alters the discrete distribution of the composite and the empirical distribution of $p$ under the reference DGP: the threshold calibrated at $m=10$ is not fully transportable to other $m$.
 \item SPS-10 and AHS are not monotonic in $n$: the corrected rate drops from .996 to .909 (SPS-10, $n=500\to1000$) and from .876 to .821 (AHS, $n=500\to1000$); at $n=1000$, AHS is $\approx$97\% of its $N$, but that does not explain SPS-10's drop ($N=91,658$).
@@ -283,7 +261,7 @@ The observed power of each instrument was compared with that of its assigned sim
 \begin{enumerate}
 \item Across the 47 combined cells, $r=.981$; by instrument, $r \geq .957$. Controlling for $n$ (partial correlation), it remains high ($r=.968$). Mean absolute error is .042 (RMSE $=.079$), with a small bias: the simulation overestimates the real rate by .026. Excluding the AHS cell with the largest sampling fraction, or the instrument entirely, does not change this ($r=.981$; RMSE $=.079$–$.085$). These cells share instrument and are not independent; with the \emph{corrected} rate, agreement holds ($r=.977$; by instrument $r \geq .928$, Table~\ref{tab:validacion}; partial $r=.972$; RMSE $=.080$); aggregating first by instrument ($N=6$) gives a similar value ($r=.980$), without depending solely on repeated cells.
 \item The targets come from an external source \parencite{cain2017}, not from the validation instruments; even so, both use the same coordinates (skewness, kurtosis), so the agreement is not fully independent.
-\item Fit distance (0.066--0.450) is moderately associated with prediction error (Spearman $\rho=.37$): the calibration generalizes without a near-perfect fit. This distance sums squared skewness and kurtosis without standardizing, implicitly weighting kurtosis more heavily (larger target magnitude, Table~\ref{tab:niveles}): it is an ad hoc metric, not a neutral one.
+\item Fit distance (0.066--0.450) is moderately associated with prediction error (Spearman $\rho=.37$): the calibration generalizes without a near-perfect fit. This distance sums unstandardized squared skewness and kurtosis, implicitly weighting kurtosis more (Table~\ref{tab:niveles}): it is an ad hoc metric.
 \end{enumerate}
 
 \begin{table}[H]
@@ -307,11 +285,11 @@ RWAS (9) & high & 0.450 & .996 & .027 \\
 \subsection{Simulated-Block Patterns in Real Data}
 \label{sec:res-patrones}
 
-The patterns tested do not come from prior literature, which does not cover this cross of factors, nor were they preregistered: they arise from the \emph{corrected} simulated levels block, and here we examine whether they reproduce in the six real instruments, likewise using the corrected rate. Coefficients are estimated by linear regression of power on $k$ (or on the parity of $k$), treating the 11 tests as pseudo-replicates within each assigned severity level --they share the same sample, they are not independent--. They are therefore reported only as a description of the pattern, without their $p$-values, not as inferential evidence.
+The patterns tested are neither from prior literature nor preregistered: they arise from the \emph{corrected} simulated levels block, and here we examine whether they reproduce in the six real instruments, likewise using the corrected rate. Coefficients are estimated by linear regression of power on $k$ (or on the parity of $k$), treating the 11 tests as pseudo-replicates within each assigned severity level --they share the same sample, they are not independent--. They are therefore reported only as a description of the pattern, without their $p$-values, not as inferential evidence.
 
 \begin{description}
 \item[More categories ($k$), more corrected rate.] Reproduces under high severity (SPS-10, RWAS): the descriptive coefficient of $k$ was positive at $n=10,25,50$. Under low-moderate (RSE, MACH-IV, HEXACO) it was negative across all 8 sample sizes, because HEXACO ($k=7$) has a corrected rate as low ($\approx.27$) as RSE's ($k=4$) despite having more categories: this coincides with the local minimum at $k=7$ in the simulated block (Discussion).
-\item[The effect depends on $n$.] Reproduces: the association with $n$ is descriptively consistent with the simulation: the corrected gap between instruments with different $k$ tends to grow with $n$ rather than shrink.
+\item[The effect depends on $n$.] Reproduces descriptively: the corrected gap between instruments with different $k$ tends to grow with $n$ rather than shrink.
 \item[The gap between extreme $k$ values shrinks with severity.] Cannot be evaluated in the real data: only low-moderate includes several values of $k$; moderate is represented only by AHS.
 \item[The parity of $k$ affects power.] No descriptive support: coefficient near zero at $n=10,25,50$.
 \end{description}
@@ -347,14 +325,13 @@ Pearson $\chi^2$ & .451 & .290 & .339 \\
 \begin{itemize}
 \item \textbf{D'Agostino-Pearson} has the highest mean value under the adjusted threshold across all three scenarios, and is one of only three tests with the smallest deviation from the nominal 5\% under the reference DGP (\textbf{Jarque-Bera} follows).
 \item Corrected, \textbf{Shapiro-Wilk} and \textbf{Shapiro-Francia} retain a considerable value (.49--.72) despite being poorly calibrated: miscalibration inflated their \emph{nominal} power, without rendering them useless.
-\item \textbf{Pearson $\chi^2$} has the lowest mean value of the 11 across the three aggregated scenarios --not necessarily in every individual combination of $k$, $n$, and severity-- and is poorly calibrated.
-\item The mean ordering is consistent across scenarios, compatible with using the clean simulation as a controlled comparative reference among tests.
+\item \textbf{Pearson $\chi^2$} has the lowest mean value of the 11 across the three scenarios (not necessarily in every combination of $k$, $n$, and severity) and is poorly calibrated.
 \end{itemize}
 
 \section{Discussion}
 \label{sec:discussion}
 
-The study shows a systematic association between response categories and the power of normality tests, but the nominal criterion ($p<.05$) describes it backwards from what actually occurs. Under that criterion, power declines slightly as $k$ increases (gap of .012 to .045). But 8 of the 11 tests reject up to 100\% of the time under the reference cell with no severity (Method) when $k$ is small and $n$ is large --they detect the discreteness of the composite, not severity--, so much of that nominal power is miscalibration, not detection. Correcting the decision threshold for that miscalibration, the gap reverses and tends to grow with $n$ rather than shrink (from $-.15$ to $-.37$ across the 5 levels): size-adjusted power relative to that reference DGP is higher at large $k$ than at small $k$. This adds a further consideration, alongside those already known regarding reliability and validity \parencite{lozano2008,preston2000}, for weighing the consequences of using scales with very few categories: with few categories, the interpretation of these tests can be seriously compromised by the miscalibration induced by the discreteness of the composite.
+The study shows a systematic association between response categories and the power of normality tests, but the nominal criterion ($p<.05$) describes it backwards from what actually occurs. Under that criterion, power declines slightly as $k$ increases (gap of .012 to .045), but 8 of the 11 tests reject up to 100\% of the time under the reference cell when $k$ is small and $n$ is large --they detect discreteness, not severity--, so much of that nominal power is miscalibration, not detection. Correcting the decision threshold for that miscalibration, the gap reverses and tends to grow with $n$ rather than shrink (from $-.15$ to $-.37$ across the 5 levels): size-adjusted power relative to that reference DGP is higher at large $k$ than at small $k$. This adds a further consideration, alongside those already known regarding reliability and validity \parencite{lozano2008,preston2000}, for weighing the consequences of using scales with very few categories: with few categories, the interpretation of these tests can be seriously compromised by the miscalibration induced by the discreteness of the composite.
 
 The relationship is not perfectly monotonic between $k=3$ and $9$: there is a local minimum at $k=7$, in several simulated levels and replicated in HEXACO (the only real instrument with that $k$), not explained by worse calibration or by $\lambda$ --possibly because equating only two moments does not uniquely fix the complete shape of the distribution, with no causal identification--. Even so, the extremes favor large $k$ across the 5 simulated levels and, descriptively, across the six real instruments (Results).
 
@@ -365,7 +342,7 @@ A further source of heterogeneity in the real data is composition by country and
 The scope of the findings is bounded by the design. The composite has 10 items and a single common factor (recalibrated to the native $m$ for 3 of 6 instruments, Results), and the calibration equates only skewness and kurtosis, not the complete distributional shape: the effect attributed to $k$ is defined under this family of DGPs, not as a general property. In real data there is one instrument per value of $k$, presented as an illustration of transportability rather than as replicates of a common design, and the parity of $k$ and the trend of the gap with severity could not be evaluated. The results apply to composite scores, not to individual items.
 
 \section*{Data and Code Availability}
-The generated data and the complete code (extraction, calibration, simulation, subsampling, analysis and aggregation, and GitHub Actions configuration) are available at \blindtext{\url{https://github.com/ArchieJamDev/ResponseCategories-Normality-Study}}{an anonymized mirror of the repository (identifying information removed for double-blind review; the original link is restored after acceptance)}. The raw data for the six instruments are available at the sources cited in the Method. The study was not preregistered.
+The generated data and the complete code (extraction, calibration, simulation, subsampling, analysis and aggregation, and GitHub Actions configuration) are available at \blindtext{\url{https://github.com/ArchieJamDev/ResponseCategories-Normality-Study}}{an anonymized mirror of the repository (\url{https://anonymous.4open.science/r/ResponseCategories-Normality-Study-CCFD/}; identifying information removed for double-blind review, the original link is restored after acceptance)}. The raw data for the six instruments are available at the sources cited in the Method. The study was not preregistered.
 
 \section*{Use of Generative Artificial Intelligence}
 Generative artificial intelligence (Claude, Anthropic) was used to implement and run part of the R code and as a writing-style assistant, always under the author's review and direction; the author developed the text and the procedure and made all conceptual and methodological decisions.
@@ -376,11 +353,11 @@ Generative artificial intelligence (Claude, Anthropic) was used to implement and
 
 \textbf{Conflict of Interest.} The author declares no conflicts of interest.
 
-\textbf{Ethical Approval.} Not applicable. No new data were collected from human participants; all real-data examples reuse previously published, publicly available, and de-identified datasets (see Real Psychometric Instruments in the Method, and the Data Availability statement above).
+\textbf{Ethical Approval.} Not applicable. No new data were collected from human participants; all real-data examples reuse previously published, publicly available, and de-identified datasets.
 
 \textbf{Consent to Participate and for Publication.} Not applicable.
 
-\textbf{Author Contribution.} Single-authored manuscript; A.C. conceived the study, designed and executed the analyses, and wrote the manuscript.
+\textbf{Author Contribution.} Single-authored manuscript; the author conceived the study, designed and executed the analyses, and wrote the manuscript.
 
 \printbibliography
 
