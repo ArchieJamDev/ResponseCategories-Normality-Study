@@ -47,13 +47,19 @@ hacer_figura <- function(idioma) {
     archivo <- "paper/figuras/brecha_k3_k9_por_n_y_nivel.pdf"
   }
   cols <- setNames(unname(colores), nombres)
-  p <- ggplot(d, aes(x = n, y = brecha, color = nivel)) +
+  # Distinct line types and point shapes so the series are readable in black and white
+  ltys <- setNames(c("solid", "dashed", "dotted", "dotdash", "longdash"), nombres)
+  shps <- setNames(c(16, 17, 15, 18, 8), nombres)
+  p <- ggplot(d, aes(x = n, y = brecha, color = nivel, linetype = nivel, shape = nivel)) +
     geom_hline(yintercept = 0, color = "grey60", linewidth = 0.4) +
     geom_line(linewidth = 1) +
-    geom_point(size = 2.2) +
+    geom_point(size = 2.4) +
     scale_x_log10(breaks = n_grid) +
     scale_y_continuous(labels = sin_cero) +
     scale_color_manual(values = cols, name = tit_leyenda) +
+    scale_linetype_manual(values = ltys, name = tit_leyenda) +
+    scale_shape_manual(values = shps, name = tit_leyenda) +
+    theme(legend.key.width = grid::unit(1.6, "cm")) +
     labs(x = etq_x, y = etq_y) +
     theme_minimal(base_size = 13) +
     theme(panel.grid.minor = element_blank(), legend.position = "right")

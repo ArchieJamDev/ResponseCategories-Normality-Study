@@ -13,7 +13,7 @@
 \date{}
 \begin{document}
 \maketitle
-\begin{center}\small Response Categories and the Power of 11 Normality Tests: A Monte Carlo and Real-Data Study\end{center}
+\begin{center}\small Can Normality Tests Be Trusted on Likert Composite Scores? A Monte Carlo and Real-Data Study\end{center}
 
 \begin{table}[h]
 \centering
@@ -34,5 +34,57 @@ $n$ & low & low-moderate & moderate & high & very high \\
 \bottomrule
 \end{tabular}
 \par\smallskip{\footnotesize \emph{Note.} The gap is the corrected power at $k=3$ minus that at $k=9$, averaged over the 11 tests (Figure 2 of the main text). Severity levels: Table 1 of the main text.}
+\end{table}
+
+\clearpage
+\begin{table}[h]
+\centering
+\textbf{Table S2.} Nominal rejection rate ($p<.05$) of the 11 tests under the reference condition, by $k$ and $n$\par\medskip
+\small
+\begin{tabular}{lcccccccc}
+\toprule
+Test & 10 & 25 & 50 & 100 & 250 & 500 & 1000 & 1500 \\
+\midrule
+\multicolumn{9}{l}{\textit{$k=3$}} \\
+Shapiro-Wilk & .150 & .248 & .554 & .967 & 1.000 & 1.000 & 1.000 & 1.000 \\
+Anderson-Darling & .180 & .381 & .706 & .980 & 1.000 & 1.000 & 1.000 & 1.000 \\
+Lilliefors & .188 & .430 & .783 & .990 & 1.000 & 1.000 & 1.000 & 1.000 \\
+Jarque-Bera & .023 & .022 & .014 & .006 & .005 & .002 & .002 & .002 \\
+D'Agostino-Pearson & --- & .045 & .019 & .008 & .005 & .002 & .002 & .002 \\
+Cram\'er-von Mises & .194 & .415 & .732 & .977 & 1.000 & 1.000 & 1.000 & 1.000 \\
+Shapiro-Francia & .163 & .250 & .479 & .920 & 1.000 & 1.000 & 1.000 & 1.000 \\
+Pearson $\chi^2$ & .209 & .454 & .713 & .978 & 1.000 & 1.000 & 1.000 & 1.000 \\
+Kurtosis (Anscombe-Glynn) & .079 & .040 & .021 & .009 & .007 & .003 & .003 & .003 \\
+Epps-Pulley & .100 & .112 & .339 & .580 & .917 & .997 & 1.000 & 1.000 \\
+SSTN & .109 & .140 & .219 & .393 & .836 & .995 & 1.000 & 1.000 \\
+\midrule
+\multicolumn{9}{l}{\textit{$k=5$}} \\
+Shapiro-Wilk & .060 & .053 & .056 & .060 & .138 & .425 & .990 & 1.000 \\
+Anderson-Darling & .064 & .065 & .079 & .114 & .307 & .819 & 1.000 & 1.000 \\
+Lilliefors & .067 & .086 & .131 & .261 & .662 & .976 & 1.000 & 1.000 \\
+Jarque-Bera & .011 & .021 & .023 & .017 & .016 & .015 & .013 & .013 \\
+D'Agostino-Pearson & --- & .047 & .034 & .021 & .018 & .015 & .012 & .011 \\
+Cram\'er-von Mises & .064 & .068 & .083 & .123 & .333 & .876 & 1.000 & 1.000 \\
+Shapiro-Francia & .070 & .058 & .057 & .056 & .104 & .301 & .947 & 1.000 \\
+Pearson $\chi^2$ & .082 & .093 & .159 & .421 & .858 & 1.000 & 1.000 & 1.000 \\
+Kurtosis (Anscombe-Glynn) & .046 & .034 & .025 & .016 & .012 & .010 & .007 & .006 \\
+Epps-Pulley & .086 & .065 & .056 & .064 & .102 & .179 & .336 & .482 \\
+SSTN & .057 & .048 & .046 & .043 & .060 & .093 & .171 & .261 \\
+\midrule
+\multicolumn{9}{l}{\textit{$k=9$}} \\
+Shapiro-Wilk & .056 & .051 & .045 & .046 & .064 & .108 & .245 & .481 \\
+Anderson-Darling & .057 & .056 & .060 & .068 & .107 & .195 & .505 & .891 \\
+Lilliefors & .057 & .062 & .079 & .121 & .265 & .517 & .887 & .992 \\
+Jarque-Bera & .011 & .025 & .028 & .026 & .028 & .024 & .024 & .024 \\
+D'Agostino-Pearson & --- & .053 & .046 & .033 & .031 & .026 & .023 & .024 \\
+Cram\'er-von Mises & .057 & .055 & .063 & .067 & .110 & .206 & .539 & .940 \\
+Shapiro-Francia & .065 & .057 & .050 & .048 & .056 & .084 & .182 & .367 \\
+Pearson $\chi^2$ & .074 & .072 & .085 & .133 & .700 & .959 & 1.000 & 1.000 \\
+Kurtosis (Anscombe-Glynn) & .047 & .042 & .037 & .032 & .023 & .021 & .021 & .017 \\
+Epps-Pulley & .096 & .079 & .066 & .061 & .070 & .094 & .144 & .200 \\
+SSTN & .054 & .050 & .047 & .044 & .054 & .068 & .094 & .122 \\
+\bottomrule
+\end{tabular}
+\par\smallskip{\footnotesize \emph{Note.} Reference condition: skewness and kurtosis equal to zero, same discrete mechanism ($m=10$ items), $R=10{,}000$ replications per cell; columns give the sample size $n$. A rate near .05 indicates correct size. D'Agostino-Pearson is not computable at $n=10$ (---).}
 \end{table}
 \end{document}
