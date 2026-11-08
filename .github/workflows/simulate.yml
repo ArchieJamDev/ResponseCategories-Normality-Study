@@ -8,7 +8,7 @@ name: Bloque real de categorias
 
 run-name: >-
   Bloque real:
-  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (6 datasets, k=4,5,6,7,8,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}${{ inputs.correr_calibracion_niveles && 'Calibracion de niveles (5 niveles x k=3..9) ' || '' }}${{ inputs.correr_consolidar_calibracion_niveles && 'Consolidar calibracion de niveles ' || '' }}${{ inputs.correr_simulacion_niveles && 'Simulacion de niveles (35 shards) ' || '' }}
+  ${{ inputs.correr_extraccion && 'Extraccion de datos reales ' || '' }}${{ inputs.correr_bloque_real && 'Submuestreo real (6 datasets, k=4,5,6,7,8,9) ' || '' }}${{ inputs.correr_agregacion && 'Agregacion ' || '' }}${{ inputs.correr_calibracion_niveles && 'Calibracion de niveles (5 niveles x k=3..9) ' || '' }}${{ inputs.correr_consolidar_calibracion_niveles && 'Consolidar calibracion de niveles ' || '' }}${{ inputs.correr_simulacion_niveles && 'Simulacion de niveles (35 shards) ' || '' }}${{ inputs.correr_verificacion_umbral && 'Verificacion del umbral (7 shards) ' || '' }}${{ inputs.correr_inferencia_posterior && 'Inferencia posterior (42 shards) ' || '' }}
 
 on:
   workflow_dispatch:
@@ -95,6 +95,15 @@ on:
         default: false
       correr_bloque_real_sexo_corregido:
         description: "Exploratorio (no implica cambios al paper todavia): repite el chequeo de sexo (hombres vs. mujeres, grilla reducida n=10..250) con el umbral corregido en vez de potencia nominal -- requiere correr_extraccion_sexo en el mismo despacho"
+        type: boolean
+        default: false
+
+      correr_verificacion_umbral:
+        description: "Verificacion fuera de muestra del umbral p05 (R/11_verificar_umbral.R): replicas nuevas de la celda de referencia con otra semilla, tasa de rechazo con el umbral original, empates e IC bootstrap del umbral (7 shards, k=3..9)"
+        type: boolean
+        default: false
+      correr_inferencia_posterior:
+        description: "Inferencia posterior (R/12_inferencia_posterior.R): error tipo I y potencia de t de Student, t de Welch y Mann-Whitney en las 35 celdas de severidad + 7 de referencia (42 shards)"
         type: boolean
         default: false
 
@@ -897,3 +906,57 @@ jobs:
         with:
           name: bloque-real-sexo-corregido-${{ matrix.dataset }}
           path: data/results/bloque_real_*_corregido*.csv
+
+  verificar-umbral:
+    if: ${{ inputs.correr_verificacion_umbral }}
+    strategy:
+      matrix:
+        k: [3, 4, 5, 6, 7, 8, 9]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - name: Verificar umbral p05 fuera de muestra (R=10000, B=1000)
+        run: Rscript R/11_verificar_umbral.R ${{ matrix.k }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: verificacion-umbral-k${{ matrix.k }}
+          path: data/results/verificacion_umbral_k${{ matrix.k }}.csv
+
+  inferencia-posterior:
+    if: ${{ inputs.correr_inferencia_posterior }}
+    strategy:
+      matrix:
+        nivel:
+          - bajo
+          - bajo_moderado
+          - moderado
+          - alto
+          - muy_alto
+          - normal
+        k: [3, 4, 5, 6, 7, 8, 9]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - name: Inferencia posterior (R=10000, R base)
+        run: Rscript R/12_inferencia_posterior.R ${{ matrix.nivel }} ${{ matrix.k }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: inferencia-${{ matrix.nivel }}-k${{ matrix.k }}
+          path: data/results/inferencia_${{ matrix.nivel }}_k${{ matrix.k }}.csv
