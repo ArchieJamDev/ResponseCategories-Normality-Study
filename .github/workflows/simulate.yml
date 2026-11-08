@@ -102,6 +102,10 @@ on:
         description: "Verificacion fuera de muestra del umbral p05 (R/11_verificar_umbral.R): replicas nuevas de la celda de referencia con otra semilla, tasa de rechazo con el umbral original, empates e IC bootstrap del umbral (7 shards, k=3..9)"
         type: boolean
         default: false
+      correr_sensibilidad_empates:
+        description: "Sensibilidad de la potencia corregida a los empates en el umbral (R/04c_simulacion_niveles_empates.R): regla de rechazo aleatorizada que da 5% exacto bajo la referencia (35 shards)"
+        type: boolean
+        default: false
       correr_inferencia_posterior:
         description: "Inferencia posterior (R/12_inferencia_posterior.R): error tipo I y potencia de t de Student, t de Welch y Mann-Whitney en las 35 celdas de severidad + 7 de referencia (42 shards)"
         type: boolean
@@ -960,3 +964,39 @@ jobs:
         with:
           name: inferencia-${{ matrix.nivel }}-k${{ matrix.k }}
           path: data/results/inferencia_${{ matrix.nivel }}_k${{ matrix.k }}.csv
+
+  sensibilidad-empates:
+    if: ${{ inputs.correr_sensibilidad_empates }}
+    strategy:
+      matrix:
+        nivel:
+          - bajo
+          - bajo_moderado
+          - moderado
+          - alto
+          - muy_alto
+        k: [3, 4, 5, 6, 7, 8, 9]
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::sstn
+            any::nortest
+            any::moments
+            any::tseries
+            any::fBasics
+            any::nortsTest
+            any::dplyr
+            any::purrr
+            any::tidyr
+            any::readr
+      - name: Sensibilidad por empates (R=10000)
+        run: Rscript R/04c_simulacion_niveles_empates.R ${{ matrix.nivel }} ${{ matrix.k }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: empates-${{ matrix.nivel }}-k${{ matrix.k }}
+          path: data/results/nivel_${{ matrix.nivel }}_k${{ matrix.k }}_corregido_empates.csv
