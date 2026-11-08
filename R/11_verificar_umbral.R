@@ -82,6 +82,17 @@ for (n in n_grid) {
     p <- pvals_matriz[, j]
     p_ok <- p[!is.na(p)]
     u_orig <- unname(umbral_vec[nombres_pruebas[j]])
+    if (length(p_ok) == 0) {
+      # Prueba no calculable en este n (p. ej. D'Agostino-Pearson con n = 10)
+      filas[[length(filas) + 1]] <- data.frame(
+        k = k_elegido, n = n, R = R_replicas, prueba = nombres_pruebas[j],
+        umbral_original = u_orig, tasa_rechazo_estricta = NA_real_,
+        tasa_rechazo_inclusiva = NA_real_, prop_empate_en_umbral = NA_real_,
+        umbral_nuevo = NA_real_, umbral_nuevo_ic_inf = NA_real_,
+        umbral_nuevo_ic_sup = NA_real_, umbral_original_dentro_ic = NA,
+        n_na = sum(is.na(p)), stringsAsFactors = FALSE)
+      next
+    }
     u_nuevo <- unname(stats::quantile(p_ok, 0.05, type = 7))
     boot <- replicate(B_boot, stats::quantile(sample(p_ok, replace = TRUE), 0.05, type = 7, names = FALSE))
     filas[[length(filas) + 1]] <- data.frame(
